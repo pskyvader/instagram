@@ -9,7 +9,6 @@ from core.database import database
 # from .table import table
 # import datetime
 import json
-import ast
 
 from .base_model import base_model
 
