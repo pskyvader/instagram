@@ -99,12 +99,6 @@ class igaccounts(base_model):
                         r["archivo"] = json.loads(r["archivo"])
                     else:
                         r["archivo"] = []
-                if not deleted and "datos" in r:
-                    if r["datos"] != "":
-                        r['datos'] =ast.literal_eval(r['datos'])
-                        #r["datos"] = json.loads(r["datos"])
-                    else:
-                        r["datos"] = {}
 
             if not deleted:
                 row_copy.append(r)
@@ -153,12 +147,6 @@ class igaccounts(base_model):
                     row[0]["archivo"] = json.loads(row[0]["archivo"])
                 else:
                     row[0]["archivo"] = []
-            if "datos" in row[0]:
-                if row[0]["datos"] != "":
-                    row[0]["datos"] =ast.literal_eval(row[0]['datos'])
-                    #row[0]["datos"] = json.loads(row[0]["datos"])
-                else:
-                    row[0]["datos"] = {}
         return row[0] if len(row) == 1 else row
 
     @classmethod
@@ -183,12 +171,6 @@ class igaccounts(base_model):
                     row[0]["archivo"] = json.loads(row[0]["archivo"])
                 else:
                     row[0]["archivo"] = []
-            if "datos" in row[0]:
-                if row[0]["datos"] != "":
-                    row[0]["datos"] =ast.literal_eval(row[0]['datos'])
-                    #row[0]["datos"] = json.loads(row[0]["datos"])
-                else:
-                    row[0]["datos"] = {}
 
         return row[0] if len(row) == 1 else row
 
