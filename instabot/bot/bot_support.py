@@ -62,14 +62,13 @@ def console_print(self, text, color=None,progress=None,bold_text=False):
         file_write = open(archivo_log, "w+")
         file_write.write(log_file)
         file_write.close()
-
-    if text!='' and self.verbosity:
-        if bold_text:
-            text=bold(text)
-        text = '\n' + text
-        if color is not None:
-            text = getattr(huepy, color)(text)
-        print(text)
+        if text!='' and self.verbosity:
+            if bold_text:
+                text=bold(text)
+            text = '\n' + text
+            if color is not None:
+                text = getattr(huepy, color)(text)
+            print(text)
 
 
 def extract_urls(text):
