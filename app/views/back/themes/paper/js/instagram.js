@@ -31,7 +31,7 @@ function fin_instagram(data) {
             }
         }
     }
-    websocket_stop();
+    setTimeout(websocket_stop, 1000);
     instagram_finalizado=true;
 }
 
