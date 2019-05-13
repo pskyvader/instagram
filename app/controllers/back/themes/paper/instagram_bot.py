@@ -80,9 +80,9 @@ class instagram_bot():
                 progress = 19 + ((k / count_users) * 40)
                 msg=u["username"] + " - " + str(k) + "/" + str(count_users)
                 
-                if u['profile_pic_url']=='':
-                    bot.console_print( "Actualizando datos de " +msg, progress=progress )
-                    u = bot.get_user_info(u['pk'],False)
+                # if u['profile_pic_url']=='':
+                #     bot.console_print( "Actualizando datos de " +msg, progress=progress )
+                #     u = bot.get_user_info(u['pk'],False)
 
                 if str(u["pk"]) in followers:
                     followers.remove(str(u["pk"]))
