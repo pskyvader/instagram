@@ -168,20 +168,22 @@ class Bot(object):
         verbosity=True,
         device=None,
     ):
-        self.api = API(device=device,parent_class=self)
+        self.api = API(device=device, parent_class=self)
 
-        c_time=functions.current_time('%Y-%m-%d')
+        c_time = functions.current_time("%Y-%m-%d")
         self.total = {
-            "likes": int(igtotal_model.get_total('likes',c_time)['cantidad']),
-            "unlikes": int(igtotal_model.get_total('unlikes',c_time)['cantidad']),
-            "follows": int(igtotal_model.get_total('follows',c_time)['cantidad']),
-            "unfollows": int(igtotal_model.get_total('unfollows',c_time)['cantidad']),
-            "comments": int(igtotal_model.get_total('comments',c_time)['cantidad']),
-            "blocks": int(igtotal_model.get_total('blocks',c_time)['cantidad']),
-            "unblocks": int(igtotal_model.get_total('unblocks',c_time)['cantidad']),
-            "messages": int(igtotal_model.get_total('messages',c_time)['cantidad']),
-            "archived": int(igtotal_model.get_total('archived',c_time)['cantidad']),
-            "unarchived": int(igtotal_model.get_total('unarchived',c_time)['cantidad']),
+            "likes": int(igtotal_model.get_total("likes", c_time)["cantidad"]),
+            "unlikes": int(igtotal_model.get_total("unlikes", c_time)["cantidad"]),
+            "follows": int(igtotal_model.get_total("follows", c_time)["cantidad"]),
+            "unfollows": int(igtotal_model.get_total("unfollows", c_time)["cantidad"]),
+            "comments": int(igtotal_model.get_total("comments", c_time)["cantidad"]),
+            "blocks": int(igtotal_model.get_total("blocks", c_time)["cantidad"]),
+            "unblocks": int(igtotal_model.get_total("unblocks", c_time)["cantidad"]),
+            "messages": int(igtotal_model.get_total("messages", c_time)["cantidad"]),
+            "archived": int(igtotal_model.get_total("archived", c_time)["cantidad"]),
+            "unarchived": int(
+                igtotal_model.get_total("unarchived", c_time)["cantidad"]
+            ),
         }
 
         self.start_time = datetime.datetime.now()
@@ -357,7 +359,8 @@ class Bot(object):
         save_checkpoint(self)
         self.api.logout()
         self.console_print(
-            "Bot stopped. " "Worked: {}".format(str(datetime.datetime.now() - self.start_time))
+            "Bot stopped. "
+            "Worked: {}".format(str(datetime.datetime.now() - self.start_time))
         )
         self.print_counters()
 
@@ -404,50 +407,60 @@ class Bot(object):
             time.sleep(t_remaining * random.uniform(0.25, 1.25))
         self.last[key] = time.time()
 
-    def update_delay(self,key,repeat=False):
-        sleep=1
-        delta=0.05
+    def update_delay(self, key, repeat=False):
+        sleep = 1
+        delta = 0.05
         if key in self.delays and key in self.sleep:
-            delay=self.delays[key]
-            sleep_delay=self.sleep[key]
-            last_sleep=time.time()-self.last_sleep[key]
+            delay = self.delays[key]
+            sleep_delay = self.sleep[key]
+            last_sleep = time.time() - self.last_sleep[key]
             if not repeat:
-                delay+=delta
-                self.delays[key]=delay
-                configuracion_model.setByVariable(key+"_delay",str(delay))
-                self.console_print('Nuevo valor para delay '+key+': '+str(self.delays[key]))
-            if last_sleep<sleep_delay*4:
-                self.console_print('Tiempo minimo activo sobrepasado: '+str(last_sleep)+' menor a ' + str(sleep_delay*4))
-            if sleep_delay<delay*5:
-                self.console_print('Proporcion de espera sobrepasado: '+str(sleep_delay)+' menor a ' + str(delay*5))
+                delay += delta
+                self.delays[key] = delay
+                configuracion_model.setByVariable(key + "_delay", str(delay))
+                self.console_print(
+                    "Nuevo valor para delay " + key + ": " + str(self.delays[key])
+                )
+            if last_sleep < sleep_delay * 4:
+                self.console_print(
+                    "Tiempo minimo activo sobrepasado: "
+                    + str(last_sleep)
+                    + " menor a "
+                    + str(sleep_delay * 4)
+                )
+            if sleep_delay < delay * 5:
+                self.console_print(
+                    "Proporcion de espera sobrepasado: "
+                    + str(sleep_delay)
+                    + " menor a "
+                    + str(delay * 5)
+                )
 
-            if repeat or sleep_delay<delay*5 or (last_sleep<sleep_delay*4):
-                sleep_delay+=sleep
-                self.sleep[key]=sleep_delay
-                configuracion_model.setByVariable(key+"_sleep",str(sleep_delay))
-                self.console_print('Nuevo valor para sleep '+key+': '+str(self.sleep[key]))
-            
-            self.last_sleep[key]=time.time()
+            if repeat or sleep_delay < delay * 5 or (last_sleep < sleep_delay * 4):
+                sleep_delay += sleep
+                self.sleep[key] = sleep_delay
+                configuracion_model.setByVariable(key + "_sleep", str(sleep_delay))
+                self.console_print(
+                    "Nuevo valor para sleep " + key + ": " + str(self.sleep[key])
+                )
 
-    def update_max(self,key):
-        key=key+'s'
+            self.last_sleep[key] = time.time()
+
+    def update_max(self, key):
+        key = key + "s"
         if key in self.total and key in self.max_per_day:
-            total=self.total[key]
-            max=self.max_per_day[key]
-            if max!=None:
-                if max-total>100:
-                    new_max=max-50
+            total = self.total[key]
+            max = self.max_per_day[key]
+            if max != None:
+                if max - total > 100:
+                    new_max = max - 50
                 else:
-                    new_max=max-1
-                configuracion_model.setByVariable("max_"+key+"_per_day",new_max)
+                    new_max = max - 1
+                configuracion_model.setByVariable("max_" + key + "_per_day", new_max)
             else:
-                print(key,'no existe en',self)
+                print(key, "no existe en", self)
         else:
-            print(key,'no existe en totales',self.total)
-
-
-
-
+            print(key, "no existe en totales", self.total)
 
     def error_delay(self):
         time.sleep(10)
@@ -463,13 +476,20 @@ class Bot(object):
         passed_days = (current_date.date() - self.start_time.date()).days
         if passed_days > 0:
             self.reset_counters()
-        
+
         if self.total[key] > self.max_per_day[key]:
-            self.console_print( 'Maximo diario alcanzado: '+key+' '+str(self.total[key])+' > '+str(self.max_per_day[key]), color='yellow')
+            self.console_print(
+                "Maximo diario alcanzado: "
+                + key
+                + " "
+                + str(self.total[key])
+                + " > "
+                + str(self.max_per_day[key]),
+                color="yellow",
+            )
             return True
         else:
             return False
-
 
     def reset_counters(self):
         for k in self.total:
@@ -668,11 +688,11 @@ class Bot(object):
 
     # follow
 
-    def follow(self, user_id,force=False,hashtag=''):
-        return follow(self, user_id,force,hashtag)
+    def follow(self, user_id, force=False, hashtag=""):
+        return follow(self, user_id, force, hashtag)
 
-    def follow_users(self, user_ids,base=0,proporcion=1,hashtag=''):
-        return follow_users(self, user_ids,base,proporcion,hashtag)
+    def follow_users(self, user_ids, base=0, proporcion=1, hashtag=""):
+        return follow_users(self, user_ids, base, proporcion, hashtag)
 
     def follow_followers(self, user_id, nfollows=None):
         return follow_followers(self, user_id, nfollows)
@@ -682,8 +702,8 @@ class Bot(object):
 
     # unfollow
 
-    def unfollow(self, user_id,progress=None):
-        return unfollow(self, user_id,progress)
+    def unfollow(self, user_id, progress=None):
+        return unfollow(self, user_id, progress)
 
     def unfollow_users(self, user_ids):
         return unfollow_users(self, user_ids)
