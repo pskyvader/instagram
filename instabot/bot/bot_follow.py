@@ -24,7 +24,7 @@ def follow(self, user_id,force=False,hashtag=''):
             self.total['follows'] += 1
             igtotal_model.set_total('follows',functions.current_time('%Y-%m-%d'),1)
             self.followed_file.append(user_id)
-            msg = '===> FOLLOWED <==== `user_id`: {}. Total: {}/{}'.format(user_id,self.total['follows'],self.self.max_per_day['follows'])
+            msg = '===> FOLLOWED <==== `user_id`: {}. Total: {}/{}'.format(user_id,self.total['follows'],self.max_per_day['follows'])
             self.console_print(msg, 'green')
             
             if user_id not in self.following:
