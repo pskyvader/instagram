@@ -192,7 +192,6 @@ class instagram_bot():
 
     def unfollow(self,accion):
         respuesta = {"exito": False, "mensaje": ""}
-
         if self.bot==None:
             respuesta['mensaje']=self.error_mensaje
             return respuesta
