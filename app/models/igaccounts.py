@@ -199,10 +199,12 @@ class igaccounts(base_model):
         if str(user_info["full_name"]).endswith("\\"):
             data["full_name"] = str(user_info["full_name"]).replace("\\", "\\\\")
 
-        if 'hd_profile_pic_url_info' in user_info:
-            data["profile_pic_url"] = user_info["profile_pic_url"]['url']
-        elif 'hd_profile_pic_versions' in user_info:
-            data["profile_pic_url"] = list(user_info["hd_profile_pic_versions"]).pop()['url']
+        if "hd_profile_pic_url_info" in user_info:
+            data["profile_pic_url"] = user_info["profile_pic_url"]["url"]
+        elif "hd_profile_pic_versions" in user_info:
+            data["profile_pic_url"] = list(user_info["hd_profile_pic_versions"]).pop()[
+                "url"
+            ]
         else:
             data["profile_pic_url"] = user_info["profile_pic_url"]
 
@@ -237,13 +239,14 @@ class igaccounts(base_model):
         if str(user_info["full_name"]).endswith("\\"):
             data["full_name"] = str(user_info["full_name"]).replace("\\", "\\\\")
 
-        if 'hd_profile_pic_url_info' in user_info:
-            data["profile_pic_url"] = user_info["profile_pic_url"]['url']
-        elif 'hd_profile_pic_versions' in user_info:
-            data["profile_pic_url"] = list(user_info["hd_profile_pic_versions"]).pop()['url']
+        if "hd_profile_pic_url_info" in user_info:
+            data["profile_pic_url"] = user_info["profile_pic_url"]["url"]
+        elif "hd_profile_pic_versions" in user_info:
+            data["profile_pic_url"] = list(user_info["hd_profile_pic_versions"]).pop()[
+                "url"
+            ]
         else:
             data["profile_pic_url"] = user_info["profile_pic_url"]
-
 
         data["biography"] = user_info["biography"]
         if str(user_info["biography"]).endswith("\\"):
