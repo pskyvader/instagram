@@ -185,7 +185,8 @@ class igaccounts(base_model):
                     row[0]["archivo"] = []
             if "datos" in row[0]:
                 if row[0]["datos"] != "":
-                    row[0]["datos"] = json.loads(row[0]["datos"])
+                    row[0]["datos"] =ast.literal_eval(row[0]['datos'])
+                    #row[0]["datos"] = json.loads(row[0]["datos"])
                 else:
                     row[0]["datos"] = {}
 
