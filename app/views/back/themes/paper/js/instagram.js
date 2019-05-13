@@ -20,10 +20,15 @@ function accion_instagram(accion,id,mensaje){
 
 
 function fin_instagram(data) {
-    console.log(data);
     if (data.exito){
         if(data.mensaje){
             notificacion('Completado', data.mensaje, 'success');
+        }
+        if (data.porcentaje) {
+            barra(data.porcentaje);
+            if ($('#progreso_instagram').length > 0) {
+                $('#progreso_instagram').val(data.porcentaje).trigger('change');
+            }
         }
     }
     websocket_stop();
