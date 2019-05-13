@@ -101,6 +101,26 @@ class instagram(base):
         socket.close()
         return ret
 
+
+    def delete(self):
+        ig=instagram_bot()
+        ret = {
+            "headers": [("Content-Type", "application/json; charset=utf-8")],
+            "body": "",
+        }
+        respuesta={'exito':False,'mensaje':''}
+        users=igaccounts_model.getAll({'follower':False,'following':False})
+    
+        ig=instagram_bot()
+        bot=ig.bot
+        for u in users:
+            bot.unfollowed_file.append(u['pk'])
+            igaccounts_model.delete(u[0])
+        
+        ret["body"] = json.dumps(respuesta, ensure_ascii=False)
+        socket.close()
+        return ret
+
     def user(self):
         ret = {
             "headers": [("Content-Type", "application/json; charset=utf-8")],
