@@ -357,7 +357,7 @@ class Bot(object):
         save_checkpoint(self)
         self.api.logout()
         self.console_print(
-            "Bot stopped. " "Worked: %s".format(datetime.datetime.now() - self.start_time)
+            "Bot stopped. " "Worked: {}".format(str(datetime.datetime.now() - self.start_time))
         )
         self.print_counters()
 
