@@ -185,7 +185,7 @@ class igaccounts(base_model):
             data["full_name"] = str(user_info["full_name"]).replace("\\", "\\\\")
 
         if "hd_profile_pic_url_info" in user_info:
-            data["profile_pic_url"] = user_info["profile_pic_url"]["url"]
+            data["profile_pic_url"] = user_info["hd_profile_pic_url_info"]["url"]
         elif "hd_profile_pic_versions" in user_info:
             data["profile_pic_url"] = list(user_info["hd_profile_pic_versions"]).pop()[
                 "url"
