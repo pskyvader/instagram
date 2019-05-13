@@ -10,7 +10,6 @@ class socket:
 
     @staticmethod
     def send(msg):
-        down=socket.download(socket.url+"port.txt")
         try:
             if socket.sock==None:
                 down=socket.download(socket.url+"port.txt")
