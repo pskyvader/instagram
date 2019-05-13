@@ -21,11 +21,11 @@ def follow(self, user_id,force=False,hashtag=''):
         self.delay('follow')
         response=self.api.follow(user_id)
         if isinstance(response,bool) and response:
-            msg = '===> FOLLOWED <==== `user_id`: {}.'.format(user_id)
-            self.console_print(msg, 'green')
             self.total['follows'] += 1
             igtotal_model.set_total('follows',functions.current_time('%Y-%m-%d'),1)
             self.followed_file.append(user_id)
+            msg = '===> FOLLOWED <==== `user_id`: {}. Total: {}/{}'.format(user_id,self.total['follows'],self.self.max_per_day['follows'])
+            self.console_print(msg, 'green')
             
             if user_id not in self.following:
                 self.following.append(user_id)
