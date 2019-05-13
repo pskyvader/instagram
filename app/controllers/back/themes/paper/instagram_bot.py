@@ -58,12 +58,21 @@ class instagram_bot():
             users_total = igaccounts_model.getAll()
             bot.console_print("Adquiriendo seguidores", progress=10)
             followers = bot.followers.copy()
-            bot.console_print("total seguidores:"+str(len(followers)), progress=10)
-
+            if len(followers)==0:
+                respuesta['exito']=False
+                respuesta['mensaje']='Error al obtener seguidores'
+            else:
+                bot.console_print("total seguidores:"+str(len(followers)), progress=10)
+        if respuesta['exito']:
             bot.console_print("Adquiriendo siguiendo", progress=15)
             following = bot.following.copy()
-            bot.console_print("total siguiendo:"+str(len(following)), progress=10)
+            if len(following)==0:
+                respuesta['exito']=False
+                respuesta['mensaje']='Error al obtener seguidos'
+            else:
+                bot.console_print("total siguiendo:"+str(len(following)), progress=10)
 
+        if respuesta['exito']:
             bot.console_print("Actualizando Usuarios actuales", progress=20)
             count_users = len(users_total)
             for k, u in enumerate(users_total):
