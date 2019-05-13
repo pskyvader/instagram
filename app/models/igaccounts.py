@@ -7,7 +7,7 @@ from core.database import database
 # from .log import log
 # from .productocategoria import productocategoria
 # from .table import table
-#import datetime
+# import datetime
 import json
 
 from .base_model import base_model
@@ -98,6 +98,11 @@ class igaccounts(base_model):
                         r["archivo"] = json.loads(r["archivo"])
                     else:
                         r["archivo"] = []
+                if not deleted and "datos" in r:
+                    if r["datos"] != "":
+                        r["datos"] = json.loads(r["datos"])
+                    else:
+                        r["datos"] = {}
 
             if not deleted:
                 row_copy.append(r)
@@ -114,9 +119,44 @@ class igaccounts(base_model):
             if idpadre != None:
                 return len(row)
             else:
-                return row[0]['total']
+                return row[0]["total"]
         else:
             return row
+
+    @classmethod
+    def getById(cls, id: int):
+        from .table import table
+
+        where = {cls.idname: id}
+        if app.front:
+            fields = table.getByname(cls.table)
+            if "estado" in fields:
+                where["estado"] = True
+
+        connection = database.instance()
+        row = connection.get(cls.table, cls.idname, where)
+        if len(row) == 1:
+            if "idpadre" in row[0]:
+                if row[0]["idpadre"] != "":
+                    row[0]["idpadre"] = json.loads(row[0]["idpadre"])
+                else:
+                    row[0]["idpadre"] = []
+            if "foto" in row[0]:
+                if row[0]["foto"] != "":
+                    row[0]["foto"] = json.loads(row[0]["foto"])
+                else:
+                    row[0]["foto"] = []
+            if "archivo" in row[0]:
+                if row[0]["archivo"] != "":
+                    row[0]["archivo"] = json.loads(row[0]["archivo"])
+                else:
+                    row[0]["archivo"] = []
+            if "datos" in row[0]:
+                if row[0]["datos"] != "":
+                    row[0]["datos"] = json.loads(row[0]["datos"])
+                else:
+                    row[0]["datos"] = {}
+        return row[0] if len(row) == 1 else row
 
     @classmethod
     def getByPK(cls, pk):
@@ -124,6 +164,28 @@ class igaccounts(base_model):
         condiciones = {"limit": 1}
         connection = database.instance()
         row = connection.get(cls.table, cls.idname, where, condiciones)
+        if len(row) == 1:
+            if "idpadre" in row[0]:
+                if row[0]["idpadre"] != "":
+                    row[0]["idpadre"] = json.loads(row[0]["idpadre"])
+                else:
+                    row[0]["idpadre"] = []
+            if "foto" in row[0]:
+                if row[0]["foto"] != "":
+                    row[0]["foto"] = json.loads(row[0]["foto"])
+                else:
+                    row[0]["foto"] = []
+            if "archivo" in row[0]:
+                if row[0]["archivo"] != "":
+                    row[0]["archivo"] = json.loads(row[0]["archivo"])
+                else:
+                    row[0]["archivo"] = []
+            if "datos" in row[0]:
+                if row[0]["datos"] != "":
+                    row[0]["datos"] = json.loads(row[0]["datos"])
+                else:
+                    row[0]["datos"] = {}
+
         return row[0] if len(row) == 1 else row
 
     @classmethod
@@ -132,17 +194,19 @@ class igaccounts(base_model):
         data["pk"] = str(user_info["pk"])
         data["username"] = user_info["username"]
         if str(user_info["username"]).endswith("\\"):
-            data["username"] = str(user_info["username"]).replace('\\','\\\\')
+            data["username"] = str(user_info["username"]).replace("\\", "\\\\")
         data["full_name"] = user_info["full_name"]
         if str(user_info["full_name"]).endswith("\\"):
-            data["full_name"] = str(user_info["full_name"]).replace('\\','\\\\')
+            data["full_name"] = str(user_info["full_name"]).replace("\\", "\\\\")
         data["profile_pic_url"] = user_info["profile_pic_url"]
         data["biography"] = user_info["biography"]
         if str(user_info["biography"]).endswith("\\"):
-            data["biography"] = str(user_info["biography"]).replace('\\','\\\\')
+            data["biography"] = str(user_info["biography"]).replace("\\", "\\\\")
         data["follower_count"] = user_info["follower_count"]
         data["following_count"] = user_info["following_count"]
-        data["has_anonymous_profile_picture"] = user_info[ "has_anonymous_profile_picture" ]
+        data["has_anonymous_profile_picture"] = user_info[
+            "has_anonymous_profile_picture"
+        ]
         data["is_private"] = user_info["is_private"]
         data["is_business"] = user_info["is_business"]
         data["is_verified"] = user_info["is_verified"]
@@ -154,22 +218,21 @@ class igaccounts(base_model):
         data["favorito"] = False
         return cls.insert(data, False)
 
-
     @classmethod
-    def update_user(cls,id, user_info):
+    def update_user(cls, id, user_info):
         data = {}
         data["id"] = id
         data["pk"] = str(user_info["pk"])
         data["username"] = user_info["username"]
         if str(user_info["username"]).endswith("\\"):
-            data["username"] = str(user_info["username"]).replace('\\','\\\\')
+            data["username"] = str(user_info["username"]).replace("\\", "\\\\")
         data["full_name"] = user_info["full_name"]
         if str(user_info["full_name"]).endswith("\\"):
-            data["full_name"] = str(user_info["full_name"]).replace('\\','\\\\')
+            data["full_name"] = str(user_info["full_name"]).replace("\\", "\\\\")
         data["profile_pic_url"] = user_info["profile_pic_url"]
         data["biography"] = user_info["biography"]
         if str(user_info["biography"]).endswith("\\"):
-            data["biography"] = str(user_info["biography"]).replace('\\','\\\\')
+            data["biography"] = str(user_info["biography"]).replace("\\", "\\\\")
         data["follower_count"] = user_info["follower_count"]
         data["following_count"] = user_info["following_count"]
         data["has_anonymous_profile_picture"] = user_info[
