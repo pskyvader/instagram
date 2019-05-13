@@ -21,8 +21,8 @@ def unfollow(self, user_id,progress=None):
             self.unfollowed_file.append(user_id)
             self.total['unfollows'] += 1
             igtotal_model.set_total('unfollows',functions.current_time('%Y-%m-%d'),1)
-            msg = '===> Unfollowed, `user_id`: {}, user_name: {}. Total: {}/{}'
-            self.console_print(msg.format(user_id, username,self.total['unfollows'],self.self.max_per_day['unfollows']), 'yellow')
+            msg = '===> Unfollowed, `user_id`: {}, user_name: {}. Total: {}/{}'.format(user_id, username,self.total['unfollows'],self.self.max_per_day['unfollows'])
+            self.console_print(msg, 'yellow')
 
             if user_id in self.following:
                 self.following.remove(user_id)
