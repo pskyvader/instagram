@@ -1,0 +1,28 @@
+<section class="payment payment-confirmation p-t-60 p-b-30">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h2>Confirmacion de pago</h2>
+                <h5>{{title}}</h5>
+                <div class="descripcion pb-5">
+                    Has completado tu pago exitosamente. Se ha enviado un correo con la información de tu pedido.
+                    <br />
+                    <em>Si no ves un correo de confirmacion por favor revisa tu carpeta de spam</em>
+                </div>
+                <hr>
+                <div class="descripcion py-5">
+                    {{description}}
+                </div>
+                {% if mensaje!='' %}
+                <div class="alert alert-danger" role="alert">
+                    <p><b>Se Ha encontrado un error, por favor notifica a soporte técnico:</b></p>
+                    {{mensaje}}
+                </div>
+                {% endif %}
+                <div class="">
+                    <a href="{{url_back}}" class="btn btn-primary mb-4 float-right">Ver pedido</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

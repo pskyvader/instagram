@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es" class="">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+    <link rel="shortcut icon" href="{{favicon}}" /> 
+    {% if keywords!='' %}
+    <meta name="keywords" content="{{keywords}}"> 
+    {% endif %}
+    {% if description!='' %}
+    <meta name="description" content="{{description}}">
+    <meta property="og:description" content="{{description}}"> 
+    {% endif %}
+    <meta property="og:site_name" content="{{title}}">
+    <meta property="og:title" content="{{title}}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{current_url}}">
+    <meta property="og:image" content="{{image}}">
+    <meta name="theme-color" content="{{color_primario}}" />
+    <link rel="manifest" href="{{manifest_url}}">
+    <meta name="author" content="Pablo R.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="application-name" content="{{title}}" data-path="{{path}}" data-websocket_url={{websocket_url}} data-modulo="{{modulo}}" data-googlemaps_key="{{googlemaps_key}}" data-url="{{current_url}}" data-max_size="{{max_size}}" data-max_size_format="{{max_size_format}}" />
+    {{css}}
+</head>
+
+<body class="animated-content infobar-overlay sidebar-scroll sidebar-collapsed">
+    <div id="page-progress-loader"></div>

@@ -1,0 +1,64 @@
+var version = "version{{version}}";
+var urlsToCache = {{lista_cache}};
+self.addEventListener("install", function(event) {
+    event.waitUntil(caches.open(version).then(function(cache) {
+        return cache.addAll(urlsToCache);
+    }).then((r) => {
+        self.skipWaiting();
+        return r;
+    }).catch(console.error));
+}); 
+{% if cache %}
+self.addEventListener('fetch', function(event) {
+    if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin') return;
+    if ( event.request.url.split('.').pop().includes("json")) return;
+    if (event.request.method=='POST') return;
+    event.respondWith(caches.match(event.request).then(function(response) {
+        if (response) {
+            if (response['url'].split('.').pop() != '') {
+                //console.log('existe',response);
+                return response;
+            } else {
+                console.log('no valida',response);
+            }
+        }
+
+        var fetchRequest = event.request.clone();
+        return fetch(fetchRequest).then(
+            function(response) {
+                // Check if we received a valid response
+                if (!response || response.status !== 200 || response.type !== 'basic') {
+                    return response;
+                }
+
+                if(fetchRequest.destination=='image' || fetchRequest.destination=='font' || fetchRequest.destination=='style'){
+                    //console.log(fetchRequest.destination,response);
+                    // IMPORTANT: Clone the response. A response is a stream
+                    // and because we want the browser to consume the response
+                    // as well as the cache consuming the response, we need
+                    // to clone it so we have two streams.
+                    var responseToCache = response.clone();
+    
+                    caches.open(version)
+                        .then(function(cache) {
+                            cache.put(event.request, responseToCache);
+                        });
+                }
+                return response;
+            }
+        );
+    }));
+});
+
+{% endif %}
+
+self.addEventListener('activate', function(event) {
+    event.waitUntil(caches.keys().then(function(cacheNames) {
+        return Promise.all(cacheNames.filter(function(cacheName) {
+            if (cacheName != version) return true;
+            else return false;
+        }).map(function(cacheName) {
+            return caches.delete(cacheName);
+        }));
+    }));
+});

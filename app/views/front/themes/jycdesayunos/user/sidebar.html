@@ -1,0 +1,10 @@
+<div class="col-lg-3">
+    <div class="box">
+        <h2 class="title">Mi cuenta</h2>
+        <ul class="list list-md list-3">
+            {% for su in sidebar_user %}
+            <li class="{{su.active}}"><a href="{{su.url}}">{{su.title}}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,24 @@
+{% if is_css %}
+    {% for c in css %} 
+        {% if c.defer %}
+            <script>
+                var element = document.createElement('link');
+                element.rel = 'stylesheet';
+                element.type = 'text/css';
+                element.href = '{{c.url}}';
+                element.media = '{{c.media}}';
+                document.head.appendChild(element);
+            </script> 
+        {% else %}
+            {% if c.is_content %}
+                <style type="text/css"> {{ c.content_css }} </style>
+            {% else %}
+                <link rel="stylesheet" type="text/css" href="{{c.url}}" media="{{c.media}}">
+            {% endif %}
+        {% endif %}
+    {% endfor %} 
+{% else %} 
+    {% for j in js %} 
+        <script src="{{j.url}}" {% if j.defer %} async defer {% endif %}></script> 
+    {% endfor %} 
+{% endif %}

@@ -1,0 +1,20 @@
+<div class="form-group map">
+    <label for="{{field}}" class="col-sm-2 control-label">{{title_field}} {% if required %} <sup>*</sup> {% endif %}</label>
+    <div class="col-sm-8">
+        <div class="mapa"></div>
+        <div class="row">
+            <div class="col-sm-4">
+                <input id="{{field}}_direccion" placeholder="Direccion" name="multiple[{{field}}][direccion]" type="text" class="form-control direccion" value="{{direccion}}" {% if required %} required="required" {% endif %}>
+            </div>
+            <div class="col-sm-2">
+                <input id="{{field}}_lat" placeholder="lat" name="multiple[{{field}}][lat]" readonly="readonly" type="text" class="form-control lat" value="{{lat}}" {% if required %} required="required" {% endif %}>
+            </div>
+            <div class="col-sm-2">
+                <input id="{{field}}_lng" placeholder="lng" name="multiple[{{field}}][lng]" readonly="readonly" type="text" class="form-control lng" value="{{lng}}" {% if required %} required="required" {% endif %}>
+            </div>
+            <div class="col-sm-4">
+                <span class="input-group-btn buscar_mapa"><button class="btn-raised btn-primary btn">buscar</button></span>
+            </div>
+        </div>
+    </div>
+</div>

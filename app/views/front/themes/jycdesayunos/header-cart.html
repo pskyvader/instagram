@@ -1,0 +1,43 @@
+<div class="cart dropdown float-left" id="carro-header">
+    <a href="#" class="cart-item dropdown-toggle" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span class="carro-cantidad">0</span>
+        <i class="fa fa-shopping-bag"></i>
+    </a>
+    <ul class="dropdown-menu carro-productos sticky-top" aria-labelledby="dropdownMenu2" x-placement="bottom-start">
+        <div class="lista-productos">
+        </div>
+        <li>
+            <div class="d-flex">
+                <strong>Productos</strong>
+                <div class="f-right f-bold carro-total-productos">$0</div>
+            </div>
+            <div class="d-flex">
+                <strong>Envio</strong>
+                <div class="f-right f-bold carro-envio">Por definir</div>
+            </div>
+            <div class="d-flex">
+                <strong>Total</strong>
+                <div class="f-right f-bold carro-total">$0</div>
+            </div>
+        </li>
+        <li>
+            <a href="#" class="btn btn-cart w-100 accion mb-3">Ingreso</a>
+            <a href="#" class="btn btn-cart w-100 accion-2">Registro</a>
+        </li>
+    </ul>
+    <div id="template_cart-item" class="d-none">
+        <li>
+            <div class="media">
+                <a data-href="{url_producto}">
+                    <img class="media-object" data-src="{imagen_producto}" width="50" alt="{titulo_producto}">
+                </a>
+                <div class="media-body">
+                    <h4>
+                        <a data-href="{url_producto}">{titulo_producto}</a>
+                    </h4>
+                    <p>{precio_producto}<span>x {cantidad_producto}</span> <i onclick="remove_cart({id});" class="fa fa-remove"></i></p>
+                </div>
+            </div>
+        </li>
+    </div>
+</div>

@@ -1,0 +1,9 @@
+<div class="steps mb-5">
+    <div class="btn-group w-100 d-block d-md-flex" role="group" aria-label="Pasos de compra">
+        {% for s in steps %}
+        <a href="{{s.url}}" class="btn {% if s.active %} btn-danger text-white {% else %} {% if disabled %} btn-light disabled{% else %} btn-primary text-white{% endif %} {% endif %} col {% if disabled %} disabled {% endif %}">
+            {{s.title}}
+        </a>
+        {% endfor %}
+    </div>
+</div>

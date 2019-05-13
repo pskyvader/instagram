@@ -1,0 +1,91 @@
+<div class="page-content">
+    <ol class="breadcrumb">
+        {% for bc in breadcrumb %}
+        <li class="{{bc.active}}">
+            <a href="{{bc.url}}">{{bc.title}}</a>
+        </li>
+        {% endfor %}
+    </ol>
+    <div class="page-heading">
+        <h1> {{title}} </h1>
+    </div>
+    <div class="container-fluid">
+        <div data-widget-group="group1">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-primary no-animate" data-widget='{"draggable": "false"}'>
+                        <div class="panel-heading">
+                            <h2>
+                                {{title}}
+                            </h2>
+                            <div class="panel-ctrls" data-actions-container="" data-action-collapse='{"target": ".panel-body, .panel-footer"}'></div>
+                        </div>
+                        <div class="panel-body" style="display:none;">
+                            {% if mensaje_error!='' %}
+                            <div class="alert alert-danger">
+                                Se ha encontrado el siguiente error:
+                                <p><b>{{mensaje_error}}</b></p>
+                                Por favor soluciona este error y actualiza la pagina
+                            </div>
+                            {% else %}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button class="btn btn-primary btn-block btn-raised btn-md" data-toggle="modal" data-target=".modal-update">
+                                        Descargar e instalar actualizacion
+                                    </button>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="centeredcontainer">
+                    <p class="text-center">Progreso</p>
+                    <input id="progreso_sitemap" type="text" class="dial" data-linecap="round" value="{{progreso}}" data-width="180" data-fgColor="#07d14f" data-thickness=".05">
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="panel panel-default" data-widget='{"draggable": "false"}'>
+                    <div class="panel-heading">
+                        <h2>Actualizacion</h2>
+                        <div class="panel-ctrls" data-actions-container="" data-action-collapse='{"target": ".panel-body"}'></div>
+                    </div>
+                    <div class="panel-body scroll-pane" style="height: 200px;">
+                        <div class="scroll-content" id="update_content">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--MODAL para eliminacion de elementos-->
+<div class="modal fade modal-update" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h2 class="modal-title">Confirmación</h2>
+            </div>
+            <div class="modal-body">
+                <ul>
+                    <li><b>Antes de actualizar deberias realizar un respaldo y descargarlo</b></li>
+                    <li>Esta actualizacion modificara componentes del panel de administracion y podria modificar componentes del sitio</li>
+                    <li>Se recomienda realizar esta actualizacion en horas de baja demanda</li>
+                </ul>
+                <p>Si ocurre algun problema al realizar esta actualizacion, por favor notificar lo antes posible a
+                    <a href="mailto:contacto@mysitio.cl">contacto@mysitio.cl</a>
+                </p>
+                <input type="hidden" name="id_update" value="">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-raised btn-warning" onclick="iniciar_update();" data-dismiss="modal">Actualizar</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,73 @@
+<section class="p-b-60 p-t-60 order step-3">
+    <div class="container">
+        <div class="content">
+            <div class="row">
+                <div class="col">
+                    {{steps}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="m-b-30">
+                        <p>Por favor confirma la informacion del pedido. </p>
+                        <p>Si toda la información es correcta, puedes <b>cerrar</b> el pedido y seleccionar medios de pago. O puedes <b>volver</b> y modificar tu pedido.</p>
+                        <div class="grupo_pedido">
+                            <div class="lista_direcciones mt-5">
+                                {% for d in direcciones %}
+                                <div class="direccion" data-id="{{d.idpedidodireccion}}">
+                                    <div class="row grid-table-heading d-none d-md-flex">
+                                        <div class="col-md-7 grid-item"><b>Direccion</b></div>
+                                        <div class="col-md-3 grid-item"><b>Fecha de entrega</b></div>
+                                        <div class="col-md-2 grid-item"><b>Valor de envio</b></div>
+                                    </div>
+                                    <div class="row grid-table align-items-md-baseline">
+                                        <div class="col-12 d-md-none grid-item heading-item pt-5"><b>Direccion</b></div>
+                                        <div class="col-12 col-md-7 grid-item pb-5">
+                                            {{d.direccion_entrega}}
+                                        </div>
+                                        <div class="col-12 d-md-none grid-item heading-item"><b>Fecha de entrega</b></div>
+                                        <div class="col-12 col-md-3 grid-item ">
+                                            {{d.fecha_entrega}} a las {{d.hora_entrega}}
+                                        </div>
+                                        <div class="col-12 d-md-none grid-item heading-item"><b>valor de envio</b></div>
+                                        <div class="col-12 col-md-2 grid-item">
+                                            <span class="precio">{{d.precio}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="row grid-table py-5 mb-5 last">
+                                        <div class="col-12">
+                                            <div class="lista_productos_pedido">
+                                                {% for p in d.productos %}
+                                                <div class="producto">
+                                                    <div class="row grid-table align-items-center py-2 bg-white">
+                                                        <div class="col-12 col-md-10 titulo mb-3">
+                                                            <img src="{{p.foto}}" alt="{{p.titulo}}">
+                                                            <a class="ml-3" href="{{p.url}}">{{p.titulo}}</a>
+                                                            <span class="mx-3">({{p.atributo}})</span>
+                                                        </div>
+                                                        <div class="col-12 col-md-2 text-right">
+                                                            <span>{{p.total}}</span>
+                                                        </div>
+                                                        <div class="col-12 mt-4">
+                                                            <b>Mensaje:</b><br />
+                                                            <span>{{p.mensaje}}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    {{sidebar}}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

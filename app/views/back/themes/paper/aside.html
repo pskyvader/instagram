@@ -1,0 +1,65 @@
+<div class="static-sidebar-wrapper sidebar-custom">
+    <div class="static-sidebar">
+        <div class="sidebar">
+            <div class="widget" id="widget-profileinfo">
+                <div class="widget-body">
+                    <div class="userinfo">
+                        <a href="{{url_admin}}">
+                            <div class="avatar pull-left">
+                                <img src="{{img_admin}}" class="img-responsive img-circle" alt="{{name}}">
+                            </div>
+                            <div class="info">
+                                <span class="username">{{name}}</span>
+                                <span class="useremail">{{email}}</span>
+                            </div>
+                        </a>
+                        <div class="acct-dropdown clearfix dropdown">
+                            <span class="pull-left"><span class="online-status online"></span>Online</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="widget stay-on-collapse" id="widget-sidebar">
+                <nav role="navigation" class="widget-body">
+                    <ul class="acc-menu">
+                        {% for m in menu %}
+                        {% if m.separador %}
+                        <li class="nav-separator"><span>{{m.title}}</span></li>
+                        {% else %}
+                        {% if m.has_submenu %}
+                        <li class="hasChild {% if m.active %} open active {% endif %}">
+                            <a class="withripple" href="javascript:;">
+                                <span class="icon">
+                                    <i class="material-icons">{{m.icon}} </i>
+                                </span>
+                                <span> {{m.title}} </span>
+                            </a>
+                            <ul class="acc-menu">
+                                {% for sm in m.submenu %}
+                                <li class="{% if sm.active %} active {% endif %}">
+                                    <a class="withripple" href="{{sm.url}}">{{sm.sub_title}} </a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        {% else %}
+                        <li>
+                            <a class="withripple {% if m.active %} active {% endif %}" href="{{m.url}}">
+                                <span class="icon">
+                                    <i class="material-icons">{{m.icon}}</i>
+                                </span>
+                                <span>{{m.title}}</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<!--termina en footer-->
+<div class="static-content-wrapper">
+    <div class="static-content" id="contenido-principal">

@@ -1,0 +1,9 @@
+<label for="{{field}}" class="col-sm-2 control-label">{{title_field}} {% if required %} <sup>*</sup> {% endif %}</label>
+<div class="col-sm-8">
+    <div class="input-group cpicker color" data-color="{{value}}" data-color-format="hex">
+        <span class="input-group-addon"><i style="background-color: {{value}}; margin-left: 8px;"></i></span>
+        <input id="{{field}}" placeholder="{{title_field}}" name="{{field}}"  type="text" readonly class="form-control" value="{{value}}" {% if required %} required="required" {% endif %} >
+    </div>
+
+</div>
+<div class="col-sm-2"><p class="help-block">{{help}}</p></div>

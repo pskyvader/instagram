@@ -1,0 +1,46 @@
+<section class="banner banner-md">
+    <div id="banner-principal" class="carousel slide d-print-none" data-ride="carousel" data-interval="5000">
+        <ol class="carousel-indicators">
+            {% for t in thumb %}
+            <li data-target="#banner-principal" data-slide-to="{{t.id}}" class="{%if t.active %} active {% endif %}"></li>
+            {% endfor %}
+        </ol>
+        <div class="carousel-inner" role="listbox">
+            {% for b in banner %}
+            <div role="option" class="carousel-item {%if b.active %} active {% endif %}">
+                <div class="card blur" data-background2="{background}" style="{{b.data}}2background-image:url({{b.background}});">
+                    <div class="container p-0 d-none-">
+                        <picture class="imagen">
+                            {% for s in  b.srcset %}
+                            <source media="{{s.media}}" {{b.data}}srcset="{{s.url}}" type="{{s.type}}">
+                            {% endfor %}
+                            <img class="" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="{{b.foto}}" alt="{{b.title}}">
+                        </picture>
+                    </div>
+                    <div class="card-img-overlay">
+                        <div class="container animated fadeInDown">
+                            {% if b.texto1!='' %}
+                            <h1 class="card-title"> {{b.texto1}}</h1>
+                            {% endif %}
+                            {% if b.texto2!='' %}
+                            <h4> {{b.texto2}}</h4>
+                            {% endif %}
+                            {% if b.link!='' %}
+                            <a href="{{b.link}}" class="btn round" target="_blank" rel="noopener noreferrer">Ver más</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <a class="carousel-control-prev" href="#banner-principal" role="button" data-slide="prev">
+            <i class="fa fa-chevron-left fa-2x " aria-hidden="true"></i>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#banner-principal" role="button" data-slide="next">
+            <i class="fa fa-chevron-right fa-2x" aria-hidden="true"></i>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+</section>

@@ -1,0 +1,59 @@
+<div class="form-group file file_individual">
+    <label for="{{field}}" class="col-sm-2 control-label">{{title_field}} {% if required %} <sup>*</sup> {% endif %}</label>
+    <div class="col-sm-5">
+        <div class="fileinput fileinput-new" data-provides="fileinput">
+            <div class="input-group">
+                <div class="form-control uneditable-input" data-trigger="fileinput">
+                    {% if is_file %}
+                    <i class="fa fa-file fileinput-exists" style="display:inline-block;"></i>&nbsp;<span class="fileinput-filename">{{url}}</span>
+                    {% else %}
+                    <i class="fa fa-file fileinput-exists"></i>&nbsp;<span class="fileinput-filename"></span>
+                    {% endif %}
+                </div>
+                <span class="input-group-btn">
+                    {% if not required %}
+                    <a href="#" class="btn btn-default btn-md eliminar_file" data-id="archivo" data-toggle="modal" data-target=".modal-eliminar">Eliminar</a>
+                    {% endif %}
+                    <a href="#" class="btn btn-default btn-md fileinput-exists" data-id="archivo" data-tipo="subir_archivo" data-dismiss="fileinput">Quitar</a>
+                    <span class="btn btn-default btn-md btn-file">
+                        <span class="fileinput-new">Selecciona un archivo</span>
+                        <span class="fileinput-exists">Cambiar</span>
+                        <input type="file" name="..." data-id="{{field}}" data-tipo="subir_archivo">
+                    </span>
+                </span>
+            </div>
+        </div>
+        <input type="hidden" class="id" name="file[{{field}}][0][id]" value="1">
+        <input type="hidden" class="url" name="file[{{field}}][0][url]" value="{{url}}">
+        <input type="hidden" class="parent" name="file[{{field}}][0][parent]" value="{{parent}}">
+        <input type="hidden" class="folder" name="file[{{field}}][0][folder]" value="{{folder}}">
+        <input type="hidden" class="subfolder" name="file[{{field}}][0][subfolder]" value="{{subfolder}}">
+        <input type="hidden" class="tmp" name="file[{{field}}][0][tmp]" value="">
+        <input type="hidden" class="original_name" name="file[{{field}}][0][original_name]" value="">
+        <input id="{{field}}" class="name" name="" type="hidden" {% if required %} required="required" {% endif %} value="{{url}}">
+    </div>
+    <div class="col-sm-3">
+        <div class="alert alert-info">{{help}}</div>
+        {% if not required %}
+        <div class="alert alert-danger">Boton Eliminar borra el archivo de forma definitiva!</div>
+        <!--MODAL para eliminacion de elementos-->
+        <div class="modal fade modal-eliminar" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h2 class="modal-title">Confirmación</h2>
+                    </div>
+                    <div class="modal-body">
+                        <p>¿Está seguro de eliminar este archivo?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-raised btn-danger" id="eliminar_editar_file" onclick="eliminar_file($(this).data('id'));" data-dismiss="modal">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>

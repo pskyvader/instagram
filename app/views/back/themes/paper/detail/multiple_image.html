@@ -1,0 +1,48 @@
+<div class="form-group image_multiple image">
+    <label for="{{field}}" class="col-sm-2 control-label">{{title_field}} {% if required %} <sup>*</sup> {% endif %}</label>
+    <div class="col-sm-8">
+        <input id="{{field}}" class="name" name="" type="hidden" {% if required %} required="required" {% endif %} value="{{count}}">
+        <div class="multiple_image"></div>
+        <div class="alert alert-info">{{help}}</div>
+        <div class="image_list sorted_multiple row">
+            {% for f in fields %}
+            <div class="campo fields col-sm-2">
+                <div class="move"><i class="fa fa-arrows fa-lg"></i>
+                    <div class="portada_container">
+                        <button data-field="{{f.field}}" data-active="{{f.active}}" data-id="0" class="btn btn-raised active tooltips btn-md {{f.class}}" data-original-title="Portada">
+                            <i class="fa {{f.icon}}"></i>
+                        </button>
+                        <input class="portada" name="multiple[image][{{f.field}}][portada][]" type="hidden" value="{{f.active}}">
+                    </div>
+                    <img class="image" src="{{f.image}}" alt="{{f.title_field}}">
+                    <input type="hidden" class="id" name="multiple[image][{{f.field}}][id][]" value="{{f.id}}">
+                    <input type="hidden" class="url" name="multiple[image][{{f.field}}][url][]" value="{{f.url}}">
+                    <input type="hidden" class="parent" name="multiple[image][{{f.field}}][parent][]" value="{{f.parent}}">
+                    <input type="hidden" class="folder" name="multiple[image][{{f.field}}][folder][]" value="{{f.folder}}">
+                    <input type="hidden" class="subfolder" name="multiple[image][{{f.field}}][subfolder][]" value="{{f.subfolder}}">
+                    <input type="hidden" class="tmp" name="multiple[image][{{f.field}}][tmp][]" value="">
+                    <button class="btn btn-raised eliminar btn-danger btn-md" onclick="count_images($(this).closest('.image'));$(this).closest('.campo').remove();">
+                        <i class="material-icons">delete</i>
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="campo new_line col-sm-2">
+            <div class="move"><i class="fa fa-arrows fa-lg"></i>
+                <div class="portada_container">
+                    <button data-field="{{field}}" data-active="false" data-id="0" class="btn btn-raised active tooltips btn-md btn-danger" data-original-title="Portada">
+                        <i class="fa fa-close"></i>
+                    </button>
+                    <input class="portada" name="multiple[image][{{field}}][portada][]" type="hidden" value="false">
+                </div>
+                <img class="image" src="" alt="{{title_field}}">
+                <input type="hidden" class="id" name="multiple[image][{{field}}][id][]" value="">
+                <input type="hidden" class="tmp" name="multiple[image][{{field}}][tmp][]" value="">
+                <button class="btn btn-raised eliminar btn-danger btn-md" onclick="count_images($(this).closest('.image'));$(this).closest('.campo').remove();">
+                    <i class="material-icons">delete</i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

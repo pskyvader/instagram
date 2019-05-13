@@ -1,0 +1,153 @@
+<div class="page-content">
+    <ol class="breadcrumb">
+        {% for b in breadcrumb %}
+        <li class="{{b.active}}">
+            <a href="{{b.url}}">{{b.title}}</a>
+        </li>
+        {% endfor %}
+    </ol>
+    <div class="page-heading">
+        <h1>{{title}} </h1>
+    </div>
+    <div class="container-fluid">
+        <div data-widget-group="group1">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default no-animate">
+                        <div class="panel-heading">
+                            <div class="panel-ctrls pull-left">
+                                <label class="panel-ctrls-center">
+                                    <select name="limit" aria-controls="limits" class="select form-control">
+                                        {% for l in limits %}
+                                        <option value="{{l.value}}" {{l.active}}>{{l.text}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </label>
+                                <i class="separator"></i>
+                                <div class="pull-right">
+                                    <label class="panel-ctrls-center">
+                                        <form action="" class="search">
+                                            <input name='search' type="search" class="form-control" placeholder="Buscar..." aria-controls="example" value='{{search}}'>
+                                        </form>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="btn-group mt-sm">
+                                {% if regenerar %}
+                                <button class="btn btn-default regenerar">
+                                    <i class="fa fa-image"></i>
+                                    <span> Regenerar Imagenes</span>
+                                </button>
+                                {% endif %}
+                                {% if excel %}
+                                <button class="btn btn-default csv">
+                                    <i class="fa fa-file-excel-o"></i>
+                                    <span> Exportar CSV</span>
+                                </button>
+                                <button class="btn btn-default excel">
+                                    <i class="fa fa-file-excel-o"></i>
+                                    <span> Exportar Excel</span>
+                                </button>
+                                {% endif %}
+                                {% if new %}
+                                <a class="btn btn-default new" href="{{new_url}}">
+                                    <i class="fa fa-plus"></i>
+                                    <span> Nuevo</span>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="panel-body no-padding table-responsive">
+                            <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-hover table-bordered m-n {% if order %} sorted_table {% endif %}" id="tabla">
+                                <thead>
+                                    <tr>
+                                        {% if order %} <th width="30"></th>{% endif %}
+                                        {% for k,h in th.items() %}
+                                        <th>{{h.title_th}}</th>
+                                        {% endfor %}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for r in row %}
+                                    <tr class="{% if r.even %} even {% else %} odd {% endif %} gradeX tooltips" data-id="{{r.id}}" data-order="{{r.order}}" data-placement="top" data-trigger="hover" data-original-title="ID: {{r.id}}">
+                                        {% if order %}
+                                        <td class="move">
+                                            <i class="fa fa-arrows fa-lg"></i>
+                                        </td>
+                                        {% endif %}
+                                        {% for t in r.td %}
+                                        <td class="center" data-field="{{t.content_field}}">
+                                            {{t.content}}
+                                        </td>
+                                        {% endfor %}
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="panel-footer">
+                            <div class="hidden" id="count_elementos">{{count}}</div>
+                            <div class="pull-left m-n">
+                                Mostrando {{inicio}} a {{fin}} de {{count}} elementos
+                            </div>
+                            <ul class="pagination pull-right m-n">
+                                {% for p in pagination %}
+                                <li class="{{p.class_page}}">
+                                    <a href="{{p.url_page}}" class="{{p.class_page}}">{{p.text_page}}</a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- .container-fluid -->
+</div>
+<!-- #page-content -->
+{% if delete %}
+<!--MODAL para eliminacion de elementos-->
+<div class="modal fade modal-eliminar" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h2 class="modal-title">Confirmación</h2>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro de eliminar este elemento? <span id="nombre_elemento"></span></p>
+                <input type="hidden" name="id_eliminar" value="">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-raised btn-danger" onclick="eliminar_elemento();" data-dismiss="modal">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+<div class="modal fade modal-foto" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <a href="" target="_blank">
+                    <img class="vista-previa" alt="Imagen" style="width:100%;">
+                </a>
+                <!--
+            <div class="cambiar-foto">
+            <div class="fileinput fileinput-new" style="width: 100%;" data-provides="fileinput">
+                <div class="fileinput-preview thumbnail mb20 fileinput-exists" data-trigger="fileinput" style="width: 100%; height: 150px;"></div>
+                <div>
+                    <span class="btn btn-default btn-file"><span class="fileinput-new">Cambiar Imagen</span><span class="fileinput-exists" onclick="cancelar_archivo();">Cambiar</span><input data-tipo="subir_imagen" type="file" name="..."></span>
+                    <a href="#" class="btn btn-default fileinput-exists guardar_modal" data-dismiss="fileinput" data-tipo="subir_imagen">Guardar</a>
+                </div>
+            </div>
+            </div>
+            <input name="foto" type="hidden">
+            -->
+            </div>
+        </div>
+    </div>
+</div>

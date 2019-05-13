@@ -1,0 +1,33 @@
+<section class="seccion-breadcrumb breadcrumb">
+    <div class="container">
+        <div class="row">
+            <div class="col-md">
+                {% if subtitulo!='' %}
+                <h3>
+                    {{titulo}}
+                </h3>
+                <h6>
+                    {{subtitulo}}
+                </h6>
+                {% else %}
+                <h3>
+                    {{titulo}}
+                </h3>
+                {% endif %}
+            </div>
+            <div class="align-self-center col-md">
+                <ol class="breadcrumb float-md-right m-0 p-0">
+                    {% for b in breadcrumb %}
+                    <li class="breadcrumb-item {% if b.active %} active {% endif %}">
+                        {% if b.active %}
+                        {{b.title}}
+                        {% else %}
+                        <a href="{{b.url}}"> {{b.title}}</a>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>

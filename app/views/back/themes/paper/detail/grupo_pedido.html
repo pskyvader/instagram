@@ -1,0 +1,260 @@
+<div class="grupo_pedido clearfix">
+    <label for="{{field}}" class="col-sm-2 control-label">{{title_field}} {% if required %} <sup>*</sup> {% endif %}</label>
+    <div class="col-sm-8">
+        <input id="{{field}}" class="name" name="" type="hidden" {% if required %} required="required" {% endif %} value="{count}">
+        <div class="alert alert-info">{{help}}</div>
+        <div class="direcciones_pedido row">
+            {% for d in direcciones %}
+            <div class="col-xs-12 mt mb-lg linea">
+                <div class="campo direccion">
+                    <h4 class="title pull-left">Direccion guardada</h4>
+                    <button class="quitar_direccion btn-raised btn-danger btn btn-md pull-right">
+                        <i class="material-icons">delete</i>
+                        <div class="ripple-container"></div>
+                    </button>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="row datos_direccion">
+                        <input type="hidden" name="datos_direcciones[{{d.idpedidodireccion}}][iddireccionpedido]" class="iddireccionpedido" value="{{d.idpedidodireccion}}">
+                        <input type="hidden" name="datos_direcciones[{{d.idpedidodireccion}}][cantidad]" class="cantidad_productos" data-campo="Todas las direcciones deben tener al menos 1 producto" value="{{d.cantidad}}" required="">
+                        <div class="col-md-4">
+                            <select name="datos_direcciones[{{d.idpedidodireccion}}][iddireccion]" class="form-control direccion_entrega">
+                                <option value="" selected="selected" hidden="" disabled="">Selecciona una direccion de entrega</option>
+                                {% for de in d.direccion_entrega %}
+                                <option value="{{de.idusuariodireccion}}" data-precio="{{de.precio}}" {% if de.selected%} selected='selected' {% endif %} >{{de.titulo}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <input placeholder="Fecha de entrega" name="datos_direcciones[{{d.idpedidodireccion}}][fecha_entrega]" type="text" class="form-control date fecha_entrega" value="{{d.fecha_entrega}}" autocomplete="off">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control direccion_precio" value="{{d.precio}}" readonly="" placeholder="Valor de envio">
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="add row">
+                        <div class="col-sm-6 col-md-4">
+                            <select name="" class="form-control lista_productos">
+                                <option value="" disabled="" hidden="" selected="">Selecciona un producto</option>
+                                {% for lp in d.lista_productos %}
+                                <option value="{{lp.idproducto}}" data-foto="{{lp.foto}}" data-precio="{{lp.precio}}" data-stock="{{lp.stock}}">{{lp.titulo}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-sm-6 col-md-4 cantidad">
+                            <input type="number" min="1" name="" class="form-control cantidad_producto" placeholder="Cantidad" value="1">
+                        </div>
+                        <div class="col-sm-6 col-md-4">
+                            <button class="add_producto btn btn-success btn-raised disabled">Añadir producto</button>
+                        </div>
+                        <hr />
+                        <div class="lista_productos_pedido col-xs-12">
+                            {% for p in d.productos %}
+                            <div class="datos_producto">
+                                <input type="hidden" name="datos_direcciones[{{d.idpedidodireccion}}][productos][{{p.idpedidoproducto}}][idproductopedido]" class="idproductopedido" value="{{p.idpedidoproducto}}">
+                                <input type="hidden" name="datos_direcciones[{{d.idpedidodireccion}}][productos][{{p.idpedidoproducto}}][idproducto]" class="idproducto" value="{{p.idproducto}}">
+                                <div class="move">
+                                    <div class="handle">
+                                        <i class="fa fa-arrows fa-lg"></i>
+                                        <label class="titulo">{{p.titulo}}</label>
+                                    </div>
+                                    <div class="producto">
+                                        <div class="row">
+                                            <div class="col-xs-6 col-md-2">
+                                                <img src="{{p.foto}}" alt="Imagen" class="imagen">
+                                            </div>
+                                            <div class="col-xs-6 col-md-2 visible-sm visible-xs">
+                                                <button class="quitar_producto btn-raised btn-danger btn btn-md pull-right">
+                                                    <i class="material-icons">delete</i>
+                                                    <div class="ripple-container"></div>
+                                                </button>
+                                            </div>
+                                            <div class="clearfix visible-sm visible-xs" style="margin-bottom: 10px;"></div>
+                                            <div class="col-sm-6 col-md-4 margen-top">
+                                                <div class="row">
+                                                    <div class="col-xs-6">
+                                                        <label for="">Cantidad</label>
+                                                    </div>
+                                                    <div class="col-xs-6">
+                                                        <input type="number" min="1" name="datos_direcciones[{{d.idpedidodireccion}}][productos][{{p.idpedidoproducto}}][cantidad]" class="producto_cantidad form-control" value="{{p.cantidad}}" readonly="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6 col-md-4 margen-top">
+                                                <div class="row">
+                                                    <div class="col-xs-6">
+                                                        <label for="">Precio</label>
+                                                    </div>
+                                                    <div class="col-xs-6">
+                                                        <input type="text" name="" class="precio form-control" value="{{p.total}}" readonly="">
+                                                        <input type="hidden" name="" class="precio_unitario" value="{{p.precio}}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 hidden-sm hidden-xs margen-top">
+                                                <button class="quitar_producto btn-raised btn-danger btn btn-md">
+                                                    <i class="material-icons">delete</i>
+                                                    <div class="ripple-container"></div>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="clearfix">
+                                            <div class="form-group">
+                                                <label for="" class="col-sm-2 control-label">Atributo</label>
+                                                <div class="col-sm-10">
+                                                    <select name="datos_direcciones[{{d.idpedidodireccion}}][productos][{{p.idpedidoproducto}}][idproductoatributo]" class="form-control producto_atributo">
+                                                        <option value="" disabled="" hidden="" selected="">Selecciona un Atributo</option>
+                                                        {% for la in p.lista_atributos %}
+                                                        <option value="{{la.idproducto}}" data-foto="{{la.foto}}" {% if la.selected%} selected='selected' {% endif %}>{{la.titulo}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix">
+                                            <div class="form-group mensaje">
+                                                <label for="" class="col-sm-2 control-label">Mensaje de la tarjeta</label>
+                                                <div class="col-sm-10">
+                                                    <textarea name="datos_direcciones[{{d.idpedidodireccion}}][productos][{{p.idpedidoproducto}}][mensaje]" cols="30" rows="2" class="producto_mensaje form-control autosize">{{p.mensaje}}</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="add">
+            <button class="add_direccion btn btn-block btn-primary btn-raised">Añadir dirección de envio</button>
+        </div>
+        <div class="col-xs-12 mt mb-lg new_line linea">
+            <div class="campo direccion">
+                <h4 class="title pull-left">Nueva dirección de envio</h4>
+                <button class="quitar_direccion btn-raised btn-danger btn btn-md pull-right">
+                    <i class="material-icons">delete</i>
+                    <div class="ripple-container"></div>
+                </button>
+                <div class="clearfix"></div>
+                <hr>
+                <div class="row datos_direccion">
+                    <input type="hidden" name="datos_direcciones[][iddireccionpedido]" class="iddireccionpedido" value="">
+                    <input type="hidden" name="datos_direcciones[][cantidad]" class="cantidad_productos" data-campo="Todas las direcciones deben tener al menos 1 producto" value="" required="">
+                    <div class="col-md-4">
+                        <select name="datos_direcciones[][iddireccion]" class="form-control direccion_entrega">
+                            <option value="" selected="selected" hidden="" disabled="">Selecciona una direccion de entrega</option>
+                            {% for de in direccion_entrega %}
+                            <option value="{{de.idusuariodireccion}}" data-precio="{{de.precio}}">{{de.titulo}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <input placeholder="Fecha de entrega" name="datos_direcciones[][fecha_entrega]" type="text" class="form-control date fecha_entrega" value="{{fecha}}" autocomplete="off">
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" class="form-control direccion_precio" value="" readonly="" placeholder="Valor de envio">
+                    </div>
+                </div>
+                <hr>
+                <div class="add row">
+                    <div class="col-sm-6 col-md-4">
+                        <select name="" class="form-control lista_productos">
+                            <option value="" disabled="" hidden="" selected="">Selecciona un producto</option>
+                            {% for lp in lista_productos %}
+                            <option value="{{lp.idproducto}}" data-foto="{{lp.foto}}" data-precio="{{lp.precio}}" data-stock="{{lp.stock}}">{{lp.titulo}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm-6 col-md-4 cantidad">
+                        <input type="number" min="1" name="" class="form-control cantidad_producto" placeholder="Cantidad" value="1">
+                    </div>
+                    <div class="col-sm-6 col-md-4">
+                        <button class="add_producto btn btn-success btn-raised disabled">Añadir producto</button>
+                    </div>
+                    <hr />
+                    <div class="lista_productos_pedido col-xs-12">
+                    </div>
+                </div>
+                <div class="datos_producto new_row">
+                    <input type="hidden" name="datos_direcciones[][productos][][idproductopedido]" class="idproductopedido">
+                    <input type="hidden" name="datos_direcciones[][productos][][idproducto]" class="idproducto">
+                    <div class="move">
+                        <div class="handle">
+                            <i class="fa fa-arrows fa-lg"></i>
+                            <label class="titulo">Titulo</label>
+                        </div>
+                        <div class="producto">
+                            <div class="row">
+                                <div class="col-xs-6 col-md-2">
+                                    <img src="" alt="Imagen" class="imagen">
+                                </div>
+                                <div class="col-xs-6 col-md-2 visible-sm visible-xs">
+                                    <button class="quitar_producto btn-raised btn-danger btn btn-md pull-right">
+                                        <i class="material-icons">delete</i>
+                                        <div class="ripple-container"></div>
+                                    </button>
+                                </div>
+                                <div class="clearfix visible-sm visible-xs" style="margin-bottom: 10px;"></div>
+                                <div class="col-sm-6 col-md-4 margen-top">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <label for="">Cantidad</label>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <input type="number" min="1" name="datos_direcciones[][productos][][cantidad]" class="producto_cantidad form-control" value="0" readonly="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-4 margen-top">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <label for="">Precio</label>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <input type="text" name="" class="precio form-control" value="0" readonly="">
+                                            <input type="hidden" name="" class="precio_unitario" value="0">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 margen-top">
+                                    <button class="quitar_producto btn-raised btn-danger btn btn-md hidden-sm hidden-xs">
+                                        <i class="material-icons">delete</i>
+                                        <div class="ripple-container"></div>
+                                    </button>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="clearfix">
+                                <div class="form-group">
+                                    <label for="" class="col-sm-2 control-label">Atributo</label>
+                                    <div class="col-sm-10">
+                                        <select name="datos_direcciones[][productos][][idproductoatributo]" class="form-control producto_atributo">
+                                            <option value="" disabled="" hidden="" selected="">Selecciona un Atributo</option>
+                                            {% for la in lista_atributos %}
+                                            <option value="{{la.idproducto}}" data-foto="{{la.foto}}">{{la.titulo}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix">
+                                <div class="form-group mensaje">
+                                    <label for="" class="col-sm-2 control-label">Mensaje de la tarjeta</label>
+                                    <div class="col-sm-10">
+                                        <textarea name="datos_direcciones[][productos][][mensaje]" cols="30" rows="2" class="producto_mensaje form-control autosize"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

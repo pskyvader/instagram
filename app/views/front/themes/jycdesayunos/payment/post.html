@@ -1,0 +1,10 @@
+<form action="{{action}}" id="form" method="POST">
+    {% for f in form %}
+    <input type="hidden" name="{{f.field}}" value="{{f.value}}">
+    {% endfor %}
+</form>
+<script>
+    window.onload = function() {
+        document.getElementById('form').submit();
+    };
+</script>

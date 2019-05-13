@@ -1,0 +1,4 @@
+<label for="{{field}}" class="col-sm-2 control-label">{{title_field}} {% if required %} <sup>*</sup> {% endif %}</label>
+<div class="col-sm-8">
+    <textarea name="{{field}}" id="{{field}}" cols="30" rows="2" class="form-control autosize" {% if required %} required="required" {% endif %}>{{value}}</textarea>
+</div>

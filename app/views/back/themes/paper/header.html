@@ -1,0 +1,37 @@
+<header id="topnav" class="navbar navbar-fixed-top navbar-custom" role="banner">
+    <div class="logo-area">
+        <a class="navbar-brand navbar-brand-custom" href="#">
+            <img class="show-on-collapse img-logo-white" alt="Logo" src="{{logo_min}}">
+            <img class="show-on-collapse img-logo-dark" alt="Logo" src="{{logo_min}}">
+            <img class="img-white" alt="Logo" src="{{logo_max}}">
+            <img class="img-dark" alt="Logo" src="{{logo_max}}">
+        </a>
+        <span id="trigger-sidebar" class="toolbar-trigger toolbar-icon-bg stay-on-search">
+            <a data-toggle="tooltips" data-placement="right" title="Toggle Sidebar">
+                <span class="icon-bg">
+                    <i class="material-icons">menu</i>
+                </span>
+            </a>
+        </span>
+    </div>
+    <!-- logo-area -->
+    <div class="mt-lg" id="time" data-time="{{date}}">Servidor: <span></span></div>
+    <ul class="nav navbar-nav toolbar pull-right">
+        <li class="toolbar-icon-bg hidden-xs" id="trigger-fullscreen">
+            <a href="#" class="toggle-fullscreen">
+                <span class="icon-bg">
+                    <i class="material-icons">fullscreen</i>
+                </span>
+            </a>
+        </li>
+        <li class="toolbar-icon-bg">
+            <a href="{{url_exit}}" id="logout" title="Salir" class="tooltips" data-trigger="hover" data-placement="bottom">
+                <span class="icon-bg">
+                    <i class="material-icons">exit_to_app</i>
+                </span>
+            </a>
+        </li>
+    </ul>
+</header>
+<div id="wrapper">
+    <div id="layout-static">

@@ -1,0 +1,39 @@
+<div class="form-group file_multiple file">
+    <label for="{{field}}" class="col-sm-2 control-label">{{title_field}} {% if required %} <sup>*</sup> {% endif %}</label>
+    <div class="col-sm-8">
+        <div class="multiple_file"></div>
+        <div class="alert alert-info">{{help}}</div>
+        <div class="file_list sorted_multiple row">
+            {% for f in fields %}
+            <div class="campo fields col-sm-6 col-md-4">
+                <div class="move"><i class="fa fa-arrows fa-lg"></i>
+                    <a class="file btn btn-xs" href="{{f.file}}" target="_blank" alt="{{f.title_field}}">
+                        {{f.url}}
+                    </a>
+                    <input type="hidden" class="id" name="multiple[file][{{f.field}}][id][]" value="{{f.id}}">
+                    <input type="hidden" class="url" name="multiple[file][{{f.field}}][url][]" value="{{f.url}}">
+                    <input type="hidden" class="parent" name="multiple[file][{{f.field}}][parent][]" value="{{f.parent}}">
+                    <input type="hidden" class="folder" name="multiple[file][{{f.field}}][folder][]" value="{{f.folder}}">
+                    <input type="hidden" class="subfolder" name="multiple[file][{{f.field}}][subfolder][]" value="{{f.subfolder}}">
+                    <input type="hidden" class="tmp" name="multiple[file][{{f.field}}][tmp][]" value="">
+                    <input type="hidden" class="original_name" name="multiple[file][{{f.field}}][original_name][]" value="">
+                    <button class="btn btn-raised eliminar btn-danger btn-xs" onclick="$(this).parent().parent().remove();">
+                        <i class="material-icons">delete</i>
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="campo new_line col-sm-6 col-md-4">
+            <div class="move"><i class="fa fa-arrows fa-lg"></i>
+                <a class="file btn btn-xs" href="" target="_blank" alt="{{title_field}}"></a>
+                <input type="hidden" class="id" name="multiple[file][{{field}}][id][]" value="">
+                <input type="hidden" class="tmp" name="multiple[file][{{field}}][tmp][]" value="">
+                <input type="hidden" class="original_name" name="multiple[file][{{field}}][original_name][]" value="">
+                <button class="btn btn-raised eliminar btn-danger btn-xs" onclick="$(this).parent().parent().remove();">
+                    <i class="material-icons">delete</i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

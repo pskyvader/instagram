@@ -1,0 +1,63 @@
+</div>
+<!--#contenido-principal empieza en header-->
+<div id="cargando" class="d-none">
+    <div class="preloader"><i class="fa fa-spinner"></i></div>
+</div>
+<footer>
+    <div class="footer-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 m-b-30 text-center">
+                    <a href="{{path}}"> <img src="{{logo}}" alt="{{title}}" class="img-fluid"> </a>
+                </div>
+                <div class="col-sm-6 col-lg-4 m-b-30">
+                    <h4 class="title">Contáctanos</h4>
+                    <ul>
+                        {% for i in informacion %}
+                        <li>
+                            <i class="fa {{i.icono}} fa-lg mr-1"></i>
+                            {% if i.url!='' %}
+                            <a href="{{i.url}}">{{i.text}}</a>
+                            {% else %}
+                            {{i.text}}
+                            {% endif %}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% if social|length>0 %}
+                    <ul class="list list-inline m-l-ab-10">
+                        {% for s in social %}
+                        <li>
+                            <a href="{{s.url}}" target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-placement="bottom" title="{{s.title}}" class="icon icon-35 f-20">
+                                <i class="fa {{s.icon}}"></i>
+                                <span class="sr-only">{{s.title}}</span>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+                {% for lf in links_footer %}
+                <div class="col-sm-6 col-lg-{{lf.size}} m-b-30">
+                    <h4 class="title">{{lf.title}}</h4>
+                    <ul>
+                        {% for l in lf.links %}
+                        <li><a href="{{l.url}}">{{l.title}}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container">
+            <p> &copy; {{title}} 2018, Todos los derechos reservados. Creado por <a href="https://mysitio.cl">My Sitio.cl</a></p>
+        </div>
+    </div>
+</footer>
+
+{{js}}
+</body>
+
+</html>

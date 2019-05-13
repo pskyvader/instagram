@@ -1,0 +1,19 @@
+<li class="{{active}}">
+    {% if url!='' %}
+        {% if prefetch %}
+        <link rel="prefetch" href="{{url}}">
+        {% endif %}
+        <a class="" href="{{url}}" {{target}}>
+            {{title}}
+        </a>
+        {% else %}
+        <a class="" href="javascript:;">
+            {{title}}
+        </a>
+    {% endif %}
+    {% if contiene_hijo %}
+    <ul class="sub-menu">
+        {{hijos}}
+    </ul>
+    {% endif %}
+</li>

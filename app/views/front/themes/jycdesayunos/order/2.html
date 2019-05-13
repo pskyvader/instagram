@@ -1,0 +1,100 @@
+<section class="p-b-60 p-t-60 order step-2">
+    <div class="container">
+        <div class="content">
+            <div class="row">
+                <div class="col">
+                    {{steps}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="m-b-30">
+                        <div class="grupo_pedido">
+                            <a href="{{url_direcciones}}" class="btn btn-primary">Modificar direcciones</a>
+                            <hr class="mb-5" />
+                            <p>Puedes agregar direcciones adicionales a este pedido para enviar a distintas direcciones</p>
+                            <button class="btn btn-info btn-xl d-block mx-auto text-white" id="new_grupo">Direccion adicional</button>
+                            <div class="lista_direcciones mt-5">
+                                {% for d in direcciones %}
+                                <div class="direccion" data-id="{{d.idpedidodireccion}}">
+                                    <div class="row grid-table-heading d-none d-md-flex">
+                                        <div class="col-md-3 grid-item"><b>Direccion</b></div>
+                                        <div class="col-md-3 grid-item"><b>Fecha de entrega</b></div>
+                                        <div class="col-md-3 grid-item"><b>Hora de entrega</b></div>
+                                        <div class="col-md-2 grid-item"><b>Valor de envio</b></div>
+                                        <div class="col-md-1 grid-item remove_direccion" style="display:none;">
+                                            <button class="btn btn-link btn-sm" onclick="remove_direccion($(this));" data-toggle="tooltip" title="Quitar">
+                                                <i class="fa fa-remove"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="row grid-table">
+                                        <div class="col-6 d-md-none grid-item heading-item pt-5"><b>Direccion * </b></div>
+                                        <div class="col-6 col-md-3 grid-item pt-5">
+                                            <select name="" id="" class="form-control direccion_entrega">
+                                                <option value="" disabled="" hidden="" selected="">Selecciona una direccion *</option>
+                                                {% for de in d.direccion_entrega %}
+                                                <option data-precio="{{de.precio}}" value="{{de.0}}" {% if de.selected %} selected="" {% endif %}>{{de.titulo}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-6 d-md-none grid-item heading-item"><b>Fecha de entrega *</b></div>
+                                        <div class="col-6 col-md-3 grid-item ">
+                                            <input type="text" name="" id="" class="form-control fecha_entrega" value="{{d.fecha_entrega}}">
+                                        </div>
+                                        <div class="col-6 d-md-none grid-item heading-item"><b>Hora de entrega *</b></div>
+                                        <div class="col-6 col-md-3 grid-item ">
+                                            <select name="" id="" class="form-control hora_entrega">
+                                                <option value="" disabled="" hidden="" selected="">Selecciona un horario *</option>
+                                                {% for he in d.horarios_entrega %}
+                                                <option value="{{he.hora}}" {% if he.selected %} selected="" {% endif %}>{{he.titulo}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-6 d-md-none grid-item heading-item"><b>valor de envio</b></div>
+                                        <div class="col-6 col-md-2 grid-item">
+                                            <span class="precio">{{d.precio}}</span>
+                                        </div>
+                                        <div class="col-6 d-md-none grid-item heading-item"><b>Quitar</b></div>
+                                        <div class="col-6 d-md-none col-md-1 grid-item text-center remove_direccion" style="display:none;" data-toggle="tooltip" title="Quitar">
+                                            <i onclick="remove_direccion($(this));" class="fa fa-remove"></i>
+                                        </div>
+                                    </div>
+                                    <div class="row grid-table py-5 mb-5 last">
+                                        <div class="col-12">
+                                            <div class="lista_productos_pedido">
+                                                {% for p in d.productos %}
+                                                <div class="producto" data-id="{{p.idpedidoproducto}}">
+                                                    <div class="row grid-table align-items-center py-2">
+                                                        <div class="col-2 col-md-1 handle text-center">
+                                                            <i class="fa fa-arrows"></i>
+                                                        </div>
+                                                        <div class="col-10 col-md-11 titulo">
+                                                            <img src="{{p.foto}}" alt="{{p.titulo}}">
+                                                            <a class="ml-3" href="{{p.url}}">{{p.titulo}}</a>
+                                                            <span class="mx-3">({{p.atributo}})</span>
+                                                            {% if p.mensaje!='' %}
+                                                            <span> - {{p.mensaje}}</span>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    {{sidebar}}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<input type="hidden" value='{{fechas_bloqueadas}}' id="fechas_bloqueadas">
+<input type="hidden" value='{{fechas_especiales}}' id="fechas_especiales">

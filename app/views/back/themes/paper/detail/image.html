@@ -1,0 +1,55 @@
+<div class="form-group image image_individual">
+    <label for="{{field}}" class="col-sm-2 control-label">{{title_field}} {% if required %} <sup>*</sup> {% endif %}</label>
+    <div class="col-sm-5">
+        <div class="fileinput fileinput-new" style="width: 100%;" data-provides="fileinput">
+            <div class="fileinput-preview thumbnail mb20" data-trigger="fileinput" style="width: 100%; height: 150px;">
+                {% if is_image %}
+                <img src="{{image}}" alt="{{title_field}}" class="{{field}}">
+                {% endif %}
+            </div>
+            <div>
+                {% if not required %}
+                <a href="#" class="btn btn-default eliminar_image" data-id="{{field}}" data-toggle="modal" data-target=".modal-eliminar">Eliminar</a>
+                {% endif %}
+                <a href="#" class="btn btn-default fileinput-exists" data-id="{{field}}" data-dismiss="fileinput">Quitar</a>
+                <span class="btn btn-default btn-file">
+                    <span class="fileinput-new">Imagen</span>
+                    <span class="fileinput-exists">Cambiar</span>
+                    <input data-id="{{field}}" type="file" name="...">
+                </span>
+            </div>
+        </div>
+        <input type="hidden" class="portada" name="image[{{field}}][0][portada]" type="hidden" value="true">
+        <input type="hidden" class="id" name="image[{{field}}][0][id]" value="1">
+        <input type="hidden" class="url" name="image[{{field}}][0][url]" value="{{url}}">
+        <input type="hidden" class="parent" name="image[{{field}}][0][parent]" value="{{parent}}">
+        <input type="hidden" class="folder" name="image[{{field}}][0][folder]" value="{{folder}}">
+        <input type="hidden" class="subfolder" name="image[{{field}}][0][subfolder]" value="{{subfolder}}">
+        <input type="hidden" class="tmp" name="image[{{field}}][0][tmp]" value="">
+        <input id="{{field}}" class="name" name="" type="hidden" {% if required %} required="required" {% endif %} value="{{url}}">
+    </div>
+    <div class="col-sm-3">
+        <div class="alert alert-info">{{help}}</div>
+        {% if not required %}
+        <div class="alert alert-danger">Boton Eliminar borra la imagen de forma definitiva!</div>
+        <!--MODAL para eliminacion de elementos-->
+        <div class="modal fade modal-eliminar" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h2 class="modal-title">Confirmación</h2>
+                    </div>
+                    <div class="modal-body">
+                        <p>¿Está seguro de eliminar este archivo?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-raised btn-danger" id="eliminar_editar_image" onclick="eliminar_image($(this).data('id'));" data-dismiss="modal">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>

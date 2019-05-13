@@ -1,0 +1,47 @@
+<div class="page-content">
+    <ol class="breadcrumb">
+        {% for b in breadcrumb %}
+        <li class="{{b.active}}">
+            <a href="{{b.url}}">{{b.title}}</a>
+        </li>
+        {% endfor %}
+    </ol>
+    <div class="page-heading">
+        <h1>{{title}} </h1>
+    </div>
+    <div class="container-fluid">
+        <div data-widget-group="group1">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-primary no-animate" data-widget='{"draggable": "false"}'>
+                        <div class="panel-heading">
+                            <h2>
+                                {{title}}
+                            </h2>
+                            <div class="panel-ctrls" data-actions-container="" data-action-collapse='{"target": ".panel-body, .panel-footer"}'></div>
+                        </div>
+                        <div class="panel-body">
+                            <form id="formulario" class="form-horizontal" method="POST" action="{{save_url}}" data-list="{{list_url}}">
+                                <input type="hidden" id="id" name="id" value="{{id}}">
+                                {% for r in row %}
+                                <div class="form-group {{r.class}}" data-field="{{r.content_field}}">{{r.content}}</div>
+                                {% endfor %}
+
+                                <div class="panel-footer">
+                                    <div class="row">
+                                        <div class="col-sm-8 col-sm-offset-2">
+                                            <!--NO CAMBIAR LAS ID -->
+                                            <button id="guardar" class="btn-raised btn-primary btn btn-md">Guardar</button>
+                                            <button id="guardar-permanecer" class="btn-raised btn-primary btn btn-md">Guardar y permanecer</button>
+                                            <a id="cancelar" class="btn-default btn btn-md">Cancelar</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

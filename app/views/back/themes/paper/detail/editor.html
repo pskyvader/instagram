@@ -1,0 +1,8 @@
+<label for="{{field}}" class="col-sm-2 control-label">{{title_field}} {% if required %} <sup>*</sup> {% endif %}</label>
+<div class="col-sm-8">
+    <textarea name="{{field}}" id="{{field}}" cols="30" rows="3" class="form-control editor" {% if required %} required="required" {% endif %}>{{value}}</textarea>
+</div>
+<div class="col-sm-2"><p class="help-block">{{help}}</p></div>
+{% for p in preload %}
+<link rel="preload" href="{{p.url}}" as="{{p.type}}">
+{% endfor %}

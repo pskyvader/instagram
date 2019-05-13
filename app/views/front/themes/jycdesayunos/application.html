@@ -1,0 +1,28 @@
+<style>
+    body {
+        background: {{color_secundario}};
+        text-align: center;
+        display: none;
+    }
+
+    #header-top,
+    header,
+    footer {
+        opacity: 0;
+        height: 0px;
+    }
+</style>
+<div class="preloader"><i class="fa fa-spinner"></i></div>
+<img class="p-3" src="{{logo}}" alt="logo" style="height: auto;max-width: 100%;background:{{color_secundario}};">
+<h4 style="color:{{color_primario}};">Cargando...</h4>
+{% for i in images %}
+<img src="{{i.src}}" alt="" style="opacity: 0;height: 0px;">
+{% endfor %}
+<script>
+    window.onload = function() {
+        console.log('load ' + "{{path}}");
+        setTimeout(function() {
+            window.location.replace("{{path}}");
+        }, 1);
+    }
+</script>

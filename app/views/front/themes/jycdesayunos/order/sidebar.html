@@ -1,0 +1,12 @@
+<div class="box border-1x sticky-top">
+    <h3 class="title">Resumen</h3>
+    <ul class="list list-md list-3 list-li">
+        <li><b class="d-inline-block w-15r">Subtotal:</b><span class="precio_subtotal">{{subtotal}}</span></li>
+        <li><b class="d-inline-block w-15r ">Envío:</b><span class="precio_envio">{{total_direcciones}}</span></li>
+        <!--<li><b class="d-inline-block w-15r">Taxt:</b>+$10,00</li>
+                                <li><b class="d-inline-block w-15r">Coupon code:</b>HYTGNJ7 (-10%)</li>-->
+    </ul>
+    <p class="cart-total"><b class="d-inline-block ht-w-12 ">Total: </b> <span class="precio_total">{{total}}</span></p>
+    <button data-href="{{url_next}}" class="btn m-r-10 m-t-20 btn-primary btn-block" id="next_step">Continuar</button>
+    <a href="{{url_product}}" class="btn bg-3 m-t-20 btn-block">Volver a productos</a>
+</div>

@@ -1,0 +1,4 @@
+<label for="{{field}}" class="col-sm-2 control-label">{{title_field}} {% if required %} <sup>*</sup> {% endif %}</label>
+<div class="col-sm-8">
+	<input id="{{field}}" placeholder="{{title_field}}" name="{{field}}" type="email" class="form-control" value="{{value}}" {% if required %} required="required" {% endif %} autocomplete="off">
+</div>

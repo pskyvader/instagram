@@ -1,0 +1,39 @@
+<div class="col-md-4 col-lg-3">
+    {% if is_sidebar_category %}
+    <div class="box">
+        <h2 class="title">{{title}}</h2>
+        <ul class="list list-md list-3">
+            {% for sc in sidebar_categories %}
+            <li class="{{sc.active}}"><a href="{{sc.url}}">{{sc.title}}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% if is_sidebar_prices %}
+    <div class="box">
+        <h2 class="title">Price</h2>
+        <form>
+            <div class="radio radio-1">
+                <input type="radio" name="radio" checked id="radio0" />
+                <label for="radio0" class="fa fa-circle"></label>
+                10$
+            </div>
+            <div class="radio radio-1">
+                <input type="radio" name="radio" id="radio1" />
+                <label for="radio1" class="fa fa-circle"></label>
+                100$
+            </div>
+            <div class="radio radio-1">
+                <input type="radio" name="radio" id="radio2" />
+                <label for="radio2" class="fa fa-circle"></label>
+                220$
+            </div>
+            <div class="radio radio-1">
+                <input type="radio" name="radio" id="radio3" />
+                <label for="radio3" class="fa fa-circle"></label>
+                300$
+            </div>
+        </form>
+    </div>
+    {% endif %}
+</div>

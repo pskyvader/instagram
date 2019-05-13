@@ -1,0 +1,28 @@
+<div class="tabs-2 m-t-50">
+    <nav class="nav nav-tabs" id="myTab" role="tablist">
+        {% if is_description %}
+        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#descripcion" role="tab" aria-controls="nav-home" aria-expanded="true">Descripción</a>
+        {% endif %}
+        {% if is_extra %}
+        <a class="nav-item nav-link {% if not is_description %} active{% endif %}" id="nav-extra-tab" data-toggle="tab" href="#extra" role="tab" aria-controls="nav-extra" aria-expanded="true">Archivos</a>
+        {% endif %}
+    </nav>
+    <div class="tab-content p-20 border-1x" id="nav-tabContent">
+        {% if is_description %}
+        <div class="tab-pane fade active show" id="descripcion" role="tabpanel" aria-labelledby="nav-home-tab" aria-expanded="false">
+            <h3>Descripcion</h3>
+            <div class="descripcion">
+                {{description}}
+            </div>
+        </div>
+        {% endif %}
+        {% if is_extra %}
+        <div class="tab-pane fade {% if not is_description %}active show{% endif %}" id="extra" role="tabpanel" aria-labelledby="nav-extra-tab" aria-expanded="false">
+            <h3>Archivos</h3>
+            <div class="descripcion">
+                {{extra}}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>

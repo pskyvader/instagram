@@ -1,0 +1,39 @@
+<div class="position-relative text-white ">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md telefonos">
+                <div class="row text-center text-md-left justify-content-center">
+                    <div class="col-sm-auto mb-2 mb-lg-0">
+                        <i class="fa fa-phone mr-2"></i>
+                        <a href="tel:{{telefono}}">
+                            <span>Llámenos </span> {{telefono}}
+                        </a>
+                    </div>
+                    <div class="col-auto d-none d-sm-block text-center p-0">|</div>
+                    <div class="col col-sm-auto mb-2 mb-lg-0">
+                        <i class="fa fa-envelope mr-2"></i>
+                        <a href="mailto:{{email}}">
+                            <span>Email </span> {{email}}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% if social|length>0 %}
+            <div class="col-md-4 col-lg-5 text-center text-md-right social">
+                <span class="mr-4">Síguenos</span>
+                <ul class="list-inline d-inline-block mr-4 mb-0">
+                    {% for s in social %}
+                    <li class="list-inline-item">
+                        <a href="{{s.url}}" target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-placement="bottom" title="{{s.title}}">
+                            <i class="fa {{s.icon}} mr-2"></i>
+                            <span class="icon-text">{{s.title}}</span>
+                            <span class="sr-only">{{s.title}}</span>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

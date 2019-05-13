@@ -1,0 +1,12 @@
+<div class="col-sm-{{col}}"> 
+    <div class="row">
+        {% for a in array %}
+        <div class="col-xs-height">
+            <button style="margin:10px 10px;" id="btn{{field}}" data-field="{{field}}" data-active="{{a.active}}" data-id="0" class="btn btn-raised active tooltips btn-md {{a.class}}" data-original-title="{{title_field}} {{a.text}}">
+                <i class="fa {{a.icon}}"></i>
+            </button>
+            <input id="{{field}}" name="multiple[{{parent}}][{{field}}][{{idparent}}][{{a.id}}]" type="hidden" value="{{a.active}}" data-required="{{required}}">
+        </div>
+        {% endfor %}
+    </div>
+</div>

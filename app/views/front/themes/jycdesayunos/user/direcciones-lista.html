@@ -1,0 +1,31 @@
+<section class="user user-direcciones p-t-60 pb-5">
+    <div class="container">
+        <div class="row">
+            {{sidebar}}
+            <div class="col">
+                <h2 class="title-section">Mis direcciones</h2>
+                <p class="card-text">Aqui puedes administrar tus direcciones</p>
+                <a href="{{url_new}}" class="btn btn-primary">Nueva dirección</a>
+                <div class="row card-border mt-5">
+                    {% for d in direcciones %}
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{d.title}}</h5>
+                                <div class="card-text">
+                                    <ul>
+                                        <li>{{d.nombre}}</li>
+                                        <li>{{d.direccion}}</li>
+                                        <li>{{d.telefono}}</li>
+                                    </ul>
+                                </div>
+                                <a href="{{d.url}}" class="btn btn-primary">Modificar</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

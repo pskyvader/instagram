@@ -1,0 +1,14 @@
+<section class="p-b-60 p-t-60 bg-fa">
+    <div class="container">
+        <div class="box-lg max-w-500">
+            <h3 class="title f-30">RECUPERAR</h3>
+            <p>Ingresa tu email para recuperar tu contraseña</p>
+            <form class="m-t-20 recuperar">
+                <input type="hidden" name="token" value="{{token}}" required="">
+                <input type="text" class="form-control" name="email" placeholder="E-mail" required="">
+                <button type="submit" class="btn btn-primary">Recuperar contraseña</button>
+            </form>
+            <a class="mt-4 d-block" href="{{url_registro}}">Nuevo aquí?</a>
+        </div>
+    </div>
+</section>

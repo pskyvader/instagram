@@ -1,2 +1,2 @@
 # instagram
-JaimitoBot
+Panel + instagram bot

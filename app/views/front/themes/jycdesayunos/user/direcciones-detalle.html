@@ -1,0 +1,68 @@
+<section class="user user-direcciones-detalle p-t-60 pb-5">
+    <div class="container">
+        <div class="row">
+            {{sidebar}}
+            <div class="col">
+                <h2 class="title-section">{{title}}</h2>
+                <form class="direccion my-4">
+                    <input type="hidden" name="token" value="{{token}}" required="">
+                    <input type="hidden" name="id" value="{{id}}">
+                    <div class="row">
+                        <div class="col-12 mt-5 mb-4">
+                            <h5>Informacion de envio</h5>
+                            <hr>
+                            <p>Informacion obligatoria.</p>
+                        </div>
+                        {% for cr in campos_requeridos %}
+                        {% if cr.tipo=='text' %}
+                        <div class="col-lg-6">
+                            <label>{{cr.texto_ayuda}} &nbsp;</label>
+                            <input type="{{cr.tipo}}" class="form-control" name="{{cr.field}}" placeholder="{{cr.titulo}} {% if cr.required %} * {% endif %}" {% if cr,required %} required="" {% endif %} value="{{cr.value}}">
+                        </div>
+                        {% else %}
+                        <div class="col-lg-6">
+                            <label>{{cr.texto_ayuda}} &nbsp;</label>
+                            <select class="form-control" name="{{cr.field}}" id="{{cr.field}}" {% if required %} required="" {% endif %}>
+                                <option value="" selected="" hidden="" disabled="">{{cr.titulo}} {% if required %} * {% endif %}</option>
+                                {% for o in options %}
+                                <option value="{{o.value}}" {% if o.selected %} selected="" {% endif %}>{{o.title}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        <div class="col-12 mt-5 mb-4">
+                            <h5>Informacion opcional</h5>
+                            <hr>
+                            <p>Los siguientes campos son opcionales. <br> <em>Rogamos llenar la mayor cantidad de datos para proveer un mejor servicio de entrega.</em></p>
+                            <a class="btn btn-primary collapsed" data-toggle="collapse" href="#campos_opcionales" role="button" aria-expanded="false" aria-controls="campos_opcionales" onclick="$(this).hide();">
+                                Mostrar campos opcionales
+                            </a>
+                        </div>
+                        <div class="collapse col-12" id="campos_opcionales">
+                            <div class="row">
+                                {% for co in campos_opcionales %}
+                                {% if co.tipo=='text' %}
+                                <div class="col-lg-6">
+                                    <label>{{co.texto_ayuda}} &nbsp;</label>
+                                    <input type="{{co.tipo}}" class="form-control" name="{{co.field}}" placeholder="{{co.titulo}} {% if co.required %} * {% endif %}" {% if co.required %} required="" {% endif %} value="{{co.value}}">
+                                </div>
+                                {% else %}
+                                <div class="col-12">
+                                    <label for="{{co.field}}">{{co.titulo}} {% if co.required %} * {% endif %}</label>
+                                    <br />
+                                    <sub>{{co.texto_ayuda}} &nbsp;</sub>
+                                    <textarea name="{{co.field}}" class="form-control" id="{{co.field}}" cols="30" rows="10" {% if co.required %} required="" {% endif %}>{{co.value}}</textarea>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

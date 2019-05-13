@@ -1,0 +1,61 @@
+<div class="page-content">
+    <ol class="breadcrumb">
+        {% for b in breadcrumb %}
+        <li class="{{b.active}}">
+            <a href="{{b.url}}">{{b.title}}</a>
+        </li>
+        {% endfor %}
+    </ol>
+    <div class="page-heading">
+        <h1>{{title}} </h1>
+    </div>
+    <div class="container-fluid">
+        <div data-widget-group="group1">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-primary no-animate" data-widget='{"draggable": "false"}'>
+                        <div class="panel-heading">
+                            <h2>
+                                {{title}}
+                            </h2>
+                            <div class="panel-ctrls" data-actions-container="" data-action-collapse='{"target": ".panel-body, .panel-footer"}'></div>
+                        </div>
+                        <div class="panel-body">
+                            <form id="formulario" class="form-horizontal" method="POST" action="{{save_url}}" data-list="{{list_url}}">
+                                <div class="form-group">
+                                    <label for="checkbox" class="col-sm-2 control-label">Vaciar tablas</label>
+                                    <div class="col-sm-8">
+                                        {% for v in vaciar %}
+                                        <div class="checkbox checkbox-inline">
+                                            <label>
+                                                <input type="checkbox" value="{{v.tablename}}" name="{{v.tablename}}"> {{v.tablename}}
+                                            </label>
+                                        </div>
+                                        {% endfor %}
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <button class="btn-raised btn-primary btn">Vaciar<div class="ripple-container"></div></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button class="btn btn-default btn-block btn-raised accion btn-md" data-id="1" data-action="json" data-mensaje="Generando JSON">
+                                        Generar JSON
+                                    </button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-default btn-block btn-raised accion btn-md" data-id="1" data-action="json_update" data-mensaje="Actualizando JSON">
+                                        Actualizar desde JSON
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

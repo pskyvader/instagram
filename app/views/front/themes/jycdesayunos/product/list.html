@@ -1,0 +1,43 @@
+<div class="product-list">
+    {% for lp in lista_productos %}
+    <div class="card">
+        <div class="row">
+            <div class="col-sm-12 col-md-5 col-lg-5">
+                <a class="card-img" href="{{lp.url}}">
+                    <picture>
+                        {% for s in lp.srcset %}
+                        <source media="{{s.media}}" data-srcset="{{s.src}}" type="{{s.type}}">
+                        {% endfor %}
+                        <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="{{lp.image}}" class="img-fluid" alt="{{lp.title}}">
+                    </picture>
+                </a>
+            </div>
+            <div class="col-sm-12 col-md-7 col-lg-7">
+                <div class="card-body">
+                    <h3 class="card-title"><a href="{{lp.url}}">{{lp.title}}</a></h3>
+                    <!--<ul class="rating">
+                    <li aria-expanded="false" class="active"><i class="fa fa-star-o"></i></li>
+                    <li class="active"><i class="fa fa-star-o"></i></li>
+                    <li class="active"><i class="fa fa-star-o"></i></li>
+                    <li><i class="fa fa-star-o"></i></li>
+                    <li><i class="fa fa-star-o"></i></li>
+                    <li></li>
+                </ul>-->
+                    <div class="card-price-group">
+                        {% if lp.old_price!=lp.price %}
+                        <span class="old-price">{{lp.old_price}}</span>
+                        {% endif %}
+                        <span class="card-price">{{lp.price}}</span>
+                    </div>
+                    <p>{{lp.description}}</p>
+                    {% if lp.stock>0 %}
+                    <button class="btn btn-add-cart" onclick="add_cart({{lp.id}});">Añadir al carro</button>
+                    {% else %}
+                    <button class="btn disabled">Producto agotado</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>

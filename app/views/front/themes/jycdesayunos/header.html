@@ -1,0 +1,47 @@
+<div class="preloader"><i class="fa fa-spinner"></i></div>
+<div id="header-top" class="d-print-none d-lg-none">
+    {{header_top}}
+    <div class="cuenta-header text-white">
+    </div>
+</div>
+<div class="container position-relative cuenta-container d-none d-lg-block">
+    <div class="cuenta-header">
+    </div>
+</div>
+<header>
+    <div class="top-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-4 d-none d-lg-block order-2">
+                    <ul class="list-top m-t-10">
+                        <li><a href="tel:{{telefono}}"><i class="fa fa-phone m-r-5"></i>{{telefono}}</a></li>
+                        <li><a href="mailto:{{email}}"><i class="fa fa-envelope-o m-r-5"></i>{{email}}</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-lg-4 text-center order-3">
+                    <a href="{{path}}" class="logo"><img src="{{logo}}" alt="{{title}}"></a>
+                </div>
+                <div class="col-lg-3 d-none d-lg-block order-4">
+                    <form class="search-box search-box-1" action="{{product_url}}">
+                        <input type="text" name="search" class="form-control" placeholder="Busca tu desayuno..." value="{{search}}">
+                        <button type="submit" class="search_btn">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </form>
+                </div>
+                <div class="col-3 col-lg-1 float-left float-md-right order-1 order-lg-5 align-self-start align-self-lg-center">
+                    {{cart}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bg-line-w-2"></div>
+    <nav class="menu-nav">
+        <ul class="menu">
+            {{menu}}
+        </ul>
+    </nav>
+    <div class="menu-btn"><i class="fa fa-bars"></i></div>
+</header>
+<div id="contenido-principal">
+    <!--#contenido-principal termina en footer-->

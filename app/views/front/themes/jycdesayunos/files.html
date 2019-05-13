@@ -1,0 +1,11 @@
+<section class="files py-4">
+        <h5>{{title}}</h5>
+        <ul class="list-group">
+            {% for f in files %}
+            <a href="{{f.url}}" target="_blank" rel="noopener noreferrer" class="list-group-item d-flex justify-content-between align-items-center btn btn-md btn-white grey lighten-4">
+                {{f.title}}
+                <span class="badge badge-secondary badge-pill">{{f.size}}</span>
+            </a>
+            {% endfor %}
+        </ul>
+</section>

@@ -1,0 +1,87 @@
+<section class="product product-detail p-t-60">
+    <div class="container">
+        <div class="row">
+            {{sidebar}}
+            <div class="col-md-8 col-lg-9">
+                <div class="row">
+                    <div class="col-lg-5">
+                        <div class="img-desc">
+                            <div class="product-gallery owl-carousel">
+                                {% for li in lista_imagenes %}
+                                <div class="item">
+                                    <a data-fancybox-trigger="galeria" href="javascript:;">
+                                        <picture>
+                                            {% for sc in li.srcset %}
+                                            <source media="{{sc.media}}" data-srcset="{{sc.src}}" type="{{sc.type}}">
+                                            {% endfor %}
+                                            <img data-thumb='<img src="{{li.thumb}}" />' src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="{{li.image}}" class="img-fluid" alt="{{li.title}}">
+                                        </picture>
+                                    </a>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% for th in thumb %}
+                            <a class="d-none" href="{{th.url}}" data-fancybox="galeria" data-thumb="{{th.thumb}}"></a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <h1 class="titulo">{{title}}</h1>
+                        <!--<ul class="rating text-left">
+                            <li aria-expanded="false" class="active"><i class="fa fa-star-o"></i></li>
+                            <li class="active"><i class="fa fa-star-o"></i></li>
+                            <li class="active"><i class="fa fa-star-o"></i></li>
+                            <li><i class="fa fa-star-o"></i></li>
+                            <li><i class="fa fa-star-o"></i></li>
+                            <li><i>(1 review)</i></li>
+                        </ul>-->
+                        <div class="card-price-group">
+                            {% if old_price !=price %}
+                            <span class="old-price">{{old_price}}</span>
+                            {% endif %}
+                            <span class="card-price">{{price}}</span>
+                        </div>
+                        <p id="nav-home2" class="resumen" role="tabpanel" aria-labelledby="nav-home-tab" aria-expanded="true">{{text}}</p>
+                        {% if stock<=0 %}
+                        <div class="alert alert-warning">Producto agotado</div>
+                        {% endif %}
+                        <div class="form-group d-flex m-t-20">
+                            {% if stock>0 %}
+                            <input type="number" min="1" max="{{stock}}" value="1" class="form-control qlt" name="cantidad">
+                            <button class="btn btn-add-cart" onclick="add_cart({{id}},$('input[name=cantidad]').val());">Añadir al carro</button>
+                            {% endif %}
+                            <button class="btn" data-toggle="tooltip" title="Agregar a favoritos" onclick="add_wish({{id}});"><i class="fa fa-heart-o"></i></button>
+                        </div>
+                        {% if categorias|length>0 %}
+                        <div class="m-t-20 cate-tag">
+                            <strong>Categorías: </strong>
+                            {% for c in categorias %}
+                            <a href="{{c.url}}"> {{c.title}} </a>
+                            {% if not loop.last %}
+                            ,
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div class="d-flex m-t-30 icon-group product-share">
+                            <strong>Compartir:</strong>
+                            <a href="https://www.facebook.com/sharer.php?u={{url}}" class="btn bg-4f84c4" target="_blank" rel="noopener noreferrer">
+                                <i class="fa fa-facebook"></i>
+                            </a>
+                            <a href="https://plus.google.com/share?url={{url}}" class="btn bg-f2552c" target="_blank" rel="noopener noreferrer">
+                                <i class="fa fa-google"></i>
+                            </a>
+                            <a href="https://twitter.com/intent/tweet?text={{title}} {{url}}" class="btn bg-95dee3" target="_blank" rel="noopener noreferrer">
+                                <i class="fa fa-twitter"></i>
+                            </a>
+                            <a href="https://www.pinterest.com/pin/create/button/?url={{url}}&description={{title}}&media={{imagen_portada}}" class="btn bg-d00e0e" target="_blank" rel="noopener noreferrer">
+                                <i class="fa fa-pinterest"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {tabs}
+            </div>
+        </div>
+    </div>
+</section>

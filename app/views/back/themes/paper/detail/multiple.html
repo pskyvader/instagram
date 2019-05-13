@@ -1,0 +1,28 @@
+<div class="form-group multiple">
+    <label for="{{field}}" class="col-sm-2 control-label">{{title_field}} {% if required %} <sup>*</sup> {% endif %}</label>
+    <div class="col-sm-10">
+        <div id="{{field}}" class="row--">
+            <input type="hidden" name="count" value="{{count}}" {% if required %} required="required" {% endif %}>
+            <div class="sorted_multiple">
+                {% for f in fields %}
+                <div class="campo fields row">
+                    {% for c in f.columna %}
+                        {{c.content}}
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+            <div class="campo new_field row" {% if new_field %} {% else %} style="display:none;" {% endif %}>
+                <div class="col-xs-12">
+                    <button class="agregar_editar btn-raised btn-primary btn btn-md" onclick="$(this).parent().parent().hide();">Agregar campo</button>
+                </div>
+            </div>
+            <div class="campo new_line row">
+                {% for n in new_line %}
+                    {{n.content}}
+                {% endfor %}
+                <input type="hidden" name="{{field}}" value="0" {% if required %} required="required" {% endif %}>
+            </div>
+        </div>
+    </div>
+</div>

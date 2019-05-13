@@ -1,0 +1,46 @@
+<section class="carrusel py-4">
+    <div class="container">
+        <!--Carousel Wrapper-->
+        <div id="carousel-thumb" class="carousel slide carousel-fade carousel-thumbnails" data-ride="carousel">
+            <!--Slides-->
+            <div class="carousel-inner" role="listbox">
+                {% for c in carousel %}
+                <div class="carousel-item {{c.active}}">
+                    <a href="{{c.original}}" data-fancybox="carousel1">
+                        <picture>
+                            {% for s in  c.srcset %}
+                            <source media="{{s.media}}" {{b.data}}srcset="{{s.url}}" type="{{s.type}}">
+                            {% endfor %}
+                            <img class="" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="{{c.foto}}" alt="{{c.title}}">
+                        </picture>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            <!--/.Slides-->
+            <ol class="carousel-indicators">
+                {% for t in thumb %}
+                <li data-target="#carousel-thumb" data-slide-to="{id}" class="{active}">
+                    <picture>
+                        {% for s in  t.srcset %}
+                        <source srcset="{{s.url}}" type="{{s.type}}">
+                        {% endfor %}
+                        <img class="" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="{{t.foto}}" alt="{{t.title}}">
+                    </picture>
+                </li>
+                {% endfor %}
+            </ol>
+            <!--Controls-->
+            <a class="carousel-control-prev" href="#carousel-thumb" role="button" data-slide="prev">
+                <i class="fas fa-chevron-left fa-2x" aria-hidden="true"></i>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carousel-thumb" role="button" data-slide="next">
+                <i class="fas fa-chevron-right fa-2x" aria-hidden="true"></i>
+                <span class="sr-only">Next</span>
+            </a>
+            <!--/.Controls-->
+        </div>
+        <!--/.Carousel Wrapper-->
+    </div>
+</section>

@@ -1,0 +1,8 @@
+<div class="col-sm-{{col}}">
+    <select id="{{field}}" name="multiple[{{parent}}][{{field}}][]" class="form-control" data-required="{{required}}">
+        <option value="" selected="selected">Selecciona {{field}}</option>
+        {% for o in option %}
+        <option value="{{o.value}}" {% if o.selected %} selected="selected" {% endif %}>{{o.text}}</option>
+        {% endfor %}
+    </select>
+</div>

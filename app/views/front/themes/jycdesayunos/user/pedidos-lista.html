@@ -1,0 +1,43 @@
+<section class="user user-pedidos p-t-60 pb-5">
+    <div class="container">
+        <div class="row">
+            {{sidebar}}
+            <div class="col">
+                <h2 class="title-section">Mis pedidos</h2>
+                <p class="card-text">Aqui puedes ver tus pedidos</p>
+                <p class="card-text">Si buscas un envio en particular, primero ingresa al detalle de tu pedido asociado:</p>
+                <p class="card-text">Por ejemplo, si tu envio es AA759EAA-AB, tu pedido es AA759EAA</p>
+                <div class="row card-border mt-5">
+                    {% for p in pedidos %}
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-4">
+                                    <div class="col">
+                                        <h5 class="mt-0">
+                                            Codigo {{p.cookie_pedido}}
+                                        </h5>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <span class="float-left float-md-right btn btn-sm mt-0" style="background:{{p.background_estado}};color:{{p.color_estado}};">{{p.estado}}</span>
+                                    </div>
+                                </div>
+                                <div class="card-text">
+                                    <ul>
+                                        <li class="mb-2">{{p.fecha}}</li>
+                                        <li>{{p.nombre}}</li>
+                                        <li>{{p.email}}</li>
+                                        <li>{{p.telefono}}</li>
+                                        <li>{{p.total}}</li>
+                                    </ul>
+                                </div>
+                                <a href="{{p.url}}" class="btn btn-primary">Ver Detalle del pedido</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

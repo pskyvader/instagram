@@ -1,0 +1,50 @@
+<section class="product card-border">
+    <div class="container">
+        <div class="row">
+            {{sidebar}}
+            <div class="col">
+                {% if search!='' %}
+                <h4 class="search">
+                    Buscando "{{search}}"
+                </h4>
+                {% endif %}
+                <div class="product-filter">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="iconc {% if view=='grid' %} active {% endif %}" id="grid"><i class="fa fa-th"></i></div>
+                            <div class="iconc {% if view=='list' %} active {% endif %}" id="list"><i class="fa fa-list"></i></div>
+                        </div>
+                        <div class="col-sm-4">
+                            <select class="form-control form-control-sm" id="order">
+                                <option selected hidden disabled>Ordenar Por</option>
+                                {% for op in orden_producto %}
+                                <option value="{{op.action}}" {% if op.active %} selected="selected" {% endif %}>{{op.title}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <select class="form-control form-control-sm" id="limit">
+                                <option selected hidden disabled>Productos por pagina</option>
+                                {% for lp in limit_producto %}
+                                <option value="{{lp.action}}" {% if lp.active %} selected="selected" {% endif %}>{{lp.title}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-lista">
+                    {{product_list}}
+                </div>
+                <nav>
+                    <ul class="pagination">
+                        {% for p in pagination %}
+                        <li class="page-item">
+                            <a class="page-link {{p.class_page}}" href="{{p.url_page}}">{{p.text_page}}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>

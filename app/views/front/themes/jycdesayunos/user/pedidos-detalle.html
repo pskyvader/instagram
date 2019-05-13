@@ -1,0 +1,97 @@
+<section class="user user-pedidos-detalle p-t-60 pb-5">
+    <div class="container">
+        <div class="row">
+            {{sidebar}}
+            <div class="col content">
+                <h2 class="title-section">Pedido {{cookie_pedido}}</h2>
+                {% if medios_pago|length>0 %}
+                <h4>{{total}}</h4>
+                <hr class="my-5">
+                <h5>Selecciona un medio de pago.</h5>
+                <p>Puedes pagar o reintentar tu pago si hubo algún error</p>
+                <div class="medios-pago">
+                    <ul>
+                        {% for m in medios_pago %}
+                        <li>
+                            <a href="{{m.url}}" class="btn btn-block btn-primary my-5 pb-5 py-5 text-white">
+                                <h6 class="mt-0">{{m.titulo}}</h6>
+                                {{m.resumen}}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <hr class="my-5">
+                {%else %}
+                <p class="card-text">Aqui puedes ver tu pedido y estados de envio</p>
+                {% if is_descripcion_pago %}
+                <hr>
+                <p class="card-text">{{descripcion_pago}}</p>
+                <hr>
+                {% endif %}
+                {% endif %}
+                <div class="my-4">
+                    <div class="row">
+                        <div class="col-12 mt-5 mb-4">
+                            <div class="row mb-4">
+                                <div class="col">
+                                    <h5 class="mt-0">
+                                        Informacion de Pedido
+                                    </h5>
+                                </div>
+                                <div class="col-md-4">
+                                    <span class="float-left float-md-right btn btn-sm mt-0" style="background:{{background_estado}};color:{{color_estado}};">{{estado}}</span>
+                                </div>
+                            </div>
+                            <ul>
+                                <li>Total del pedido: {{total}}</li>
+                                <li>{{nombre}}</li>
+                                <li>{{email}}</li>
+                                <li>{{telefono|phone_number}}</li>
+                            </ul>
+                        </div>
+                        <hr>
+                        {% for dp in direcciones_pedido %}
+                        <div class="border col-12 direccion mt-5 p-4">
+                            <div class="row mb-4">
+                                <div class="col">
+                                    <h6 class="mt-0">Envio {{dp.cookie_direccion}} </h6>
+                                </div>
+                                <div class="col-md-4">
+                                    <span class="float-left float-md-right btn btn-sm mt-0" style="background:{{dp.background_estado}};color:{{dp.color_estado}};">{{dp.estado}}</span>
+                                </div>
+                            </div>
+                            <ul>
+                                <li>Precio de envio: {{dp.precio}}</li>
+                                <li>Envio a <b>{{dp.nombre}}</b></li>
+                                <li class="pl-4">{{dp.fecha_entrega}}</li>
+                                <li class="pl-4">{{dp.telefono|phone_number}}</li>
+                                <li class="pl-4">{{dp.direccion_completa}}</li>
+                            </ul>
+                            <ul class="px-4 border mt-5">
+                                <li class="border-bottom-1x my-4 row">
+                                    <div class="col-2"></div>
+                                    <div class="col-6 col-md-2">Producto</div>
+                                    <div class="col-6 d-none d-md-flex">Mensaje</div>
+                                    <div class="col-2">Total</div>
+                                </li>
+                                {% for lp in dp.lista_productos %}
+                                <li class="py-4 producto row border-bottom-1x">
+                                    <div class="col-2"><img src="{{lp.foto}}" alt="foto producto"></div>
+                                    <div class="col-6 col-md-2">{{lp.titulo}} {% if lp.titulo_atributo!='' %}<span>({{lp.titulo_atributo}})</span>{% endif %} </div>
+                                    <div class="col-12 col-md-6 order-3 order-md-1 mt-5 mt-md-0">
+                                        <h6 class="d-md-none">Mensaje:</h6>
+                                        {{lp.mensaje}}
+                                    </div>
+                                    <div class="col-2 order-2">{{lp.total}}</div>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

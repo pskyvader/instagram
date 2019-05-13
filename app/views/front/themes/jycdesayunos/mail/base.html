@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:v="urn:schemas-microsoft-com:vml">
+{% include 'head.html' %}
+
+<body class="clean-body" style="margin: 0; padding: 0; -webkit-text-size-adjust: 100%; background-color: #FFFFFF;">
+    <!--[if IE]><div class="ie-browser"><![endif]-->
+    <table bgcolor="#FFFFFF" cellpadding="0" cellspacing="0" class="nl-container" style="table-layout: fixed; vertical-align: top; min-width: 320px; Margin: 0 auto; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #FFFFFF; width: 100%;" valign="top" width="100%">
+        <tbody>
+            <tr style="vertical-align: top;" valign="top">
+                <td style="word-break: break-word; vertical-align: top; border-collapse: collapse;" valign="top">
+                    <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" style="background-color:#FFFFFF"><![endif]-->
+                    {% include 'header.html' %}
+                    {% block content %}
+                        {% include 'gif.html' %}
+                        {% include 'resume.html' %}
+                        {% include 'fields.html' %}
+                        {% include 'space.html' %}
+                        {% include 'title_fields.html' %}
+                        {% include 'product_fields.html' %}
+                        {% include 'separator.html' %}
+                        {% include 'resume_fields.html' %}
+                        {% include 'space.html' %}
+                        {% include 'separator.html' %}
+                        {% include 'long_fields.html' %}
+                    {% endblock %}
+                    {% include 'footer.html' %}
+                    <!--[if (mso)|(IE)]></td></tr></table><![endif]-->
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <!--[if (IE)]></div><![endif]-->
+</body>
+
+</html>

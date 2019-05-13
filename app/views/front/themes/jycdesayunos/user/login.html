@@ -1,0 +1,21 @@
+<section class="p-b-60 p-t-60 bg-fa">
+    <div class="container">
+        <div class="box-lg max-w-500">
+            <h3 class="title f-30">LOGIN</h3>
+            <p>Ingresa tu email y contraseña</p>
+            <form class="m-t-20 login">
+                <input type="hidden" name="token" value="{{token}}" required="">
+                <input type="text" class="form-control" name="email" placeholder="E-mail" required="">
+                <input type="password" class="form-control" name="pass" placeholder="Contraseña" required="">
+                <div class="checkbox checkbox-1">
+                    <input type="checkbox" value="" id="recordar" name="recordar">
+                    <label for="recordar" class="fa fa-check"></label>
+                    <label for="recordar">Recordar contraseña</label>
+                </div>
+                <button type="submit" class="btn btn-primary">LOGIN</button>
+            </form>
+            <a class="mt-4 d-block" href="{{url_registro}}">Nuevo aquí? Registrate</a>
+            <a class="mt-4 d-block" href="{{url_recuperar}}">Olvidaste tu contraseña?</a>
+        </div>
+    </div>
+</section>

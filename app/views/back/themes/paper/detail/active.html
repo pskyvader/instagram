@@ -1,0 +1,6 @@
+<label for="{{field}}" class="col-sm-2 control-label">{{title_field}} {% if required %} <sup>*</sup> {% endif %}</label>
+<div class="col-sm-8">
+	<button id="btn{{field}}" data-field="{{field}}" data-active="{{active}}" data-id="0" class="btn btn-raised active btn-md {{class}}"><i class="fa {{icon}}"></i>
+	</button>
+	<input id="{{field}}" name="{{field}}" type="hidden" value="{{active}}" {% if required %} required="required" {% endif %} >
+</div>

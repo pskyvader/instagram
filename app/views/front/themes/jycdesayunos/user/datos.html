@@ -1,0 +1,22 @@
+<section class="user user-detail p-t-60 pb-5">
+    <div class="container">
+        <div class="row">
+            {{sidebar}}
+            <div class="col">
+                <h2 class="title-section">Mis datos</h2>
+                <p class="card-text">Aqui puedes modificar tus datos</p>
+                <form class="update-datos my-4">
+                    <input type="hidden" name="token" value="{{token}}" required="">
+                    <input type="text" class="form-control" name="nombre" placeholder="Nombre" required="" value="{{nombre}}">
+                    <input type="text" class="form-control" name="telefono" placeholder="Teléfono" required="" value="{{telefono}}">
+                    <label for="pass" class="mt-4">Si modificas tu email, tendras que volver a iniciar sesión</label>
+                    <input type="email" class="form-control" name="email" placeholder="Email" required="" value="{{email}}">
+                    <label for="pass" class="mt-4">Escribe una Contraseña si deseas cambiarla</label>
+                    <input type="password" class="form-control" name="pass" placeholder="Contraseña">
+                    <input type="password" class="form-control" name="pass_repetir" placeholder="Repite contraseña">
+                    <button type="submit" class="btn btn-primary">Modificar datos</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

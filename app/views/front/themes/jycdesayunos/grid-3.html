@@ -1,0 +1,31 @@
+<section class="grid-3 text-center py-4">
+    <div class="container">
+        <!--Grid row-->
+        <div class="row">
+            {% for l in list %}
+            <!--Grid column-->
+            <div class="col-lg-4 col-md-12 mb-4">
+                <!--Featured image-->
+                <div class="view overlay z-depth-2 mb-2">
+                    <picture>
+                        {% for s in  l.srcset %}
+                        <source media="{{s.media}}" {{b.data}}srcset="{{s.url}}" type="{{s.type}}">
+                        {% endfor %}
+                        <img class="" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="{{l.foto}}" class="img-fluid rounded" alt="{{l.title}}">
+                    </picture>
+                    <a href="{{l.url}}">
+                        <div class="mask waves-effect waves-light"></div>
+                    </a>
+                </div>
+                <h4 class="py-3 font-weight-bold dark-grey-text">
+                    <strong>{{l.title}}</strong>
+                </h4>
+                <p class="grey-text">{{l.description}}</p>
+                <a class="btn btn-rounded btn-md waves-effect waves-light" href="{{l.url}}">Ver más</a>
+            </div>
+            <!--Grid column-->
+            {% endfor %}
+        </div>
+        <!--Grid row-->
+    </div>
+</section>

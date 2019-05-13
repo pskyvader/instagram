@@ -1,0 +1,87 @@
+<div class="page-content">
+    <ol class="breadcrumb">
+        {% for bc in breadcrumb %}
+        <li class="{{bc.active}}">
+            <a href="{{bc.url}}">{{bc.title}}</a>
+        </li>
+        {% endfor %}
+    </ol>
+    <div class="page-heading">
+        <h1> {{title}} </h1>
+    </div>
+    <div class="container-fluid">
+        <div data-widget-group="group1">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-primary no-animate" data-widget='{"draggable": "false"}'>
+                        <div class="panel-heading">
+                            <h2>
+                                {{title}}
+                            </h2>
+                            <div class="panel-ctrls" data-actions-container="" data-action-collapse='{"target": ".panel-body, .panel-footer"}'></div>
+                        </div>
+                        <div class="panel-body">
+                            {% if mensaje_error!='' %}
+                            <div class="alert alert-danger">
+                                Se ha encontrado el siguiente error:
+                                <p><b>{{mensaje_error}}</b></p>
+                                Por favor soluciona este error y actualiza la pagina
+                            </div>
+                            {% else %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button class="btn btn-default btn-block btn-raised accion_instagram btn-md" data-id="1" data-action="update" data-mensaje="Actualizando seguidores">
+                                        Actualizar seguidores
+                                    </button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-default btn-block btn-raised accion_instagram btn-md" data-id="hashtag" data-action="follow" data-mensaje="Siguiendo por hashtags">
+                                        Seguir por hashtag
+                                    </button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-default btn-block btn-raised accion_instagram btn-md" data-id="nonfollower" data-action="unfollow" data-mensaje="Dejando de seguir por no seguidores">
+                                        Dejar de seguir (No seguidores)
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id='id_instagram' placeholder="Nombre o ID de usuario">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button class="btn btn-default btn-block btn-raised btn-md" onclick="accion_instagram('user',$('#id_instagram').val(),'Buscando usuario')">
+                                            Obtener usuario
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="centeredcontainer">
+                    <p class="text-center">Progreso</p>
+                    <input id="progreso_instagram" type="text" class="dial" data-linecap="round" value="{{progreso}}" data-width="180" data-fgColor="#07d14f" data-thickness=".05">
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="panel panel-default" data-widget='{"draggable": "false"}'>
+                    <div class="panel-heading">
+                        <h2>Log de procesos</h2>
+                        <div class="panel-ctrls" data-actions-container="" data-action-collapse='{"target": ".panel-body"}'></div>
+                    </div>
+                    <div class="panel-body scroll-pane" style="height: 200px;">
+                        <div class="scroll-content" id="log_instagram">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

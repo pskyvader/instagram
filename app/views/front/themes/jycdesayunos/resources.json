@@ -1,0 +1,42 @@
+{
+    "css" : [
+        {"url": "css/custom-head.css","local":true,"media":"all","combine":false,"defer":false},
+        {"url": "css/bootstrap/bootstrap.min.css","local":true,"media":"all","combine":true,"defer":true},
+        {"url": "css/owl-carousel/owl.carousel.min.css","local":true,"media":"all","combine":true,"defer":true},
+        {"url": "css/owl-carousel/owl.theme.default.min.css","local":true,"media":"all","combine":true,"defer":true},
+        {"url": "css/fancybox/jquery.fancybox.min.css","local":true,"media":"all","combine":true,"defer":true},
+        {"url": "css/select2/select2.min.css","local":true,"media":"all","combine":true,"defer":true},
+        {"url": "css/datepicker/bootstrap-datepicker3.min.css","local":true,"media":"all","combine":true,"defer":true},
+        {"url": "css/font-awesome.min.css","local":true,"media":"all","combine":true,"defer":true},
+        {"url": "css/animate.css","local":true,"media":"all","combine":true,"defer":true},
+        {"url": "css/css.css","local":true,"media":"all","combine":true,"defer":true},
+        {"url": "css/style.css","local":true,"media":"all","combine":true,"defer":true},
+        {"url": "css/custom.css","local":true,"media":"all","combine":true,"defer":true},
+        {"url": "css/fonts.css","local":true,"media":"all","combine":true,"defer":true}
+    ],
+    "js" : [
+        {"url": "js/jquery-3.3.1.min.js","local":true,"defer":false,"combine":true},
+        {"url": "js/jquery-ui-1.12.1.min.js","local":true,"defer":false,"combine":true},
+        {"url": "js/jquery.ui.touch-punch.min.js","local":true,"defer":false,"combine":true},
+        {"url": "js/bootstrap/popper.min.js","local":true,"defer":false,"combine":true},
+        {"url": "js/bootstrap/bootstrap.min.js","local":true,"defer":false,"combine":true},
+        {"url": "js/owl-carousel/owl.carousel.min.js","local":true,"defer":false,"combine":true},
+        {"url": "js/owl-carousel/OwlCarousel2Thumbs.min.js","local":true,"defer":false,"combine":true},
+        {"url": "js/fancybox/jquery.fancybox.min.js","local":true,"defer":false,"combine":true},
+        {"url": "js/select2/select2.min.js","local":true,"defer":false,"combine":true},
+        {"url": "js/datepicker/bootstrap-datepicker.min.js","local":true,"defer":false,"combine":true},
+        {"url": "js/datepicker/locales/bootstrap-datepicker.es.min.js","local":true,"defer":false,"combine":true},
+        {"url": "js/bootstrap-notify.min.js","local":true,"defer":false,"combine":true},
+        {"url": "js/mobile_browser.js","local":true,"defer":false,"combine":true},
+        {"url": "js/script.js","local":true,"defer":false,"combine":true},
+        {"url": "js/functions.js","local":true,"defer":false,"combine":true},
+        {"url": "js/map.js","local":true,"defer":false,"combine":true},
+        {"url": "js/ajax.js","local":true,"defer":false,"combine":true},
+        {"url": "js/form.js","local":true,"defer":false,"combine":true},
+        {"url": "js/products.js","local":true,"defer":false,"combine":true},
+        {"url": "js/cart.js","local":true,"defer":false,"combine":true},
+        {"url": "js/user.js","local":true,"defer":false,"combine":true},
+        {"url": "js/pedido.js","local":true,"defer":false,"combine":true},
+        {"url": "js/custom.js","local":true,"defer":false,"combine":true}
+    ]
+}

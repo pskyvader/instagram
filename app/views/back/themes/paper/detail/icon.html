@@ -1,0 +1,7 @@
+<label for="{{field}}" class="col-sm-2 control-label">{{title_field}} {% if required %} <sup>*</sup> {% endif %}</label>
+<div class="col-sm-8">
+    <select id="{{field}}" name="{{field}}" class="icons form-control" {% if required %} required="required" {% endif %} data-value="{{value}}"> 
+        <option value="" selected="selected">Selecciona</option>
+    </select>
+</div>
+<div class="col-sm-2"><p class="help-block">{{help}}</p></div>

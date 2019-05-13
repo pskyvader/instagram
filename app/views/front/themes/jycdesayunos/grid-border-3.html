@@ -1,0 +1,38 @@
+<section class="grid-border-3 py-4">
+    <div class="container">
+        <!-- Grid row -->
+        <div class="row">
+            {% for l in list %}
+            <!-- Grid column -->
+            <div class="col-lg-4 col-md-6 py-3">
+                <!--Card Regular-->
+                <div class="card card-cascade">
+                    <!--Card image-->
+                    <div class="view view-cascade overlay">
+                        <picture>
+                            {% for s in  l.srcset %}
+                            <source media="{{s.media}}" {{b.data}}srcset="{{s.url}}" type="{{s.type}}">
+                            {% endfor %}
+                            <img class="" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="{{l.foto}}" class="img-fluid rounded" alt="{{l.title}}">
+                        </picture>
+                        <a href="{{l.url}}">
+                            <div class="mask rgba-white-slight"></div>
+                        </a>
+                    </div>
+                    <!--/.Card image-->
+                    <!--Card content-->
+                    <div class="card-body card-body-cascade text-center">
+                        <!--Title-->
+                        <h4 class="card-title"><strong>{{l.title}}</strong></h4>
+                        <div class="card-text">{{l.description}}</div>
+                    </div>
+                    <!--/.Card content-->
+                </div>
+                <!--/.Card Regular-->
+            </div>
+            <!-- Grid column -->
+            {% endfor %}
+        </div>
+        <!-- Grid row -->
+    </div>
+</section>
