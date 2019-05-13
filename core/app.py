@@ -5,7 +5,6 @@ import json
 from pathlib import Path
 import importlib
 
-
 class app:
     config = {}
     app_dir = "app/"
