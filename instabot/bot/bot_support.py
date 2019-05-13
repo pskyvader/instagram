@@ -55,6 +55,8 @@ def console_print(self, text, color=None,progress=None,bold_text=False):
     if bold_text:
         log_file['bold']=bold_text
 
+    print(log_file)
+
     log_file=json.dumps(log_file)
     socket.send(log_file)
     if socket.sock==None:
