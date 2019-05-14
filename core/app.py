@@ -270,8 +270,6 @@ class app:
             headers = {}
             if 'CONTENT_TYPE' in post_env:
                 headers['content-type'] = post_env['CONTENT_TYPE']
-            if 'QUERY_STRING' in post_env:
-                self.qs_on_post = post_env['QUERY_STRING']
             if 'CONTENT_LENGTH' in post_env:
                 headers['content-length'] = post_env['CONTENT_LENGTH']
             print(headers)
