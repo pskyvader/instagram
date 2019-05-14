@@ -11,11 +11,12 @@ class socket:
     @staticmethod
     def send(msg):
         try:
-            if socket.sock==None:
+            if socket.sock==None and not socket.intento:
                 down=socket.download(socket.url+"port.txt")
                 socket.host=json.loads(down)['final_url']
                 socket.sock = create_connection(socket.host)
-            socket.sock.send(msg)
+            if socket.sock!=None:
+                socket.sock.send(msg)
         except Exception as e:
             print("error:",e)
             socket.sock=None
@@ -30,6 +31,10 @@ class socket:
         url=socket.url
         try:
             response = urllib.request.urlopen(url,timeout=1)
+            if socket.sock==None:
+                down=socket.download(socket.url+"port.txt")
+                socket.host=json.loads(down)['final_url']
+                socket.sock = create_connection(socket.host)
         except:
             pass
 
