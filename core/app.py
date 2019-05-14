@@ -268,7 +268,6 @@ class app:
             post_env["CONTENT_LENGTH"] = int(app.environ.get("CONTENT_LENGTH", 0))
             input1=app.environ["wsgi.input"]
             print(input1.read(1))
-            print(app.environ["wsgi.input"].read(1))
             
             p = FieldStorage( fp=post_env["wsgi.input"], environ=post_env, keep_blank_values=True )
             if p.list != None:
