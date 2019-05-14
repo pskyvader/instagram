@@ -267,7 +267,7 @@ class app:
             post_env = app.environ.copy()
             post_env["QUERY_STRING"] = ""
             post_env["CONTENT_LENGTH"] = int(app.environ.get("CONTENT_LENGTH", 0))
-            buffer=post_env["wsgi.input"].read(post_env["CONTENT_LENGTH"])
+            buffer=str(post_env["wsgi.input"].read(post_env["CONTENT_LENGTH"]))
             p = FieldStorage( fp=StringIO(buffer), environ=post_env, keep_blank_values=True )
             if p.list != None:
                 post = app.post_field(p)
