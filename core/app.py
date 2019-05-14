@@ -260,15 +260,15 @@ class app:
     @staticmethod
     def parse_post():
         from cgi import FieldStorage,parse_qs
-        from io import StringIO
+        from io import BufferedReader
 
         post = {}
         if app.environ["REQUEST_METHOD"] == "POST":
             post_env = app.environ.copy()
             post_env["QUERY_STRING"] = ""
             post_env["CONTENT_LENGTH"] = int(app.environ.get("CONTENT_LENGTH", 0))
-            buffer=str(post_env["wsgi.input"].read(post_env["CONTENT_LENGTH"]))
-            p = FieldStorage( fp=StringIO(buffer), environ=post_env, keep_blank_values=True )
+            buffer=post_env["wsgi.input"].read(post_env["CONTENT_LENGTH"])
+            p = FieldStorage( fp=BufferedReader(buffer), environ=post_env, keep_blank_values=True )
             if p.list != None:
                 post = app.post_field(p)
 
