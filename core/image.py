@@ -196,6 +196,10 @@ class image:
 
             name, extension = os.path.splitext(file['name'])
             extension = extension.lower()
+            
+            my_file = Path(folder)
+            if not my_file.is_dir():
+                makedirs(folder, 777)
 
             my_file = Path(folder)
             if not my_file.is_dir():
