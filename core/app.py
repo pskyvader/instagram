@@ -265,7 +265,9 @@ class app:
         if app.environ["REQUEST_METHOD"] == "POST":
             post_env = app.environ.copy()
             post_env["QUERY_STRING"] = ""
-            post_env["CONTENT_LENGTH"] = int(app.environ.get("CONTENT_LENGTH", 0))            
+            post_env["CONTENT_LENGTH"] = int(app.environ.get("CONTENT_LENGTH", 0))
+            print(app.environ["wsgi.input"])
+            
             p = FieldStorage(
                 fp=post_env["wsgi.input"], environ=post_env, keep_blank_values=True
             )
