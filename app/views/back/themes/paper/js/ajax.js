@@ -57,6 +57,7 @@ function post(url_post, info, mensaje_inicial, importante, archivo, callback, ex
         type='application/x-www-form-urlencoded; charset=UTF-8'
         data={'campos':info}
     }
+    
     $.ajax({
         url: url_post,
         type: 'POST',
