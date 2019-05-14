@@ -259,7 +259,7 @@ class app:
 
     @staticmethod
     def parse_post():
-        from cgi import FieldStorage,parse_qs
+        from cgi import FieldStorage
         from io import BytesIO
 
         post = {}
