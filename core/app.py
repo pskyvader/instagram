@@ -272,7 +272,7 @@ class app:
             print(app.environ["wsgi.input"].readline())
             
             p = FieldStorage( fp=post_env["wsgi.input"], environ=post_env, keep_blank_values=True )
-            f p.list != None:
+            if p.list != None:
                 post = app.post_field(p)
 
         post = app.format_array(post)
