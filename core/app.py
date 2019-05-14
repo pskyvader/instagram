@@ -267,7 +267,7 @@ class app:
             post_env["QUERY_STRING"] = ""
             post_env["CONTENT_LENGTH"] = int(app.environ.get("CONTENT_LENGTH", 0))
 
-            d = post_env['wsgi.input'].read(post_env["CONTENT_LENGTH"]).decode()
+            d = post_env['wsgi.input'].read(post_env["CONTENT_LENGTH"])
             p = parse_qs(d)
             print(p)
 
