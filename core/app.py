@@ -264,11 +264,19 @@ class app:
         post = {}
         if app.environ["REQUEST_METHOD"] == "POST":
             post_env = app.environ.copy()
-            print(repr(post_env))
             post_env["QUERY_STRING"] = ""
             post_env["CONTENT_LENGTH"] = int(app.environ.get("CONTENT_LENGTH", 0))
+            
+            headers = {}
+            if 'CONTENT_TYPE' in post_env:
+                headers['content-type'] = post_env['CONTENT_TYPE']
+            if 'QUERY_STRING' in post_env:
+                self.qs_on_post = post_env['QUERY_STRING']
+            if 'CONTENT_LENGTH' in post_env:
+                headers['content-length'] = post_env['CONTENT_LENGTH']
+
             p = FieldStorage(
-                fp=post_env["wsgi.input"], environ=post_env, keep_blank_values=True
+                fp=post_env["wsgi.input"], environ=post_env, headers=headers, keep_blank_values=True
             )
             if p.list != None:
                 post = app.post_field(p)
