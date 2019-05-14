@@ -65,7 +65,8 @@ def follow_users(self, user_ids,base=0,proporcion=1,hashtag=''):
     msg = msg.format(skipped.fname, len(user_ids))
     self.console_print(msg, 'green')
     count=0
-    for user_id in tqdm(user_ids, desc='Processed users'):
+    #for user_id in tqdm(user_ids, desc='Processed users'):
+    for user_id in user_ids:
         count+=1
         if self.reached_limit('follows'):
             self.console_print("Out of follows for today.")
