@@ -5,7 +5,6 @@ import json
 from pathlib import Path
 import importlib
 
-
 class app:
     config = {}
     app_dir = "app/"
@@ -49,7 +48,7 @@ class app:
         app.prefix_site = functions.url_amigable(app.title)
 
         app.root_url = environ["SERVER_NAME"].replace("www.", "")
-        # app.root_url = environ["HTTP_HOST"].replace("www.", "")
+        #app.root_url = environ["HTTP_HOST"].replace("www.", "")
         subdirectorio = config["dir"]
         https = "https://" if config["https"] else "http://"
         www = "www." if config["www"] else ""
@@ -175,6 +174,7 @@ class app:
         # print('antes de render', (datetime.now()-init_time).total_seconds()*1000)
         # init_time=datetime.now()
 
+
         if isinstance(response["body"], list):
             data_return["response_body"] = view.render(response["body"])
             cache.save_cache()
@@ -192,7 +192,6 @@ class app:
     def parse_url(url):
         from app.models.seo import seo as seo_model
         from .cache import cache
-
         config = app.get_config()
         url = url.lstrip("/")
 
@@ -200,8 +199,8 @@ class app:
             url = " ".join(url.split("/")).split()
         else:
             url = []
-
-        cache.url_cache = url.copy()
+        
+        cache.url_cache=url.copy()
 
         if len(url) > 0:
             if url[0] == "manifest.js":
@@ -268,7 +267,7 @@ class app:
             post_env["QUERY_STRING"] = ""
             post_env["CONTENT_LENGTH"] = int(app.environ.get("CONTENT_LENGTH", 0))
             p = FieldStorage(
-                fp=app.environ["wsgi.input"], environ={'REQUEST_METHOD': 'POST'}, keep_blank_values=True
+                fp=post_env["wsgi.input"], environ=post_env, keep_blank_values=True
             )
             if p.list != None:
                 post = app.post_field(p)
@@ -285,11 +284,7 @@ class app:
         post = {}
         try:
             for key in p.keys():
-                if (
-                    isinstance(p[key], FieldStorage)
-                    and p[key].file
-                    and p[key].filename != None
-                ):
+                if isinstance(p[key], FieldStorage) and p[key].file and p[key].filename!=None :
                     if not "file" in post:
                         post["file"] = []
                     tmpfile = p[key].file.read()
@@ -300,9 +295,7 @@ class app:
                     post["file"].append(
                         {"name": name, "type": mime, "tmp_name": tmpfile}
                     )
-                elif isinstance(p[key], MiniFieldStorage) or isinstance(
-                    p[key], FieldStorage
-                ):
+                elif isinstance(p[key], MiniFieldStorage) or  isinstance(p[key], FieldStorage):
                     post[key] = p[key].value
                 elif isinstance(p[key], list):
                     tmp_list = []
