@@ -36,12 +36,12 @@ function post(url_post, info, mensaje_inicial, archivo, callback, extra) {
         $.each(archivo, function(key, value) {
             data.append(key, value);
         });
-        process=false
-        type=false
+        process=false;
+        type=false;
     }else{
-        process=true
-        type='application/x-www-form-urlencoded; charset=UTF-8'
-        data={'campos':info}
+        process=true;
+        type='application/x-www-form-urlencoded; charset=UTF-8';
+        data={'campos':info};
     }
 
     $.ajax({
