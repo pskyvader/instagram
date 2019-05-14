@@ -161,8 +161,7 @@ class cache:
                 + resource.replace("/", "-")
             )
 
-            if not os.path.exists(theme + "cache/"):
-                os.makedirs(theme + "cache/")
+            os.makedirs(theme + "cache/",exist_ok=True)
 
             my_file = Path(cache_file)
             if my_file.is_file():
