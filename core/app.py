@@ -259,7 +259,7 @@ class app:
 
     @staticmethod
     def parse_post():
-        from cgi import FieldStorage
+        from cgi import FieldStorage,parse_qs
 
         post = {}
         if app.environ["REQUEST_METHOD"] == "POST":
@@ -268,6 +268,7 @@ class app:
             post_env["CONTENT_LENGTH"] = int(app.environ.get("CONTENT_LENGTH", 0))
 
             p = post_env['wsgi.input'].read(post_env["CONTENT_LENGTH"])
+            p = parse_qs(p)
             print(p)
 
             #p = FieldStorage( fp=post_env["wsgi.input"], environ=post_env, keep_blank_values=True )
