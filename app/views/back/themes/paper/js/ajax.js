@@ -51,7 +51,8 @@ function post(url_post, info, mensaje_inicial, importante, archivo, callback, ex
             data.append(key, value);
         });
         process=false;
-        type='multipart/form-data';
+        //type='multipart/form-data';
+        type='application/x-www-form-urlencoded; charset=UTF-8';
     }else{
         process=true
         type='application/x-www-form-urlencoded; charset=UTF-8';
