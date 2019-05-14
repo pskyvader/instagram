@@ -37,7 +37,7 @@ function post(url_post, info, mensaje_inicial, archivo, callback, extra) {
             data.append(key, value);
         });
         process=false;
-        type=false;
+        type='multipart/form-data';
     }else{
         process=true;
         type='application/x-www-form-urlencoded; charset=UTF-8';
