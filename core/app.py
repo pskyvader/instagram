@@ -264,7 +264,7 @@ class app:
         post = {}
         if app.environ["REQUEST_METHOD"] == "POST":
             post_env = app.environ.copy()
-            print(json.dumps(post_env))
+            print(post_env)
             post_env["QUERY_STRING"] = ""
             post_env["CONTENT_LENGTH"] = int(app.environ.get("CONTENT_LENGTH", 0))
             p = FieldStorage(
