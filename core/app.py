@@ -269,7 +269,9 @@ class app:
             print(app.environ["wsgi.input"])
             bytes_a=b''
             first=app.environ["wsgi.input"].readline()
-            while first:
+            count=0
+            while first and count<10:
+                count+=1
                 bytes_a+=first
                 first=app.environ["wsgi.input"].readline()
             print(bytes_a)
