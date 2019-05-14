@@ -77,9 +77,7 @@ class image:
         folder = image.get_upload_dir() + base_folder + '/' + \
             str(name_final) + '/' + subfolder
 
-        my_file = Path(folder)
-        if not my_file.is_dir():
-            makedirs(folder, 777)
+        makedirs(folder,exist_ok=True)
 
         name, extension = splitext(file_move['tmp'])
         file_move['url'] = file_move['id'] + extension
@@ -131,9 +129,7 @@ class image:
             if subfolder != '':
                 folder += '/' + subfolder
 
-            my_file = Path(folder)
-            if not my_file.is_dir():
-                makedirs(folder, 777)
+            makedirs(folder,exist_ok=True)
 
             destino = folder + '/' + new_file['url']
             if os.access(folder, os.W_OK):
