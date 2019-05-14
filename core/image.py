@@ -185,7 +185,7 @@ class image:
         import stat
         import os
         import tempfile
-        folder = image.get_upload_dir() + folder_upload
+        folder = image.get_upload_dir()
         respuesta = image.validate(file)
         if respuesta['exito']:
             if '' == name_final:
@@ -201,9 +201,11 @@ class image:
             if not my_file.is_dir():
                 makedirs(folder, 777)
 
+            folder += folder_upload
             my_file = Path(folder)
             if not my_file.is_dir():
                 makedirs(folder, 777)
+                
             with open(folder + '/' + name_final + extension, 'wb') as output_file:
                 output_file.write(file['tmp_name'])
 
