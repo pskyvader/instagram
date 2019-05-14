@@ -272,7 +272,6 @@ class app:
                 headers['content-type'] = post_env['CONTENT_TYPE']
             if 'CONTENT_LENGTH' in post_env:
                 headers['content-length'] = post_env['CONTENT_LENGTH']
-            print(headers)
 
             p = FieldStorage(
                 fp=post_env["wsgi.input"], environ=post_env, headers=headers, keep_blank_values=True
