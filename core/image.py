@@ -198,11 +198,8 @@ class image:
             extension = extension.lower()
             
             makedirs(folder, 777,exist_ok=True)
-
             folder += folder_upload
-            my_file = Path(folder)
-            if not my_file.is_dir():
-                makedirs(folder, 777)
+            makedirs(folder, 777,exist_ok=True)
                 
             with open(folder + '/' + name_final + extension, 'wb') as output_file:
                 output_file.write(file['tmp_name'])
