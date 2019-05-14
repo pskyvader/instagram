@@ -197,9 +197,9 @@ class image:
             name, extension = os.path.splitext(file['name'])
             extension = extension.lower()
             
-            makedirs(folder, 777,exist_ok=True)
+            makedirs(folder,exist_ok=True)
             folder += folder_upload
-            makedirs(folder, 777,exist_ok=True)
+            makedirs(folder,exist_ok=True)
                 
             with open(folder + '/' + name_final + extension, 'wb') as output_file:
                 output_file.write(file['tmp_name'])
