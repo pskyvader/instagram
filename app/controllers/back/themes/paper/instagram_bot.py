@@ -74,7 +74,10 @@ class instagram_bot():
                 bot.console_print("total siguiendo:"+str(len(following)), progress=10)
 
         if respuesta['exito']:
-            igto
+            c_time = functions.current_time("%Y-%m-%d")
+            start_follow=int(igtotal_model.get_total("start_follow", c_time))
+            stop_follow=int(igtotal_model.get_total("stop_follow", c_time))
+
             bot.console_print("Actualizando Usuarios actuales", progress=20)
             count_users = len(users_total)
             for k, u in enumerate(users_total):
