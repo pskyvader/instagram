@@ -34,8 +34,11 @@ class igtotal(base_model):
     
     @classmethod
     def set_total(cls,tag,fecha,cantidad=1):
-        row=cls.get_total(tag,fecha,True)
-        data={}
-        data['id']=row[0]
-        data['cantidad']=row['cantidad']+cantidad
-        return cls.update(data, False)
+        if cantidad>0:
+            row=cls.get_total(tag,fecha,True)
+            data={}
+            data['id']=row[0]
+            data['cantidad']=row['cantidad']+cantidad
+            return cls.update(data, False)
+        else:
+            return True
