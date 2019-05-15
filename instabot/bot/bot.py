@@ -372,7 +372,11 @@ class Bot(object):
             args["proxy"] = self.proxy
         if self.api.login(**args) is False:
             return False
+        
+        print(self.total)
         self.prepare()
+        
+        print(self.total)
         signal.signal(signal.SIGTERM, self.logout)
         atexit.register(self.logout)
         configuracion_model.setByVariable("login_instagram", "1")
