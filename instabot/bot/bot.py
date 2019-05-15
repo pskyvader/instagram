@@ -186,6 +186,8 @@ class Bot(object):
             ),
         }
 
+        
+
         self.start_time = datetime.datetime.now()
         self.sleep = {
             "like": like_sleep,
