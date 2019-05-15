@@ -373,9 +373,7 @@ class Bot(object):
         if self.api.login(**args) is False:
             return False
         
-        print(self.total)
-        self.prepare()
-        print(self.total)
+        #self.prepare()
         signal.signal(signal.SIGTERM, self.logout)
         atexit.register(self.logout)
         configuracion_model.setByVariable("login_instagram", "1")
