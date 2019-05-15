@@ -30,7 +30,7 @@ class igtotal(base_model):
                 cls.insert(data)
                 return cls.get_total(tag,fecha)
             else:
-                return False
+                return data
     
     @classmethod
     def set_total(cls,tag,fecha,cantidad=1):
