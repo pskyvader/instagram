@@ -93,22 +93,22 @@ class instagram_bot():
                     followers.remove(str(u["pk"]))
                     if not u["follower"]:
                         start_follow=+1
-                        bot.console_print( "Actualizando " +msg, progress=progress )
+                        bot.console_print( "Actualizando seguidor " +msg, progress=progress )
                         igaccounts_model.update({"id": u[0], "follower": True},False)
                 else:
                     if u["follower"]:
                         stop_follow=+1
-                        bot.console_print( "Actualizando " +msg, progress=progress )
+                        bot.console_print( "Actualizando No seguidor " +msg, progress=progress )
                         igaccounts_model.update({"id": u[0], "follower": False},False)
 
                 if str(u["pk"]) in following:
                     following.remove(str(u["pk"]))
                     if not u["following"]:
-                        bot.console_print( "Actualizando " +msg, progress=progress )
+                        bot.console_print( "Actualizando siguiendo " +msg, progress=progress )
                         igaccounts_model.update({"id": u[0], "following": True},False)
                 else:
                     if u["following"]:
-                        bot.console_print( "Actualizando " +msg, progress=progress )
+                        bot.console_print( "Actualizando No siguiendo " +msg, progress=progress )
                         igaccounts_model.update({"id": u[0], "following": False},False)
                 
                 if not respuesta['exito']:
