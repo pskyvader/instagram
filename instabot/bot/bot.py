@@ -479,7 +479,7 @@ class Bot(object):
         if passed_days > 0:
             self.reset_counters()
 
-        if self.total[key] > self.max_per_day[key]:
+        if self.total[key] >= self.max_per_day[key]:
             self.console_print(
                 "Maximo diario alcanzado: "
                 + key
