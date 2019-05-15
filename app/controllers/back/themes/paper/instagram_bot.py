@@ -114,8 +114,6 @@ class instagram_bot():
                 if not respuesta['exito']:
                     break
             
-            igtotal_model.set_total("start_follow",c_time,start_follow)
-            igtotal_model.set_total("stop_follow",c_time,stop_follow)
 
 
         if respuesta['exito']:
@@ -130,6 +128,7 @@ class instagram_bot():
                         respuesta['exito']=False
                         break
                 else:
+                    start_follow=+1
                     bot.console_print( "agregando " + u["username"] + " - " + str(k) + "/" + str(count_followers), progress=progress )
                     if not u["follower"]:
                         igaccounts_model.update({"id": u[0], "follower": True},False)
@@ -158,6 +157,10 @@ class instagram_bot():
             bot.console_print("Completado", progress=100)
         else:
             bot.console_print("Completado con errores", progress=100)
+
+        
+        igtotal_model.set_total("start_follow",c_time,start_follow)
+        igtotal_model.set_total("stop_follow",c_time,stop_follow)
         return respuesta
 
 
