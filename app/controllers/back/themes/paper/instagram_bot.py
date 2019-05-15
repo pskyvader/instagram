@@ -81,7 +81,7 @@ class instagram_bot():
             bot.console_print("Actualizando Usuarios actuales", progress=20)
             count_users = len(users_total)
             for k, u in enumerate(users_total):
-                k = k + 1
+                k =+ 1
                 progress = 19 + ((k / count_users) * 40)
                 msg=u["username"] + " - " + str(k) + "/" + str(count_users)
                 
