@@ -158,10 +158,9 @@ class instagram_bot():
         else:
             bot.console_print("Completado con errores", progress=100)
 
-        if start_follow>0:
-            igtotal_model.set_total("start_follow",c_time,start_follow)
-        if stop_follow>0:
-            igtotal_model.set_total("stop_follow",c_time,stop_follow)
+        
+        igtotal_model.set_total("start_follow",c_time,start_follow)
+        igtotal_model.set_total("stop_follow",c_time,stop_follow)
         return respuesta
 
 
