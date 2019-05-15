@@ -10,6 +10,7 @@ from app.models.configuracion import configuracion as configuracion_model
 from app.models.igusuario import igusuario as igusuario_model
 from app.models.igaccounts import igaccounts as igaccounts_model
 from app.models.ighashtag import ighashtag as ighashtag_model
+from app.models.igtotal import igtotal as igtotal_model
 
 # from .detalle import detalle as detalle_class
 # from .lista import lista as lista_class
@@ -73,6 +74,7 @@ class instagram_bot():
                 bot.console_print("total siguiendo:"+str(len(following)), progress=10)
 
         if respuesta['exito']:
+            igto
             bot.console_print("Actualizando Usuarios actuales", progress=20)
             count_users = len(users_total)
             for k, u in enumerate(users_total):
