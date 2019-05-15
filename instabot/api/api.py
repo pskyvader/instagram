@@ -28,8 +28,8 @@ PY2 = sys.version_info[0] == 2
 
 
 class API(object):
-    def __init__(self, device=None,parent_class=None):
-        self.fatal_error=False
+    def __init__(self, device=None, parent_class=None):
+        self.fatal_error = False
         # Setup device and user_agent
         self.parent_class = parent_class
         device = device or devices.DEFAULT_DEVICE
@@ -181,17 +181,26 @@ class API(object):
             self.session.proxies["http"] = scheme + self.proxy
             self.session.proxies["https"] = scheme + self.proxy
 
-    def send_request(self, endpoint, post=None, login=False, with_signature=True,delay=None,repeat=False):
+    def send_request(
+        self,
+        endpoint,
+        post=None,
+        login=False,
+        with_signature=True,
+        delay=None,
+        repeat=False,
+    ):
         from instabot.bot import bot_support
-        if isinstance(post,dict) or isinstance(post,list):
-            post_tmp=post.copy()
+
+        if isinstance(post, dict) or isinstance(post, list):
+            post_tmp = post.copy()
         else:
-            post_tmp=post
+            post_tmp = post
 
         if not self.is_logged_in and not login:
             msg = "Not logged in!"
             self.logger.critical(msg)
-            bot_support.console_print( bot_support, msg,'red')
+            bot_support.console_print(bot_support, msg, "red")
             raise Exception(msg)
 
         self.session.headers.update(config.REQUEST_HEADERS)
@@ -207,7 +216,7 @@ class API(object):
                 response = self.session.get(config.API_URL + endpoint)
         except Exception as e:
             self.logger.warning(str(e))
-            bot_support.console_print( bot_support, str(e),'yellow')
+            bot_support.console_print(bot_support, str(e), "yellow")
             return False
 
         if response.status_code == 200:
@@ -219,7 +228,11 @@ class API(object):
                 return False
         else:
             self.logger.error("Request returns {} error!".format(response.status_code))
-            bot_support.console_print( bot_support, "Request returns {} error!".format(response.status_code),'red')
+            bot_support.console_print(
+                bot_support,
+                "Request returns {} error!".format(response.status_code),
+                "red",
+            )
             try:
                 response_data = json.loads(response.text)
             except JSONDecodeError:
@@ -229,26 +242,38 @@ class API(object):
                 self.logger.error(
                     "ATTENTION!: `feedback_required`, your action could have been blocked"
                 )
-                bot_support.console_print( bot_support, "ATTENTION!: `feedback_required`, your action could have been blocked",'red')
-                self.fatal_error=True
-                if delay!=None:
+                bot_support.console_print(
+                    bot_support,
+                    "ATTENTION!: `feedback_required`, your action could have been blocked",
+                    "red",
+                )
+                self.fatal_error = True
+                if delay != None:
                     self.parent_class.update_max(delay)
                 return "feedback_required"
             if response.status_code == 429:
-                if delay!=None:
+                if delay != None:
                     sleep_seconds = self.parent_class.sleep[delay]
                 else:
-                    sleep_seconds = 5*60
+                    sleep_seconds = 5 * 60
                 self.logger.warning(
                     "That means 'too many requests'. I'll go to sleep "
                     "for {} seconds.".format(sleep_seconds)
                 )
-                bot_support.console_print( bot_support, "That means 'too many requests'. I'll go to sleep for {} seconds.".format(sleep_seconds),'yellow')
-                if delay!=None:
-                    self.parent_class.update_delay(delay,repeat)
+                bot_support.console_print(
+                    bot_support,
+                    "That means 'too many requests'. I'll go to sleep for {} seconds.".format(
+                        sleep_seconds
+                    ),
+                    "yellow",
+                )
+                if delay != None:
+                    self.parent_class.update_delay(delay, repeat)
 
                 time.sleep(sleep_seconds)
-                return self.send_request(endpoint, post_tmp, login, with_signature,delay=delay,repeat=True)
+                return self.send_request(
+                    endpoint, post_tmp, login, with_signature, delay=delay, repeat=True
+                )
             elif response.status_code == 400:
                 response_data = json.loads(response.text)
                 msg = "Instagram's error message: {}"
@@ -380,14 +405,14 @@ class API(object):
     def comment(self, media_id, comment_text):
         data = self.json_data({"comment_text": comment_text})
         url = "media/{media_id}/comment/".format(media_id=media_id)
-        return self.send_request(url, data,delay='comment')
+        return self.send_request(url, data, delay="comment")
 
     def reply_to_comment(self, media_id, comment_text, parent_comment_id):
         data = self.json_data(
             {"comment_text": comment_text, "replied_to_comment_id": parent_comment_id}
         )
         url = "media/{media_id}/comment/".format(media_id=media_id)
-        return self.send_request(url, data,delay='comment')
+        return self.send_request(url, data, delay="comment")
 
     def delete_comment(self, media_id, comment_id):
         data = self.json_data()
@@ -397,7 +422,7 @@ class API(object):
 
     def get_username_info(self, user_id):
         url = "users/{user_id}/info/".format(user_id=user_id)
-        return self.send_request(url,delay='get')
+        return self.send_request(url, delay="get")
 
     def get_self_username_info(self):
         return self.get_username_info(self.user_id)
@@ -506,6 +531,7 @@ class API(object):
         data = self.json_data()
         url = "media/{comment_id}/comment_like/".format(comment_id=comment_id)
         return self.send_request(url, data)
+
     def unlike_comment(self, comment_id):
         data = self.json_data()
         url = "media/{comment_id}/comment_unlike/".format(comment_id=comment_id)
@@ -514,12 +540,12 @@ class API(object):
     def like(self, media_id):
         data = self.json_data({"media_id": media_id})
         url = "media/{media_id}/like/".format(media_id=media_id)
-        return self.send_request(url, data,delay='like')
+        return self.send_request(url, data, delay="like")
 
     def unlike(self, media_id):
         data = self.json_data({"media_id": media_id})
         url = "media/{media_id}/unlike/".format(media_id=media_id)
-        return self.send_request(url, data,delay='unlike')
+        return self.send_request(url, data, delay="unlike")
 
     def get_media_comments(self, media_id, max_id=""):
         url = "media/{media_id}/comments/".format(media_id=media_id)
@@ -533,22 +559,22 @@ class API(object):
     def follow(self, user_id):
         data = self.json_data({"user_id": user_id})
         url = "friendships/create/{user_id}/".format(user_id=user_id)
-        return self.send_request(url, data,delay='follow')
+        return self.send_request(url, data, delay="follow")
 
     def unfollow(self, user_id):
         data = self.json_data({"user_id": user_id})
         url = "friendships/destroy/{user_id}/".format(user_id=user_id)
-        return self.send_request(url, data,delay='unfollow')
+        return self.send_request(url, data, delay="unfollow")
 
     def block(self, user_id):
         data = self.json_data({"user_id": user_id})
         url = "friendships/block/{user_id}/".format(user_id=user_id)
-        return self.send_request(url, data,delay='block')
+        return self.send_request(url, data, delay="block")
 
     def unblock(self, user_id):
         data = self.json_data({"user_id": user_id})
         url = "friendships/unblock/{user_id}/".format(user_id=user_id)
-        return self.send_request(url, data,delay='unblock')
+        return self.send_request(url, data, delay="unblock")
 
     def user_friendship(self, user_id):
         data = self.json_data({"user_id": user_id})
@@ -696,7 +722,7 @@ class API(object):
             with open(to_file, "w"):
                 pass
         desc = "Getting {} of {}".format(which, user_id)
-        #with tqdm(total=total, desc=desc, leave=True) as pbar:
+        # with tqdm(total=total, desc=desc, leave=True) as pbar:
         while True:
             get(user_id, next_max_id)
             last_json = self.last_json
@@ -719,7 +745,7 @@ class API(object):
                             else:
                                 f.write("{}\n".format(item["pk"]))
                         result.append(item)
-                        #pbar.update(1)
+                        # pbar.update(1)
                         sleep_track += 1
                         if sleep_track >= 20000:
                             sleep_time = uniform(120, 180)
