@@ -487,7 +487,7 @@ class Bot(object):
                 + str(self.total[key])
                 + " > "
                 + str(self.max_per_day[key]),
-                color="yellow",
+                color="red",
             )
             return True
         else:
