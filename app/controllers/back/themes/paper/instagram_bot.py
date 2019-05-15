@@ -92,10 +92,12 @@ class instagram_bot():
                 if str(u["pk"]) in followers:
                     followers.remove(str(u["pk"]))
                     if not u["follower"]:
+                        start_follow=+1
                         bot.console_print( "Actualizando " +msg, progress=progress )
                         igaccounts_model.update({"id": u[0], "follower": True},False)
                 else:
                     if u["follower"]:
+                        stop_follow=+1
                         bot.console_print( "Actualizando " +msg, progress=progress )
                         igaccounts_model.update({"id": u[0], "follower": False},False)
 
@@ -111,6 +113,9 @@ class instagram_bot():
                 
                 if not respuesta['exito']:
                     break
+            
+            igtotal_model.set_total("start_follow",c_time,start_follow)
+            igtotal_model.set_total("stop_follow",c_time,stop_follow)
 
 
         if respuesta['exito']:
