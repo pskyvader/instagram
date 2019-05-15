@@ -185,8 +185,9 @@ class Bot(object):
                 igtotal_model.get_total("unarchived", c_time)["cantidad"]
             ),
         }
+        print(self.total)
 
-        
+
 
         self.start_time = datetime.datetime.now()
         self.sleep = {
