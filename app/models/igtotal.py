@@ -16,7 +16,7 @@ class igtotal(base_model):
 
 
     @classmethod
-    def get_total(cls,tag,fecha):
+    def get_total(cls,tag,fecha,insert=False):
         from .table import table
         where = {'tag': tag,'fecha':fecha}
         connection = database.instance()
@@ -26,12 +26,15 @@ class igtotal(base_model):
         else:
             data=where
             data['cantidad']=0
-            cls.insert(data)
-            return cls.get_total(tag,fecha)
+            if insert:
+                cls.insert(data)
+                return cls.get_total(tag,fecha)
+            else:
+                return False
     
     @classmethod
     def set_total(cls,tag,fecha,cantidad=1):
-        row=cls.get_total(tag,fecha)
+        row=cls.get_total(tag,fecha,True)
         data={}
         data['id']=row[0]
         data['cantidad']=row['cantidad']+cantidad
