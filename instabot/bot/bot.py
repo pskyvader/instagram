@@ -375,7 +375,6 @@ class Bot(object):
         
         print(self.total)
         self.prepare()
-        
         print(self.total)
         signal.signal(signal.SIGTERM, self.logout)
         atexit.register(self.logout)
