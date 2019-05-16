@@ -81,7 +81,7 @@ class instagram_bot():
             bot.console_print("Actualizando Usuarios actuales", progress=20)
             count_users = len(users_total)
             for k, u in enumerate(users_total):
-                k =+ 1
+                k += 1
                 progress = 19 + ((k / count_users) * 40)
                 msg=u["username"] + " - " + str(k) + "/" + str(count_users)
                 
@@ -92,12 +92,12 @@ class instagram_bot():
                 if str(u["pk"]) in followers:
                     followers.remove(str(u["pk"]))
                     if not u["follower"]:
-                        start_follow=+1
+                        start_follow+=1
                         bot.console_print( "Actualizando seguidor " +msg, progress=progress )
                         igaccounts_model.update({"id": u[0], "follower": True},False)
                 else:
                     if u["follower"]:
-                        stop_follow=+1
+                        stop_follow+=1
                         bot.console_print( "Actualizando No seguidor " +msg, progress=progress )
                         igaccounts_model.update({"id": u[0], "follower": False},False)
 
@@ -128,7 +128,7 @@ class instagram_bot():
                         respuesta['exito']=False
                         break
                 else:
-                    start_follow=+1
+                    start_follow+=1
                     bot.console_print( "agregando " + u["username"] + " - " + str(k) + "/" + str(count_followers), progress=progress )
                     if not u["follower"]:
                         igaccounts_model.update({"id": u[0], "follower": True},False)
