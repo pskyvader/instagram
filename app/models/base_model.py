@@ -168,12 +168,13 @@ class base_model:
         return row
 
     @classmethod
-    def delete(cls, id: int):
+    def delete(cls, id: int,logging=True):
         from .log import log
         where = {cls.idname: id}
         connection = database.instance()
         row = connection.delete(cls.table, cls.idname, where)
-        log.insert_log(cls.table, cls.idname, cls, where)
+        if logging:
+            log.insert_log(cls.table, cls.idname, cls, where)
         return row
 
     @classmethod
