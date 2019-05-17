@@ -208,7 +208,7 @@ class instagram(base):
             ig.bot.console_print("Hubo un error al dejar de seguir. Reiniciando bot para el siguiente paso")
             ig=instagram_bot()
 
-        #respuesta = ig.follow('hashtag')
+        respuesta = ig.follow('hashtag')
         ig.bot.console_print("Todos los pasos completados")
         if len(var)==0:
             ret["body"] = json.dumps(respuesta, ensure_ascii=False)
