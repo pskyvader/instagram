@@ -365,7 +365,7 @@ class Bot(object):
             "Worked: {}".format(str(datetime.datetime.now() - self.start_time))
         )
         self.print_counters()
-        configuracion_model.setByVariable("login_instagram", "0")
+        configuracion_model.setByVariable("login_instagram", "0",False)
 
     def login(self, **args):
         if self.proxy:
@@ -376,7 +376,7 @@ class Bot(object):
         #self.prepare()
         signal.signal(signal.SIGTERM, self.logout)
         atexit.register(self.logout)
-        configuracion_model.setByVariable("login_instagram", "1")
+        configuracion_model.setByVariable("login_instagram", "1",False)
         return True
 
     def prepare(self):
@@ -422,7 +422,7 @@ class Bot(object):
             if not repeat:
                 delay += delta
                 self.delays[key] = delay
-                configuracion_model.setByVariable(key + "_delay", str(delay))
+                configuracion_model.setByVariable(key + "_delay", str(delay),False)
                 self.console_print(
                     "Nuevo valor para delay " + key + ": " + str(self.delays[key])
                 )
@@ -444,7 +444,7 @@ class Bot(object):
             if repeat or sleep_delay < delay * 5 or (last_sleep < sleep_delay * 4):
                 sleep_delay += sleep
                 self.sleep[key] = sleep_delay
-                configuracion_model.setByVariable(key + "_sleep", str(sleep_delay))
+                configuracion_model.setByVariable(key + "_sleep", str(sleep_delay),False)
                 self.console_print(
                     "Nuevo valor para sleep " + key + ": " + str(self.sleep[key])
                 )
@@ -461,7 +461,7 @@ class Bot(object):
                     new_max = max - 50
                 else:
                     new_max = max - 1
-                configuracion_model.setByVariable("max_" + key + "_per_day", new_max)
+                configuracion_model.setByVariable("max_" + key + "_per_day", new_max,False)
             else:
                 print(key, "no existe en", self)
         else:
