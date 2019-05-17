@@ -27,7 +27,7 @@ class igtotal(base_model):
             data=where
             data['cantidad']=0
             if insert:
-                cls.insert(data)
+                cls.insert(data,False)
                 return cls.get_total(tag,fecha)
             else:
                 return data
