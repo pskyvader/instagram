@@ -187,3 +187,32 @@ class instagram(base):
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         socket.close()
         return ret
+    
+    def complete_process(self,var=[]):
+        ret = {
+            "headers": [("Content-Type", "application/json; charset=utf-8")],
+            "body": "",
+        }
+        respuesta = {"exito": False, "mensaje": ""}
+        ig=instagram_bot()
+        ig.bot.console_print("Actualizando usuarios")
+        respuesta = ig.update()
+        if not respuesta['exito']:
+            ig.bot.console_print("Hubo un error al actualizar usuarios. Reiniciando bot para el siguiente paso")
+            ig=instagram_bot()
+
+        ig.bot.console_print("Dejando de seguir no seguidores")
+        respuesta = ig.unfollow('nonfollower')
+        
+        if not respuesta['exito']:
+            ig.bot.console_print("Hubo un error al dejar de seguir. Reiniciando bot para el siguiente paso")
+            ig=instagram_bot()
+
+        #respuesta = ig.follow('hashtag')
+        ig.bot.console_print("Todos los pasos completados")
+        if len(var)==0:
+            ret["body"] = json.dumps(respuesta, ensure_ascii=False)
+        socket.close()
+        
+
+        return ret
