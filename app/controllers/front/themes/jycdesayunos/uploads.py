@@ -8,6 +8,7 @@ class uploads:
             return {'error': 404}
         theme =  app.get_dir(True)+'uploads/'
         resource = '/'.join(var)
+        print(resource)
         resource_url = theme + resource
         ret=cache.serve_cache(resource_url,theme,resource)
         return ret
