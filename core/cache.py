@@ -153,13 +153,7 @@ class cache:
                 ("Accept-encoding", "gzip,deflate"),
                 ("Content-Encoding", "gzip"),
             ]
-            cache_file = (
-                theme
-                + "cache/"
-                + str(functions.fecha_archivo(resource_url, True))
-                + "-"
-                + resource.replace("/", "-")
-            )
+            cache_file = os.path.join( theme + "cache/" + str(functions.fecha_archivo(resource_url, True)) + "-" + resource.replace("/", "-") )
 
             os.makedirs(theme + "cache/",exist_ok=True)
 
