@@ -161,6 +161,7 @@ class image:
 
         if len(modulo)>0 and 'recortes' in modulo[0]:
             for recorte in modulo[0]['recortes']:
+                print(recorte)
                 recorte['ancho'] = int(recorte['ancho'])
                 recorte['alto'] = int(recorte['alto'])
                 recorte['calidad'] = int(recorte['calidad'])
