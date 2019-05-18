@@ -155,7 +155,7 @@ class cache:
             ]
             cache_file = os.path.join( theme + "cache/" + str(functions.fecha_archivo(resource_url, True)) + "-" + resource.replace("/", "-") )
 
-            print(theme + "cache/")
+            print(theme + "cache/",os.path.join(theme + "cache/"))
             os.makedirs(os.path.join(theme + "cache/"),exist_ok=True)
 
             my_file = Path(cache_file)
