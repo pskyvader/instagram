@@ -2,16 +2,17 @@ class cache:
     data = []
     cacheable = None
     cacheable_config = None
-    url_cache=[]
+    url_cache = []
 
     @staticmethod
     def set_cache(cacheable: bool):
-        if cache.cacheable!=False:
+        if cache.cacheable != False:
             cache.cacheable = cacheable
 
     @staticmethod
     def add_cache(content):
         from .app import app
+
         if cache.cacheable:
             cache.data.append(content)
 
@@ -59,7 +60,7 @@ class cache:
         ruta = functions.generar_url(cache.url_cache)
         current = functions.current_url()
 
-        if cache.url_cache=='' or ruta != current:
+        if cache.url_cache == "" or ruta != current:
             return ""
         if cache.cacheable_config == None:
             config = app.get_config()
@@ -85,8 +86,8 @@ class cache:
 
         ruta = functions.generar_url(cache.url_cache)
         current = functions.current_url()
-        
-        if cache.url_cache!='' and ruta == current and cache.cacheable:
+
+        if cache.url_cache != "" and ruta == current and cache.cacheable:
             folder = app.get_dir(True) + "cache/"
             if not os.path.exists(folder):
                 os.makedirs(folder)
@@ -95,7 +96,7 @@ class cache:
                 name = cache.file_name()
                 if name != "":
                     f = "".join(cache.data)
-                    cache.data=[]
+                    cache.data = []
                     f = bytes(f, "utf-8")
                     f = compress(f)
 
@@ -121,7 +122,7 @@ class cache:
         post = app.post.copy()
         if "ajax" in post:
             name += "__ajax"
-            del post['ajax']
+            del post["ajax"]
 
         if len(post) > 0:
             return ""
@@ -153,9 +154,15 @@ class cache:
                 ("Accept-encoding", "gzip,deflate"),
                 ("Content-Encoding", "gzip"),
             ]
-            cache_file = os.path.join( theme + "cache/" + str(functions.fecha_archivo(resource_url, True)) + "-" + resource.replace("/", "-") )
-            
-            os.makedirs(os.path.join(theme + "cache/"),exist_ok=True)
+            cache_file = os.path.join(
+                theme
+                + "cache/"
+                + str(functions.fecha_archivo(resource_url, True))
+                + "-"
+                + resource.replace("/", "-")
+            )
+
+            os.makedirs(os.path.join(theme + "cache/"), exist_ok=True)
 
             my_file = Path(cache_file)
             if my_file.is_file():
