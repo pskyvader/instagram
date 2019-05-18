@@ -274,7 +274,6 @@ class app:
             )
             if p.list != None:
                 post = app.post_field(p)
-            print(post)
 
         post = app.format_array(post)
         post = app.parse_values(post)
