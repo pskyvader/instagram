@@ -455,11 +455,9 @@ class database():
                     row = [row[key] for key in sorted(row.keys())]
 
                 if key != "image" and key != "file":
+                    print(row)
                     data[key] = json.dumps(row, ensure_ascii=False)
                 else:
-                    print(row,type(row))
-                    if isinstance(row,dict):
-                        row=[row]
                     data[key] = row
 
             del data['multiple']
