@@ -71,8 +71,10 @@ class app:
         app.url["base"] = app.path
         app.url["admin"] = app.path + config["admin"] + "/"
 
-        app.url["base_dir"] = app.root + "/"
-        app.url["admin_dir"] = app.root + "/" + config["admin"] + "/"
+        #app.url["base_dir"] = app.root + "/"
+        #app.url["admin_dir"] = app.root + "/" + config["admin"] + "/"
+        app.url["base_dir"] = app.root
+        app.url["admin_dir"] = app.root + config["admin"] + "/"
 
         app.url["base_sub"] = subdirectorio
         app.url["admin_sub"] = subdirectorio + config["admin"] + "/"
