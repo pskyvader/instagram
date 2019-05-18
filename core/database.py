@@ -456,6 +456,7 @@ class database():
                 if key != "image" and key != "file":
                     data[key] = json.dumps(row, ensure_ascii=False)
                 else:
+                    print(row,type(row))
                     if isinstance(row,dict):
                         row=[row]
                     data[key] = row
