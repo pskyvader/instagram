@@ -178,7 +178,7 @@ class cache:
                 f = open(resource_url, "rb").read()
                 f = compress(f)
 
-                file_write = open(cache_file, "wb+")
+                file_write = open(cache_file, "wb")
                 file_write.write(f)
                 file_write.close()
                 ret["file"] = cache_file
