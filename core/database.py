@@ -406,6 +406,7 @@ class database():
         import json
         if 'multiple' in data:
             for key, multiple in data['multiple'].items():
+                print(multiple)
                 row = {}
                 loop = None
                 if isinstance(multiple, dict):
