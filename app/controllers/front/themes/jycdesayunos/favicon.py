@@ -12,5 +12,6 @@ class favicon:
         theme =  app.get_dir(True)+'uploads/'
         resource_url = image.generar_dir(portada, 'favicon')
         resource = resource_url[len(theme):]
+        print(theme,resource)
         ret=cache.serve_cache(resource_url,theme,resource)
         return ret
