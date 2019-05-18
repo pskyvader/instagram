@@ -406,7 +406,6 @@ class database():
         import json
         if 'multiple' in data:
             for key, multiple in data['multiple'].items():
-                print(key,multiple,type(multiple))
                 row = {}
                 loop = None
                 if isinstance(multiple, dict):
@@ -455,7 +454,6 @@ class database():
                     row = [row[key] for key in sorted(row.keys())]
 
                 if key != "image" and key != "file":
-                    print(row)
                     data[key] = json.dumps(row, ensure_ascii=False)
                 else:
                     data[key] = row
