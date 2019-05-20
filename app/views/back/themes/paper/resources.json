@@ -85,7 +85,7 @@
         {"url": "js/sitemap.js","local":true,"defer":false,"combine":true},
         {"url": "js/backup.js","local":true,"defer":false,"combine":true},
         {"url": "js/update.js","local":true,"defer":false,"combine":true},
-        {"url": "js/graficos.js","local":true,"defer":false,"combine":true},
+        {"url": "js/graficos.js","local":true,"defer":false,"combine":false},
         {"url": "js/instagram.js","local":true,"defer":false,"combine":true},
         {"url": "js/list.js","local":true,"defer":false,"combine":true},
         {"url": "js/detail.js","local":true,"defer":false,"combine":true},
