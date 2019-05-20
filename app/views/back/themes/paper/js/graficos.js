@@ -1,7 +1,7 @@
 function inicio_graficos() {
-    var ctx = $('#myChart');
+    var ctx = $('#chart-seguidores');
     var myChart = new Chart(ctx, {
-        type: 'line',
+        type: 'bar',
         data: {
             labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
             datasets: [{
