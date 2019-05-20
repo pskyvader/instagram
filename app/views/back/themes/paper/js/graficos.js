@@ -69,7 +69,7 @@ function chart_followers() {
             })
             .on("mousemove", function() {
                 console.log(d3.event);
-                tooltip.style("left", (d3.event.pageX) + "px") .style("top", (d3.event.pageY - 28) + "px");
+                tooltip.style("left", (d3.event.layerX) + "px") .style("top", (d3.event.layerY - 28) + "px");
             })
             .on("mouseout", function(d, i) {
                 tooltip.transition().duration(2000).style("opacity", 0);
