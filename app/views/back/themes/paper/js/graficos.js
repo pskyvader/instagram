@@ -48,11 +48,6 @@ function chart_followers() {
             size: data['both'],
         });
         sets.push({
-            sets: ['Favoritos'],
-            label: 'Favoritos',
-            size: data['favoritos'],
-        });
-        sets.push({
             sets: ['Seguidores','Favoritos'],
             label: 'Favoritos',
             size: data['favoritos'],
