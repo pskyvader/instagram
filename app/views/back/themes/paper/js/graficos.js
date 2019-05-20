@@ -21,8 +21,9 @@ function inicio_graficos() {
 }
 
 function chart_followers() {
-    post(create_url(modulo, 'get_followers'), {}, 'Adquiriendo usuarios', false, null, function(initial_data){
-        generar_grafico($('#chart-seguidores'), generar_response(initial_data,'Usuarios'), 'bar');
+    var url=create_url(modulo, 'get_followers')
+    post(url, {}, 'Adquiriendo usuarios', false, null, function(data){
+        generar_grafico($('#chart-seguidores'), generar_response(data,'Usuarios'), 'bar');
     });
 }
 
