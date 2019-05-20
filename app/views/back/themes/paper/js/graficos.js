@@ -57,7 +57,7 @@ function chart_followers() {
             size: data['both']
         });
 
-        var chart = venn.VennDiagram().width(500).height(400);
+        var chart = venn.VennDiagram().width(500);
         var div = d3.select("#chart-seguidores").datum(sets).call(chart);
         div.selectAll("text").style("fill", "white");
         div.selectAll(".venn-circle path")
