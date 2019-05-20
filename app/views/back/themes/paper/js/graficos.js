@@ -34,7 +34,17 @@ function chart_followers() {
         var sets = [];
 
         sets.push({
+            sets: ['Todos'],
+            label: 'Todos',
+            size: data['total'],
+        });
+        sets.push({
             sets: ['Seguidores'],
+            label: 'Seguidores',
+            size: data['follower'],
+        });
+        sets.push({
+            sets: ['total','Seguidores'],
             label: 'Seguidores',
             size: data['follower'],
         });
@@ -44,7 +54,17 @@ function chart_followers() {
             size: data['following'],
         });
         sets.push({
+            sets: ['total','Seguidores'],
+            label: 'Siguiendo',
+            size: data['following'],
+        });
+        sets.push({
             sets: ['Seguidores', 'Siguiendo'],
+            label: 'Seguidores y Siguiendo',
+            size: data['both'],
+        });
+        sets.push({
+            sets: ['total','Seguidores', 'Siguiendo'],
             label: 'Seguidores y Siguiendo',
             size: data['both'],
         });
