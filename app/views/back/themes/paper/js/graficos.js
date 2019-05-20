@@ -62,8 +62,6 @@ function generar_venn(sets, id, title) {
         $(v).css('fill', chart_borders[count]);
         count++;
     });
-
-
     div.selectAll("g").on("mouseover", function(d, i) {
         venn.sortAreas(div, d);
         tooltip.transition().duration(40).style("opacity", 1);
@@ -79,8 +77,6 @@ function generar_venn(sets, id, title) {
         var opacity = d.sets.length == 1 ? .5 : 0;
         selection.select("path").style("stroke-width", 3).style("fill-opacity", opacity).style("stroke", "none");
     });
-
-
 }
 
 
@@ -121,8 +117,6 @@ function generar_response(initial_data, title) {
     return data_response
 
 }
-
-
 
 function generar_grafico(id, data, type) {
     var chart = new Chart(id, {
