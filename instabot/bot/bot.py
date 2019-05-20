@@ -451,12 +451,13 @@ class Bot(object):
 
     def update_max(self, key):
         delay_adjust=int(configuracion_model.getByVariable('delay_adjust',50))
+        max_delay_adjust=int(configuracion_model.getByVariable('max_delay_adjust',100))
         key = key + "s"
         if key in self.total and key in self.max_per_day:
             total = self.total[key]
             max = self.max_per_day[key]
             if max != None:
-                if max - total > 100:
+                if max - total > max_delay_adjust:
                     new_max = max - delay_adjust
                 else:
                     new_max = max - 1
