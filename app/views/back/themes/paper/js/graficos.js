@@ -47,7 +47,7 @@ function chart_followers() {
         var div = d3.select("#chart-seguidores").datum(sets).call(chart);
         div.selectAll("text").style("fill", "white");
         div.selectAll(".venn-circle path").style("stroke", "fff");
-        var tooltip = d3.select("#venn_one").append("div")
+        var tooltip = d3.select("#chart-seguidores").append("div")
             .attr("class", "venntooltip");
 
 
