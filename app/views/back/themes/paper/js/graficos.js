@@ -29,16 +29,19 @@ function chart_followers() {
 
         sets.push({
             sets: ['Seguidores'],
+            label: 'Seguidores',
             size: data['follower'],
             figure: data['follower'],
         });
         sets.push({
             sets: ['Siguiendo'],
+            label: 'Siguiendo',
             size: data['following'],
             figure: data['following'],
         });
         sets.push({
             sets: ['Seguidores', 'Siguiendo'],
+            label: 'Seguidores y Siguiendo',
             size: data['both'],
             figure: data['both'],
         });
