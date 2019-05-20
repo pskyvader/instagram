@@ -66,7 +66,7 @@ class home(base):
         respuesta['following']=igaccounts_model.getAll(where,select='total')
         where={'follower':True,'following':True}
         respuesta['both']=igaccounts_model.getAll(where,select='total')
-        where={'favoritos':True}
+        where={'favorito':True}
         respuesta['favoritos']=igaccounts_model.getAll(where,select='total')
         
 
