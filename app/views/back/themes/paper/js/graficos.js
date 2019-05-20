@@ -43,6 +43,18 @@ function chart_followers() {
             figure: data['both'],
         });
 
+
+        var sets = [
+            {sets:["Audio"], figure: 8.91, label: "Audio", size: 8.91},
+            {sets:["Direct Buy"], figure: 34.53, label: "Direct Buy", size: 34.53},
+            {sets:["Branded Takeover"], figure: 40.9, label: "Branded Takeover", size: 40.9},
+            {sets: ["Audio", "Direct Buy"], figure: 5.05, label: "Audio and Direct Buy", size: 5.05},
+            {sets: ["Audio", "Branded Takeover"], figure: 3.65, label: "Audio and Branded Takeover", size: 3.65},
+            {sets: ["Direct Buy", "Branded Takeover"], figure: 4.08, label: "Direct Buy and Branded Takeover", size: 4.08},
+            {sets: ["Audio", "Direct Buy", "Branded Takeover"], figure: 2.8, label: "Audio, Direct Buy, and Branded Takeover", size: 2.8}
+            ];
+
+
         var chart = venn.VennDiagram().width(500);
         var div = d3.select("#chart-seguidores").datum(sets).call(chart);
         div.selectAll("text").style("fill", "white");
