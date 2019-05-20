@@ -109,7 +109,7 @@ class instagram(base):
             "body": "",
         }
         respuesta={'exito':False,'mensaje':''}
-        users=igaccounts_model.getAll({'follower':False,'following':False,'favorito':False})
+        users=igaccounts_model.getAll({'follower':False,'following':False,'favorito':False,'hashtag':''})
     
         ig=instagram_bot()
         bot=ig.bot
