@@ -6,6 +6,7 @@ from .header import header
 from .aside import aside
 from .footer import footer
 from app.models.administrador import administrador as administrador_model
+from app.models.igaccounts import igaccounts as igaccounts_model
 
 import json
 
@@ -57,7 +58,14 @@ class home(base):
             "headers": [("Content-Type", "application/json; charset=utf-8")],
             "body": "",
         }
-        respuesta = {"exito": False, "mensaje": ""}
+        respuesta = {}
+        respuesta['Total']=igaccounts_model.getAll(select='total')
+        where={'follower':True}
+        respuesta['Seguidores']=igaccounts_model.getAll(where,select='total')
+        where={'following':True}
+        respuesta['Siguiendo']=igaccounts_model.getAll(where,select='total')
+        where={'follower':True,'following':True}
+        respuesta['Seguidores y siguiendo']=igaccounts_model.getAll(where,select='total')
         
 
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
