@@ -50,8 +50,12 @@ function chart_followers() {
         var div = d3.select("#chart-seguidores").datum(sets).call(chart);
         div.selectAll(".venn-circle path").style("fill-opacity", .5).style("stroke-width", 3).style("stroke-opacity", 1);
         var tooltip = d3.select("#chart-seguidores").append("div").attr("class", "venntooltip");
-
-        console.log(div.selectAll("g")._groups[0]);
+        
+        var count=0;
+        $.each(div.selectAll("g")._groups[0],function(k,v){
+            v.style('fill',chart_borders[count]);
+            count++;
+        });
 
 
         div.selectAll("g")
