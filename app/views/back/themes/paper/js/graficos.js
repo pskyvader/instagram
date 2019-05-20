@@ -51,6 +51,8 @@ function chart_followers() {
         div.selectAll(".venn-circle path").style("fill-opacity", .5).style("stroke-width", 3).style("stroke-opacity", 1);
         var tooltip = d3.select("#chart-seguidores").append("div").attr("class", "venntooltip");
 
+        console.log(div.selectAll("g"));
+
 
         div.selectAll("g")
             .on("mouseover", function(d, i) {
