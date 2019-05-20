@@ -450,13 +450,14 @@ class Bot(object):
             self.last_sleep[key] = time.time()
 
     def update_max(self, key):
+        delay_adjust=int(configuracion_model.getByVariable('delay_adjust',50))
         key = key + "s"
         if key in self.total and key in self.max_per_day:
             total = self.total[key]
             max = self.max_per_day[key]
             if max != None:
                 if max - total > 100:
-                    new_max = max - 50
+                    new_max = max - delay_adjust
                 else:
                     new_max = max - 1
                 configuracion_model.setByVariable("max_" + key + "_per_day", new_max,False)
