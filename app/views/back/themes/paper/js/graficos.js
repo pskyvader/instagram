@@ -1,9 +1,7 @@
 function inicio_graficos() {
-    
     var ctx = $('#myChart');
-    
     var myChart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
             datasets: [{
@@ -38,5 +36,4 @@ function inicio_graficos() {
             }
         }
     });
-
 }
