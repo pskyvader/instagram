@@ -1,5 +1,7 @@
 function inicio_graficos() {
-    var ctx = document.getElementById('myChart');
+    
+    var ctx = $('#myChart');
+    
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
