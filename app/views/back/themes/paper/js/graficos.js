@@ -29,15 +29,18 @@ function chart_followers() {
 
         sets.push({
             sets: ['Seguidores'],
-            size: data['follower']
+            size: data['follower'],
+            figure: data['follower'],
         });
         sets.push({
             sets: ['Siguiendo'],
-            size: data['following']
+            size: data['following'],
+            figure: data['following'],
         });
         sets.push({
             sets: ['Seguidores', 'Siguiendo'],
-            size: data['both']
+            size: data['both'],
+            figure: data['both'],
         });
 
         var chart = venn.VennDiagram().width(500);
