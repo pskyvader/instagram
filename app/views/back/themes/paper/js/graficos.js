@@ -68,7 +68,8 @@ function chart_followers() {
                 tooltip.transition().duration(40).style("opacity", 1);
                 tooltip.text(d.size + " de los usuarios son " + d.label);
                 var selection = d3.select(this).transition("tooltip").duration(400);
-                selection.select("path").style("stroke-width", 3).style("fill-opacity", d.sets.length == 1 ? 1 : (d.sets.length > .8 ? 1 : 0)).style("stroke", "fff");
+                var opacity=d.sets.length == 1 ? 1 : (d.sets.length > .8 ? 1 : 0);
+                selection.select("path").style("stroke-width", 3).style("fill-opacity", opacity).style("stroke", "fff");
             })
             .on("mousemove", function() {
                 tooltip.style("left", (d3.event.offsetX + 50) + "px").style("top", (d3.event.offsetY - 28) + "px");
@@ -76,7 +77,8 @@ function chart_followers() {
             .on("mouseout", function(d, i) {
                 tooltip.transition().duration(100).style("opacity", 0);
                 var selection = d3.select(this).transition("tooltip").duration(200);
-                selection.select("path").style("stroke-width", 3).style("fill-opacity", d.sets.length == 1 ? .5 : 0).style("stroke", "none");
+                var opacity=d.sets.length == 1 ? .5 : 0;
+                selection.select("path").style("stroke-width", 3).style("fill-opacity", opacity).style("stroke", "none");
             });
     });
 }
