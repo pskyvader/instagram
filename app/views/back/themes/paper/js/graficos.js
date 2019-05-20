@@ -34,7 +34,7 @@ function generar_response(initial_data,title){
     var border=[]
     var count_background=0;
     var count_border=0;
-    $(initial_data).each(function(k,v){
+    $.each(initial_data,function(k,v){
         label.push(k);
         final_data.push(v);
         if(typeof(chart_backgrounds[count_background])=='undefined'){
