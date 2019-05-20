@@ -32,12 +32,6 @@ function chart_followers() {
         //var data_response = generar_response(data, 'Usuarios');
         //generar_grafico($('#chart-seguidores'), data_response, 'bar');
         var sets = [];
-
-        sets.push({
-            sets: ['Todos'],
-            label: 'Todos',
-            size: data['total'],
-        });
         sets.push({
             sets: ['Seguidores'],
             label: 'Seguidores',
