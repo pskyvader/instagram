@@ -68,6 +68,10 @@ class home(base):
         respuesta['both']=igaccounts_model.getAll(where,select='total')
         where={'favorito':True}
         respuesta['favoritos']=igaccounts_model.getAll(where,select='total')
+        where={'favorito':True,'follower':True}
+        respuesta['favoritos-follower']=igaccounts_model.getAll(where,select='total')
+        where={'favorito':True,'following':True}
+        respuesta['favoritos-following']=igaccounts_model.getAll(where,select='total')
         
 
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
