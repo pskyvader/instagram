@@ -21,7 +21,7 @@ function inicio_graficos() {
 }
 
 function chart_followers() {
-    post(create_url(modulo, accion), {
+    post(create_url(modulo, 'get_followers'), {
         id: id
     }, mensaje, false, null, function(data){
         
