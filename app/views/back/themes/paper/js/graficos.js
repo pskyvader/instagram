@@ -1,5 +1,6 @@
 var chart_backgrounds = [
     'rgba(255, 99, 132, 0.2)',
+    'rgb(214, 39, 40, 0.2)',
     'rgba(54, 162, 235, 0.2)',
     'rgba(255, 206, 86, 0.2)',
     'rgba(75, 192, 192, 0.2)',
@@ -9,6 +10,7 @@ var chart_backgrounds = [
 ]
 var chart_borders = [
     'rgba(255, 99, 132, 1)',
+    'rgb(214, 39, 40, 1)',
     'rgba(54, 162, 235, 1)',
     'rgba(255, 206, 86, 1)',
     'rgba(75, 192, 192, 1)',
@@ -56,7 +58,7 @@ function chart_followers() {
 
 
 function generar_venn(sets, id, title) {
-    var width=$(id).innerWidth();
+    var width = $(id).innerWidth();
     var chart = venn.VennDiagram().width(width);
     var div = d3.select(id).datum(sets).call(chart);
     div.selectAll(".venn-circle path").style("fill-opacity", .5).style("stroke-width", 3).style("stroke-opacity", 1);
@@ -75,7 +77,7 @@ function generar_venn(sets, id, title) {
         tooltip.transition().duration(40).style("opacity", 1);
         tooltip.text(d.size + " " + title + " " + d.label);
         var selection = d3.select(this).transition("tooltip").duration(400);
-        var opacity = d.sets.length >= 1 ? .8 :0;
+        var opacity = d.sets.length >= 1 ? .8 : 0;
         selection.select("path").style("stroke-width", 3).style("fill-opacity", opacity).style("stroke", "fff");
     }).on("mousemove", function() {
         tooltip.style("left", (d3.event.offsetX - 30) + "px").style("top", (d3.event.offsetY + 50) + "px");
