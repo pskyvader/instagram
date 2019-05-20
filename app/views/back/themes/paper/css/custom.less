@@ -15,6 +15,7 @@ body.dragging * {
 
 .placeholder {
     height: 20px;
+
     &:before {
         position: relative;
         content: "";
@@ -25,6 +26,7 @@ body.dragging * {
 }
 
 .panel-ctrls {
+
     .form-group,
     label {
         margin: 0 !important;
@@ -51,30 +53,37 @@ table .tooltip.top {
 .image_list {
     border: 1px solid #bdbdbd;
     padding: 25px 0;
+
     &:empty {
         display: none
     }
+
     .image {
         width: 100px;
         height: auto;
         margin: 0 auto;
         display: block
     }
+
     .placeholder {
         height: 126px;
+
         &:before {
             display: none
         }
+
         .move {
             background: #eee;
             height: 100px
         }
     }
+
     .move {
         width: 106px;
         margin: 0 auto;
         padding: 2px;
         border: 1px solid #aaa;
+
         .fa-arrows {
             vertical-align: top;
             position: absolute;
@@ -83,11 +92,13 @@ table .tooltip.top {
             color: #323232
         }
     }
+
     .portada_container {
         margin-bottom: -26px;
         float: right;
         z-index: 1;
         position: relative;
+
         button {
             height: 25px;
             text-align: center;
@@ -97,22 +108,27 @@ table .tooltip.top {
             margin: 0 auto
         }
     }
+
     .dragged {
         margin-left: -70px;
         margin-top: -70px
     }
+
     .campo {
         min-width: 132px;
         padding-top: 10px;
         padding-bottom: 10px;
+
         &:hover .eliminar,
         &:hover .move .fa-arrows {
             opacity: 1
         }
+
         &:hover .move .image {
             transition: .1s opacity ease;
             opacity: .5;
         }
+
         .eliminar {
             position: absolute;
             padding: 3px;
@@ -121,6 +137,7 @@ table .tooltip.top {
             opacity: 0;
             transition: .1s opacity ease
         }
+
         .move .fa-arrows {
             opacity: 0;
             transition: .1s opacity ease
@@ -133,9 +150,11 @@ table .tooltip.top {
     box-shadow: 0 1px 6px 0 rgba(0, 0, 0, .12), 0 1px 1px 0 rgba(0, 0, 0, .12) !important;
     padding-top: 30px;
     padding-bottom: 30px;
+
     .alert {
         margin-top: 15px;
     }
+
     .direccion {
         background: #fff;
         border: 1px solid rgba(0, 0, 0, .125);
@@ -143,83 +162,105 @@ table .tooltip.top {
         padding: 1rem 2rem;
         box-shadow: 3px 3px 10px 1px rgba(156, 156, 156, 0.5);
     }
+
     .placeholder_pedido {
         height: 1.5em;
         line-height: 1.2em;
         background: red;
     }
+
     .datos_producto {
         border: 1px solid #eee;
         background: #dbe2e6;
         padding: 1rem;
         margin-bottom: 2rem;
+
         label {
             color: #323232;
         }
+
         textarea {
             background-color: white;
             border: 1px solid #aaa;
             padding: 7px 15px;
             margin-bottom: 0px;
         }
+
         hr {
             margin: 5px 0px;
         }
+
         input {
             padding: 0px;
             height: auto;
         }
+
         button {
             margin: 0px;
         }
+
         @media screen and (min-width:992px) {
             .margen-top {
                 margin-top: 10px;
             }
         }
+
         .imagen {
             float: right;
+
             @media screen and (max-width: 991px) {
                 float: left;
             }
         }
+
         .move {
             cursor: initial;
+
             .producto {
                 margin-top: 10px;
             }
+
             .handle {
                 cursor: move;
                 border: 1px solid #aaa;
                 padding: 5px;
+
                 .fa-arrows {
                     margin: 0px 10px;
                 }
+
                 .titulo {
                     cursor: move;
                 }
             }
         }
+
         .form-group {
             margin-top: 0px;
+
             &.mensaje {
                 padding-bottom: 0px;
             }
         }
     }
+
     .placeholder_producto {
         background: #dbe2e6;
         opacity: 0.5;
         height: 60px;
         margin-bottom: 2rem;
     }
+
     .ui-sortable-helper {
         height: 60px !important;
     }
+
     .lista_productos_pedido {
         min-height: 60px;
+
         &:empty {
             background: #dbe2e6;
+
             &:before {
                 padding: 2rem;
                 display: block;
@@ -228,10 +269,12 @@ table .tooltip.top {
             }
         }
     }
+
     .select2 {
         .select2-selection--single {
             height: 40px;
         }
+
         img {
             height: 35px;
         }
@@ -271,4 +314,19 @@ header {
 
 i {
     opacity: 1
+}
+
+
+.venntooltip {
+    font-size: 14px;
+    position: absolute;
+    text-align: center;
+    width: 128px;
+    height: 85px;
+    background: #333;
+    color: #fff;
+    padding: 2px;
+    border: 0px;
+    border-radius: 8px;
+    opacity: 0;
 }
