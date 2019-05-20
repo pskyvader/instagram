@@ -60,6 +60,7 @@ function generar_response(initial_data,title){
             borderWidth: 1
         }]
     }
+    console.log(data_response);
     return data_response
 
 }
