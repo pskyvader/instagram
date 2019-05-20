@@ -62,11 +62,6 @@ function chart_followers() {
             label: 'Favoritos Siguiendo',
             size: data['favoritos-following'],
         });
-        sets.push({
-            sets: ['Seguidores', 'Siguiendo','Favoritos'],
-            label: 'Favoritos Seguidores y Siguiendo',
-            size: data['favoritos-follower-following'],
-        });
         generar_venn(sets, "#chart-seguidores", 'Usuarios');
     });
 }
