@@ -72,7 +72,7 @@ function chart_followers() {
                 selection.select("path").style("stroke-width", 3).style("fill-opacity", opacity).style("stroke", "fff");
             })
             .on("mousemove", function() {
-                tooltip.style("left", (d3.event.offsetX) + "px").style("top", (d3.event.offsetY + 50) + "px");
+                tooltip.style("left", (d3.event.offsetX-30) + "px").style("top", (d3.event.offsetY + 50) + "px");
             })
             .on("mouseout", function(d, i) {
                 tooltip.transition().duration(100).style("opacity", 0);
