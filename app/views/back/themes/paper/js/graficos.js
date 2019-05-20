@@ -68,8 +68,7 @@ function chart_followers() {
                 selection.select("path").style("stroke-width", 3).style("fill-opacity", d.sets.length == 1 ? .8 : 0).style("stroke-opacity", 1);
             })
             .on("mousemove", function() {
-                console.log(d3.event);
-                tooltip.style("left", (d3.event.layerX) + "px") .style("top", (d3.event.layerY - 28) + "px");
+                tooltip.style("left", (d3.event.offsetX) + "px") .style("top", (d3.event.offsetY - 28) + "px");
             })
             .on("mouseout", function(d, i) {
                 tooltip.transition().duration(2000).style("opacity", 0);
