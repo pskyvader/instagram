@@ -54,7 +54,7 @@ function chart_followers() {
             size: data['following'],
         });
         sets.push({
-            sets: ['total','Seguidores'],
+            sets: ['total','Siguiendo'],
             label: 'Siguiendo',
             size: data['following'],
         });
