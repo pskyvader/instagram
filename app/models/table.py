@@ -53,8 +53,8 @@ class table(base_model):
     def getByname(cls, name: str):
         if name == cls.table:
             return cls.data
-        if name in cache_table:
-            return cache_table[name];
+        if name in cls.cache_table:
+            return cls.cache_table[name];
 
         where = {'tablename': name}
         connection = database.instance()
@@ -65,7 +65,7 @@ class table(base_model):
             fields = {}
             for field in row[0]['fields']:
                 fields[field['titulo']] = field
-            cache_table[name]=fields
+            cls.cache_table[name]=fields
             return fields
         else:
             print("No existe el modelo para la tabla" + name)
