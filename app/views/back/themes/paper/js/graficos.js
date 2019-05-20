@@ -42,7 +42,7 @@ function chart_followers() {
             label: 'Seguidores y Siguiendo',
             size: data['both'],
         });
-        generar_venn(sets,"#chart-seguidores",'Usuarios');
+        generar_venn(sets, "#chart-seguidores", 'Usuarios');
     });
 }
 
@@ -51,7 +51,7 @@ function chart_followers() {
 
 
 
-function generar_venn(sets,id,title) {
+function generar_venn(sets, id, title) {
     var chart = venn.VennDiagram().width(500);
     var div = d3.select(id).datum(sets).call(chart);
     div.selectAll(".venn-circle path").style("fill-opacity", .5).style("stroke-width", 3).style("stroke-opacity", 1);
@@ -67,7 +67,7 @@ function generar_venn(sets,id,title) {
     div.selectAll("g").on("mouseover", function(d, i) {
         venn.sortAreas(div, d);
         tooltip.transition().duration(40).style("opacity", 1);
-        tooltip.text(d.size + " "+title+" " + d.label);
+        tooltip.text(d.size + " " + title + " " + d.label);
         var selection = d3.select(this).transition("tooltip").duration(400);
         var opacity = d.sets.length == 1 ? .8 : (d.sets.length > 1 ? .8 : 0);
         selection.select("path").style("stroke-width", 3).style("fill-opacity", opacity).style("stroke", "fff");
