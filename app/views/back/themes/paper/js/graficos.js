@@ -26,18 +26,9 @@ function chart_followers() {
         //var data_response = generar_response(data, 'Usuarios');
         //generar_grafico($('#chart-seguidores'), data_response, 'bar');
         var sets = [];
-        sets.push({
-            sets: ['Todos'],
-            size: data['total'],
-            label: 'Todos'
-        });
 
         sets.push({
             sets: ['Seguidores'],
-            size: data['follower']
-        });
-        sets.push({
-            sets: ['Todos', 'Seguidores'],
             size: data['follower']
         });
         sets.push({
@@ -45,15 +36,7 @@ function chart_followers() {
             size: data['following']
         });
         sets.push({
-            sets: ['Todos', 'Siguiendo'],
-            size: data['following']
-        });
-        sets.push({
             sets: ['Seguidores', 'Siguiendo'],
-            size: data['both']
-        });
-        sets.push({
-            sets: ['Todos', 'Seguidores', 'Siguiendo'],
             size: data['both']
         });
 
