@@ -23,7 +23,6 @@ function inicio_graficos() {
 function chart_followers() {
     var url=create_url(modulo, 'get_followers');
     post_basic(url, {}, 'Adquiriendo usuarios',function(data){
-        console.log(data);
         generar_grafico($('#chart-seguidores'), generar_response(data,'Usuarios'), 'bar');
     });
 }
