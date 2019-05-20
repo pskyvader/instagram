@@ -53,7 +53,7 @@ function chart_followers() {
         
         var count=0;
         $.each(div.selectAll("path")._groups[0],function(k,v){
-            $(v).style('fill',chart_borders[count]);
+            $(v).css('fill',chart_borders[count]);
             count++;
         });
 
