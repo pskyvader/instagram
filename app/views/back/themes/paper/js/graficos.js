@@ -41,7 +41,6 @@ function generar_response(initial_data,title){
             count_background=0;
         }
         background.push(chart_backgrounds[count_background]);
-
         if(typeof(chart_borders[count_border])=='undefined'){
             count_border=0;
         }
