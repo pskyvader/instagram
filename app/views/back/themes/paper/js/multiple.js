@@ -5,23 +5,16 @@ function inicio_multiple() {
     });
 }
 
-function inicio_sorted(){
-
-
-
-
-
+function inicio_sorted() {
     $(".sorted_multiple").sortable({
         cursor: "move",
         placeholder: "placeholder",
-        forcePlaceholderSize :true,
+        forcePlaceholderSize: true,
         handle: '.move',
         revert: true,
         scrollSensitivity: 120,
         scrollSpeed: 30,
     });
-
-
 }
 
 function multiple(e) {
