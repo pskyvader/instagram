@@ -26,16 +26,43 @@ function chart_followers() {
         //var data_response = generar_response(data, 'Usuarios');
         //generar_grafico($('#chart-seguidores'), data_response, 'bar');
         var sets = [];
-        sets.push({ sets: ['Todos'], size: data['total'] });
-        sets.push({ sets: ['Seguidores'], size: data['follower'] });
-        sets.push({ sets: ['Todos','Seguidores'], size: data['follower'] });
-        sets.push({ sets: ['Siguiendo'], size: data['following'] });
-        sets.push({ sets: ['Todos','Siguiendo'], size: data['following'] });
-        sets.push({ sets: ['Seguidores','Siguiendo'], size: data['both'] });
-        sets.push({ sets: ['Todos','Seguidores','Siguiendo'], size: data['both'] });
-        
+        sets.push({
+            sets: ['Todos'],
+            size: data['total']
+        });
+        sets.push({
+            sets: ['Seguidores'],
+            size: data['follower']
+        });
+        sets.push({
+            sets: ['Todos', 'Seguidores'],
+            size: data['follower']
+        });
+        sets.push({
+            sets: ['Siguiendo'],
+            size: data['following']
+        });
+        sets.push({
+            sets: ['Todos', 'Siguiendo'],
+            size: data['following']
+        });
+        sets.push({
+            sets: ['Seguidores', 'Siguiendo'],
+            size: data['both']
+        });
+        sets.push({
+            sets: ['Todos', 'Seguidores', 'Siguiendo'],
+            size: data['both']
+        });
+
         var chart = venn.VennDiagram();
-        d3.select("#chart-seguidores").datum(sets).call(chart);
+        var div = d3.select("#chart-seguidores").datum(sets).call(chart);
+        div.selectAll("text").style("fill", "white");
+        div.selectAll(".venn-circle path")
+            .style("fill-opacity", .8)
+            .style("stroke-width", 1)
+            .style("stroke-opacity", 1)
+            .style("stroke", "fff");
 
     });
 }
