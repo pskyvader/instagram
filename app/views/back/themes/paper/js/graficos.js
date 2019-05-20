@@ -23,6 +23,7 @@ function inicio_graficos() {
 function chart_followers() {
     var url=create_url(modulo, 'get_followers');
     post_basic(url, {}, 'Adquiriendo usuarios',function(data){
+        console.log(data);
         generar_grafico($('#chart-seguidores'), generar_response(data,'Usuarios'), 'bar');
     });
 }
@@ -35,7 +36,6 @@ function generar_response(initial_data,title){
     var count_background=0;
     var count_border=0;
     $(initial_data).each(function(k,v){
-        console.log(k,v);
         label.push(k);
         final_data.push(v);
         if(typeof(chart_backgrounds[count_background])=='undefined'){
