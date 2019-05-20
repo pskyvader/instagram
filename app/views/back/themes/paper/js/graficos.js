@@ -2,7 +2,7 @@ function inicio_graficos() {
     
     var ctx = $('#myChart');
     
-    var myChart = $('#myChart').Chart({
+    var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
