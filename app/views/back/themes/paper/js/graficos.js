@@ -60,7 +60,7 @@ function generar_venn(sets, id, title) {
     var tooltip = d3.select(id).append("div").attr("class", "venntooltip");
     var count = 0;
     $.each(div.selectAll("path")._groups[0], function(k, v) {
-        if (typeof(chart_borders[count_border]) == 'undefined') {
+        if (typeof(chart_borders[count]) == 'undefined') {
             count = 0;
         }
         $(v).css('fill', chart_borders[count]);
