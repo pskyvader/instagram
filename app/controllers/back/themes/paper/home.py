@@ -69,5 +69,6 @@ class home(base):
         
 
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
+        print(ret)
         return ret
 
