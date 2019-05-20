@@ -10,25 +10,38 @@
         <h1> {{title}} </h1>
     </div>
     <div class="container-fluid">
-        <div data-widget-group="group1">
+        <div data-widget-group="group1" id="graficos">
             <div class="row">
-                <div class="col-md-12">
-                    <div class="panel panel-primary no-animate" data-widget='{"draggable": "false"}'>
+                <div class="col-md-4">
+                    <div class="panel panel-default" data-widget='{"draggable": "false"}'>
                         <div class="panel-heading">
-                            <h2>
-                                {{title}}
-                            </h2>
-                            <div class="panel-ctrls" data-actions-container="" data-action-collapse='{"target": ".panel-body, .panel-footer"}'></div>
+                            <h2>Simple Line Chart</h2>
+                            <div class="panel-ctrls" data-actions-container="" data-action-collapse='{"target": ".panel-body"}'></div>
                         </div>
-                        <div class="panel-body" id="graficos">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <h2>Grafico 1</h2>
-                                </div>
-                                <div class="col-md-12">
-                                    <canvas id="myChart"></canvas>
-                                </div>
-                            </div>
+                        <div class="panel-body">
+                            <canvas id="myChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="panel panel-default" data-widget='{"draggable": "false"}'>
+                        <div class="panel-heading">
+                            <h2>Holes in Data</h2>
+                            <div class="panel-ctrls" data-actions-container="" data-action-collapse='{"target": ".panel-body"}'></div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="ct-chart-holes ct-chart ct-golden-section"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="panel panel-default" data-widget='{"draggable": "false"}'>
+                        <div class="panel-heading">
+                            <h2>Line Chart with Area</h2>
+                            <div class="panel-ctrls" data-actions-container="" data-action-collapse='{"target": ".panel-body"}'></div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="ct-chart-area ct-chart ct-golden-section"></div>
                         </div>
                     </div>
                 </div>
