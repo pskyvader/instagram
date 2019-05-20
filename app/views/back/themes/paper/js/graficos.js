@@ -54,7 +54,7 @@ function chart_followers() {
                     .style("stroke-width", 1)
                     .style("stroke-opacity", 1)
                     .style("stroke", "fff");
-        var tooltip = d3.select("#chart-seguidores").append("div").prop("class", "venntooltip");
+        var tooltip = d3.select("#chart-seguidores").append("div").attr("class", "venntooltip");
 
 
         div.selectAll("g")
