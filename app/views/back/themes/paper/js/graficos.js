@@ -35,6 +35,7 @@ function generar_response(initial_data,title){
     var count_background=0;
     var count_border=0;
     $(initial_data).each(function(k,v){
+        console.log(k,v);
         label.push(k);
         final_data.push(v);
         if(typeof(chart_backgrounds[count_background])=='undefined'){
@@ -60,7 +61,6 @@ function generar_response(initial_data,title){
             borderWidth: 1
         }]
     }
-    console.log(data_response);
     return data_response
 
 }
