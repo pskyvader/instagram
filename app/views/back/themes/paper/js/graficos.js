@@ -35,17 +35,17 @@ function generar_response(initial_data,title){
     var count_background=0;
     var count_border=0;
     $(initial_data).each(function(k,v){
-        label.append(k);
-        final_data.append(v);
+        label.push(k);
+        final_data.push(v);
         if(typeof(chart_backgrounds[count_background])=='undefined'){
             count_background=0;
         }
-        background.append(chart_backgrounds[count_background]);
+        background.push(chart_backgrounds[count_background]);
 
         if(typeof(chart_borders[count_border])=='undefined'){
             count_border=0;
         }
-        border.append(chart_borders[count_border]);
+        border.push(chart_borders[count_border]);
         
         count_background++;
         count_border++;
