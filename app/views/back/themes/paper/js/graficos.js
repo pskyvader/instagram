@@ -30,8 +30,15 @@ function chart_followers() {
         sets.push({ sets: ['Todos','Seguidores'], size: data['follower'] });
         sets.push({ sets: ['Todos','Siguiendo'], size: data['following'] });
         sets.push({ sets: ['Todos','Seguidores','Siguiendo'], size: data['both'] });
+        //var chart = venn.VennDiagram();
+        //d3.select('#chart-seguidores').datum(sets).call(chart);
+        
+        var sets = [ {sets: ['A'], size: 12},
+             {sets: ['B'], size: 12},
+             {sets: ['A','B'], size: 2}];
+
         var chart = venn.VennDiagram();
-        d3.select('#chart-seguidores').datum(sets).call(chart);
+        d3.select("#chart-seguidores").datum(sets).call(chart);
 
     });
 }
