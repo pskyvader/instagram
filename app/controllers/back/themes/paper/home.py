@@ -59,13 +59,13 @@ class home(base):
             "body": "",
         }
         respuesta = {}
-        respuesta['Total']=igaccounts_model.getAll(select='total')
+        respuesta['total']=igaccounts_model.getAll(select='total')
         where={'follower':True}
-        respuesta['Seguidores']=igaccounts_model.getAll(where,select='total')
+        respuesta['follower']=igaccounts_model.getAll(where,select='total')
         where={'following':True}
-        respuesta['Siguiendo']=igaccounts_model.getAll(where,select='total')
+        respuesta['following']=igaccounts_model.getAll(where,select='total')
         where={'follower':True,'following':True}
-        respuesta['Seguidores y siguiendo']=igaccounts_model.getAll(where,select='total')
+        respuesta['both']=igaccounts_model.getAll(where,select='total')
         
 
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
