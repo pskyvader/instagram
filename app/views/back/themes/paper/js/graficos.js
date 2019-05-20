@@ -61,7 +61,7 @@ function chart_followers() {
 
                 // Display a tooltip with the current size
                 tooltip.transition().duration(40).style("opacity", 1);
-                tooltip.text(d.size + "% of Audience One saw " + d.label);
+                tooltip.text(d.size + " de los usuarios son " + d.label);
 
                 // highlight the current path
                 // highlight the current path
