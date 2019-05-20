@@ -52,7 +52,7 @@ function chart_followers() {
 
 
 function generar_venn(sets, id, title) {
-    var width=$(id).innerWidth;
+    var width=$(id).innerWidth();
     console.log(width);
     var chart = venn.VennDiagram().width(500);
     var div = d3.select(id).datum(sets).call(chart);
