@@ -27,9 +27,6 @@ function chart_followers() {
         //generar_grafico($('#chart-seguidores'), data_response, 'bar');
         var sets = [];
         sets.push({ sets: ['Todos'], size: data['Todos'] });
-        sets.push({ sets: ['Todos','Seguidores'], size: data['Seguidores'] });
-        sets.push({ sets: ['Todos','Siguiendo'], size: data['Siguiendo'] });
-        sets.push({ sets: ['Todos','Seguidores','Siguiendo'], size: data['Seguidores y siguiendo'] });
         var chart = venn.VennDiagram()
         d3.select('#chart-seguidores').datum(sets).call(chart);
 
