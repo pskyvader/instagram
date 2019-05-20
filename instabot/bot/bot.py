@@ -365,7 +365,6 @@ class Bot(object):
             "Worked: {}".format(str(datetime.datetime.now() - self.start_time))
         )
         self.print_counters()
-        configuracion_model.setByVariable("login_instagram", "0",False)
 
     def login(self, **args):
         if self.proxy:
@@ -376,7 +375,6 @@ class Bot(object):
         #self.prepare()
         signal.signal(signal.SIGTERM, self.logout)
         atexit.register(self.logout)
-        configuracion_model.setByVariable("login_instagram", "1",False)
         return True
 
     def prepare(self):
