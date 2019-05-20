@@ -52,9 +52,8 @@ function chart_followers() {
         var tooltip = d3.select("#chart-seguidores").append("div").attr("class", "venntooltip");
         
         var count=0;
-        $.each(div.selectAll("g")._groups[0],function(k,v){
-            console.log(v);
-            v.select("path").style('fill',chart_borders[count]);
+        $.each(div.selectAll("path")._groups[0],function(k,v){
+            $(v).style('fill',chart_borders[count]);
             count++;
         });
 
