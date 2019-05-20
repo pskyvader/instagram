@@ -49,7 +49,7 @@ function chart_followers() {
         var chart = venn.VennDiagram().width(500);
         var div = d3.select("#chart-seguidores").datum(sets).call(chart);
         div.selectAll("text").style("fill", "white");
-        div.selectAll(".venn-circle path").style("fill-opacity", .4).style("stroke-width", 1).style("stroke-opacity", 1).style("stroke", "fff");
+        div.selectAll(".venn-circle path").style("fill-opacity", .5).style("stroke-width", 1).style("stroke-opacity", 1).style("stroke", "fff");
         var tooltip = d3.select("#chart-seguidores").append("div").attr("class", "venntooltip");
 
 
@@ -70,7 +70,7 @@ function chart_followers() {
             .on("mouseout", function(d, i) {
                 tooltip.transition().duration(100).style("opacity", 0);
                 var selection = d3.select(this).transition("tooltip").duration(200);
-                selection.select("path").style("stroke-width", 3).style("fill-opacity", d.sets.length == 1 ? .8 : 0).style("stroke-opacity", 1).style("stroke", "none");
+                selection.select("path").style("stroke-width", 3).style("fill-opacity", d.sets.length == 1 ? .5 : 0).style("stroke-opacity", 1).style("stroke", "none");
             });
     });
 }
