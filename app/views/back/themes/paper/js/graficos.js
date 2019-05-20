@@ -23,20 +23,46 @@ function inicio_graficos() {
 function chart_followers() {
     post(create_url(modulo, 'get_followers'), {
         id: id
-    }, mensaje, false, null, function(data){
-        
-        var data_response = {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: chart_backgrounds,
-                borderColor: chart_borders,
-                borderWidth: 1
-            }]
-        }
-        generar_grafico($('#chart-seguidores'), data_response, 'bar');
+    }, mensaje, false, null, function(initial_data){
+        generar_grafico($('#chart-seguidores'), generar_response(initial_data,'Usuarios'), 'bar');
     });
+}
+
+function generar_response(initial_data,title){
+    var label=[]
+    var final_data=[]
+    var background=[]
+    var border=[]
+    var count_background=0;
+    var count_border=0;
+    $(initial_data).each(function(k,v){
+        label.append(k);
+        final_data.append(v);
+        if(typeof(chart_backgrounds[count_background])=='undefined'){
+            count_background=0;
+        }
+        background.append(chart_backgrounds[count_background]);
+
+        if(typeof(chart_borders[count_border])=='undefined'){
+            count_border=0;
+        }
+        border.append(chart_borders[count_border]);
+        
+        count_background++;
+        count_border++;
+    })
+    var data_response = {
+        labels: label,
+        datasets: [{
+            label: title,
+            data: final_data,
+            backgroundColor: chart_backgrounds,
+            borderColor: chart_borders,
+            borderWidth: 1
+        }]
+    }
+    return data_response
+
 }
 
 
