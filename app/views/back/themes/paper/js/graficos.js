@@ -29,9 +29,9 @@ function chart_followers() {
         sets.push({
             sets: ['Todos'],
             size: data['total'],
-            label:'Todos'
+            label: 'Todos'
         });
-        
+
         sets.push({
             sets: ['Seguidores'],
             size: data['follower']
@@ -57,7 +57,7 @@ function chart_followers() {
             size: data['both']
         });
 
-        var chart = venn.VennDiagram();
+        var chart = venn.VennDiagram().width(500).height(400);
         var div = d3.select("#chart-seguidores").datum(sets).call(chart);
         div.selectAll("text").style("fill", "white");
         div.selectAll(".venn-circle path")
