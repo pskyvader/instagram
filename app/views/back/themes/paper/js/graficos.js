@@ -65,28 +65,17 @@ function chart_followers() {
                 // highlight the current path
                 // highlight the current path
                 var selection = d3.select(this).transition("tooltip").duration(400);
-                selection.select("path")
-                    .style("stroke-width", 3)
-                    .style("fill-opacity", d.sets.length == 1 ? .8 : 0)
-                    .style("stroke-opacity", 1);
+                selection.select("path").style("stroke-width", 3).style("fill-opacity", d.sets.length == 1 ? .8 : 0).style("stroke-opacity", 1);
             })
-
             .on("mousemove", function() {
                 tooltip.style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - 28) + "px");
             })
-
             .on("mouseout", function(d, i) {
                 tooltip.transition().duration(2000).style("opacity", 0);
                 var selection = d3.select(this).transition("tooltip").duration(400);
-                selection.select("path")
-                    .style("stroke-width", 3)
-                    .style("fill-opacity", d.sets.length == 1 ? .8 : 0)
-                    .style("stroke-opacity", 1);
+                selection.select("path").style("stroke-width", 3).style("fill-opacity", d.sets.length == 1 ? .8 : 0).style("stroke-opacity", 1);
             });
-
-
-
     });
 }
 
