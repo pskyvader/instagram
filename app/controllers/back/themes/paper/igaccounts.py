@@ -86,6 +86,8 @@ class igaccounts(base):
             elif int(get['tipo'])==6:
                 where['follower'] = False
                 where['following'] = False
+            elif int(get['tipo'])==7:
+                where['favorito'] = True
         if cls.contiene_hijos:
             where['idpadre'] = get['idpadre']
         if cls.class_parent != None:
