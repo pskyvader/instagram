@@ -28,8 +28,10 @@ function chart_followers() {
         var sets = [];
         sets.push({
             sets: ['Todos'],
-            size: data['total']
+            size: data['total'],
+            label:'Todos'
         });
+        
         sets.push({
             sets: ['Seguidores'],
             size: data['follower']
