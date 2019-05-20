@@ -7,6 +7,8 @@ from .aside import aside
 from .footer import footer
 from app.models.administrador import administrador as administrador_model
 
+import json
+
 
 class home(base):
     url = ['home']
@@ -47,3 +49,17 @@ class home(base):
         ret['body'] += f.normal()['body']
 
         return ret
+
+
+    
+    def get_followers(self):
+        ret = {
+            "headers": [("Content-Type", "application/json; charset=utf-8")],
+            "body": "",
+        }
+        respuesta = {"exito": False, "mensaje": ""}
+        
+
+        ret["body"] = json.dumps(respuesta, ensure_ascii=False)
+        return ret
+
