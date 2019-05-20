@@ -49,11 +49,7 @@ function chart_followers() {
         var chart = venn.VennDiagram().width(500);
         var div = d3.select("#chart-seguidores").datum(sets).call(chart);
         div.selectAll("text").style("fill", "white");
-            div.selectAll(".venn-circle path")
-                    .style("fill-opacity", .8)
-                    .style("stroke-width", 1)
-                    .style("stroke-opacity", 1)
-                    .style("stroke", "fff");
+        div.selectAll(".venn-circle path").style("fill-opacity", .8).style("stroke-width", 1).style("stroke-opacity", 1).style("stroke", "fff");
         var tooltip = d3.select("#chart-seguidores").append("div").attr("class", "venntooltip");
 
 
