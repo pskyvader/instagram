@@ -19,7 +19,6 @@ def application2(environ, start_response):
         if ret != "":
             ret = bytes(ret, "utf-8")
             from gzip import compress
-
             ret = compress(ret)
             main_data["headers"].append(("Accept-encoding", "gzip,deflate"))
             main_data["headers"].append(("Content-Encoding", "gzip"))
