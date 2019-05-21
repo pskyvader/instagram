@@ -89,9 +89,17 @@ class home(base):
         }
         respuesta = {}
         # respuesta['total']=igaccounts_model.getAll(select='total')
+        followers={}
+        following={}
+        removed={}
         hashtag = ighashtag_model.getAll({'estado':True})
         for h in hashtag:
-            respuesta[h["hashtag"].capitalize()] = igaccounts_model.getAll( {"hashtag": h["hashtag"],'follower':True}, select="total" )
+            followers[h["hashtag"].capitalize()] = igaccounts_model.getAll( {"hashtag": h["hashtag"],'follower':True}, select="total" )
+            following[h["hashtag"].capitalize()] = igaccounts_model.getAll( {"hashtag": h["hashtag"],'following':True}, select="total" )
+            removed[h["hashtag"].capitalize()] = igaccounts_model.getAll( {"hashtag": h["hashtag"],'following':False}, select="total" )
+        respuesta['followers']=followers
+        respuesta['following']=following
+        respuesta['removed']=removed
 
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         return ret
