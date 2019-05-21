@@ -46,35 +46,44 @@ function chart_total() {
 function chart_hashtag() {
     var url = create_url(modulo, 'get_hashtag_users');
     post_basic(url, {}, 'Adquiriendo hashtag', function(data) {
-        var seguidores=[]
-        $.each(data.followers,function(k,v){
-            seguidores.push({key:k,value:v});
+        var seguidores = []
+        $.each(data.followers, function(k, v) {
+            seguidores.push({
+                key: k,
+                value: v
+            });
         });
-        seguidores =seguidores.sort((a, b) => (a.value > b.value) ? 1 : -1);
-        var seg={};
-        $.each(seguidores,function(k,v){
-            seg[v.key]=v.value;
+        seguidores = seguidores.sort((a, b) => (a.value > b.value) ? 1 : -1);
+        var seg = {};
+        $.each(seguidores, function(k, v) {
+            seg[v.key] = v.value;
         });
 
         var data_seguidores = generar_response(seg, 'Seguidores');
         var options = {
-            legend:{
-                display:false
+            legend: {
+                display: false
             },
             scales: {
                 xAxes: [{
                     gridLines: {
-                        display:false
+                        display: false
+                    },
+                    ticks: {
+                        beginAtZero: true
                     }
                 }],
                 yAxes: [{
                     gridLines: {
-                        display:false
-                    }   
+                        display: false
+                    },
+                    ticks: {
+                        beginAtZero: true
+                    }
                 }]
             }
         };
-        generar_grafico($('#chart-hashtag-followers'), data_seguidores, 'pie',options);
+        generar_grafico($('#chart-hashtag-followers'), data_seguidores, 'pie', options);
 
         var data_eficiencia = generar_response(data.eficiencia, 'Eficiencia', 'yellow');
         generar_grafico($('#chart-hashtag-eficiencia'), data_eficiencia, 'bar');
@@ -106,8 +115,7 @@ function chart_hashtag() {
 function chart_followers() {
     var url = create_url(modulo, 'get_followers');
     post_basic(url, {}, 'Adquiriendo usuarios', function(data) {
-        var sets = [
-            {
+        var sets = [{
                 sets: ['Totales'],
                 label: 'Totales',
                 size: data['total']
@@ -118,7 +126,7 @@ function chart_followers() {
                 size: data['follower']
             },
             {
-                sets: ['Totales','Seguidores'],
+                sets: ['Totales', 'Seguidores'],
                 label: 'Seguidores',
                 size: data['follower']
             },
@@ -128,7 +136,7 @@ function chart_followers() {
                 size: data['following']
             },
             {
-                sets: ['Totales','Siguiendo'],
+                sets: ['Totales', 'Siguiendo'],
                 label: 'Siguiendo',
                 size: data['following']
             },
@@ -138,18 +146,18 @@ function chart_followers() {
                 size: data['both']
             },
             {
-                sets: ['Totales','Seguidores', 'Siguiendo'],
+                sets: ['Totales', 'Seguidores', 'Siguiendo'],
                 label: 'Seguidores y Siguiendo',
                 size: data['both']
             },
-            
+
             {
                 sets: ['Favoritos'],
                 label: 'Favoritos',
                 size: data['favoritos']
             },
             {
-                sets: ['Totales','Favoritos'],
+                sets: ['Totales', 'Favoritos'],
                 label: 'Favoritos',
                 size: data['favoritos']
             },
@@ -164,12 +172,12 @@ function chart_followers() {
                 size: data['favoritos-follower']
             },
             {
-                sets: ['Favoritos','Seguidores', 'Siguiendo'],
+                sets: ['Favoritos', 'Seguidores', 'Siguiendo'],
                 label: 'Favoritos',
                 size: data['favoritos-follower-following']
             },
             {
-                sets: ['Totales','Favoritos','Seguidores', 'Siguiendo'],
+                sets: ['Totales', 'Favoritos', 'Seguidores', 'Siguiendo'],
                 label: 'Favoritos',
                 size: data['favoritos-follower-following']
             },
@@ -179,7 +187,7 @@ function chart_followers() {
         generar_venn(sets, "#chart-seguidores", 'Usuarios');
         $(window).on('resize', function() {
             var width = $("#chart-seguidores").innerWidth();
-            var height = $( window ).height()*0.5;
+            var height = $(window).height() * 0.5;
             var chart = venn.VennDiagram().width(width).height(height);
             d3.select("#chart-seguidores").datum(sets).call(chart);
         });
@@ -193,7 +201,7 @@ function chart_followers() {
 
 function generar_venn(sets, id, title) {
     var width = $(id).empty().innerWidth();
-    var height = $( window ).height()*0.5;
+    var height = $(window).height() * 0.5;
     var progress = $(id).siblings()[0];
     $(progress).show().css('width', '75%');
     var chart = venn.VennDiagram().width(width).height(height);
@@ -302,7 +310,7 @@ function generar_grafico(id, data, type, options_extra) {
     }
 
 
-    
+
 
     var chart = new Chart(id, {
         type: type,
