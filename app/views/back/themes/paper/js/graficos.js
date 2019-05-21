@@ -94,8 +94,8 @@ function chart_hashtag() {
         var data_removed = generar_response(data.removed, 'No siguiendo', 'green');
         var datasets = [
             data_following.datasets[0],
+            data_followers.datasets[0],
             data_removed.datasets[0],
-            data_followers.datasets[0]
         ];
         data_followers.datasets = datasets;
         var options = {
