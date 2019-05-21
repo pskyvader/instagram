@@ -145,7 +145,7 @@ class view:
             return ("resources", data)
 
     @staticmethod
-    def js(combine=False, array_only=False):
+    def js(combine=True, array_only=False):
         from core.functions import functions
         from core.app import app
 
