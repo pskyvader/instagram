@@ -61,7 +61,7 @@ function generar_venn(sets, id, title) {
     var tooltip = d3.select(id).append("div").attr("class", "venntooltip");
     var count = 0;
     $.each(div.selectAll("path")._groups[0], function(k, v) {
-        $(v).css('fill', randomColor({luminosity: 'light',count: 27}));
+        $(v).css('fill', randomColor({luminosity: 'light',count: 1}));
         count++;
     });
     div.selectAll("g").on("mouseover", function(d, i) {
@@ -89,10 +89,13 @@ function generar_venn(sets, id, title) {
 function generar_response(initial_data, title) {
     var label = []
     var final_data = []
+    var color=[]
     $.each(initial_data, function(k, v) {
         label.push(k);
         final_data.push(v);
-    })
+        color.push(randomColor({luminosity: 'light',count: 1}))
+    });
+    
     var data_response = {
         labels: label,
         datasets: [{
