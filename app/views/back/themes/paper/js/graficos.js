@@ -8,19 +8,26 @@ function inicio_graficos() {
 function chart_total() {
     var url = create_url(modulo, 'get_total');
     post_basic(url, {}, 'Adquiriendo Totales', function(data) {
-        var data_follows = generar_response(data.follows, 'Siguiendo','red');
-        var data_unfollows = generar_response(data.unfollows, 'No siguiendo','blue');
-        var data_start_follow = generar_response(data.start_follow, 'Seguidor','yellow');
-        var data_stop_follow = generar_response(data.stop_follow, 'Dejo de seguir','green');
+        var data_follows = generar_response(data.follows, 'Siguiendo', 'red');
+        var data_unfollows = generar_response(data.unfollows, 'No siguiendo', 'blue');
+        var data_start_follow = generar_response(data.start_follow, 'Seguidor', 'yellow');
+        var data_stop_follow = generar_response(data.stop_follow, 'Dejo de seguir', 'green');
 
         var datasets = [
             data_follows.datasets[0],
-            data_unfollows.datasets[0],
+            data_unfollows.datasets[0]
+        ];
+        var datasets2 = [
             data_start_follow.datasets[0],
             data_stop_follow.datasets[0]
         ];
+
         data_follows.datasets = datasets;
         generar_grafico($('#chart-total'), data_follows, 'line');
+
+        data_start_follow.datasets = datasets2;
+        generar_grafico($('#chart-total-seguidores'), data_start_follow, 'line');
+
     });
 }
 
