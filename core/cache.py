@@ -89,7 +89,7 @@ class cache:
 
         if cache.url_cache != "" and ruta == current and cache.cacheable:
             folder = app.get_dir(True) + "cache/"
-            os.makedirs(folder,exist_ok=True)
+            os.makedirs(folder, exist_ok=True)
 
             if os.access(folder, os.W_OK):
                 name = cache.file_name()
@@ -161,7 +161,6 @@ class cache:
                 + resource.replace("/", "-")
             )
 
-            print(os.path.join(theme + "cache/"))
             os.makedirs(os.path.join(theme + "cache/"), exist_ok=True)
 
             my_file = Path(cache_file)
