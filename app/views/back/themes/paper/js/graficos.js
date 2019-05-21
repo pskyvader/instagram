@@ -189,8 +189,7 @@ function generar_response(initial_data, title, hue) {
 
 }
 
-function generar_grafico(id, data, type, options) {
-    if (typeof(options) == 'undefined') {
+function generar_grafico(id, data, type, options_extra) {
         var progress = $(id).siblings()[0];
         var options = {
             scales: {
@@ -214,7 +213,12 @@ function generar_grafico(id, data, type, options) {
                 }
             }
         };
-    }
+    
+        if (typeof(options_extra) == 'undefined') {
+            var options = $.extend(true, options, options_extra);
+        }
+
+
     var chart = new Chart(id, {
         type: type,
         data: data,
