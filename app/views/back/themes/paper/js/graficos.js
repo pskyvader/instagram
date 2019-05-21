@@ -92,8 +92,8 @@ function generar_response(initial_data, title) {
     $.each(initial_data, function(k, v) {
         label.push(k);
         final_data.push(v);
-        color.push(randomColor({luminosity: 'light',count: 1,format:'rgba',alpha:1}));
-        border.push(randomColor({luminosity: 'light',count: 1,format:'rgba',alpha:0.2}));
+        color.push(randomColor({luminosity: 'light',format:'rgba',alpha:1}));
+        border.push(randomColor({luminosity: 'light',format:'rgba',alpha:0.2}));
     });
     console.log(color);
     
