@@ -209,7 +209,7 @@ function generar_grafico(id, data, type, options_extra) {
             point: {
                 radius: 4,
                 hoverRadius: 5,
-                hitRadius: 3,
+                hitRadius: 10,
             }
         }
     };
