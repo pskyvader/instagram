@@ -101,8 +101,8 @@ function generar_response(initial_data, title) {
         datasets: [{
             label: title,
             data: final_data,
-            backgroundColor: chart_backgrounds,
-            borderColor: chart_borders,
+            backgroundColor: color,
+            borderColor: color,
             borderWidth: 1
         }]
     }
