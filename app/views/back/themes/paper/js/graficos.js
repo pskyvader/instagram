@@ -208,7 +208,7 @@ function generar_grafico(id, data, type, options) {
             },
             elements: {
                 point: {
-                    radius: 10
+                    radius: 5
                 }
             }
         };
