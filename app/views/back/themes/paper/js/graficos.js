@@ -197,7 +197,7 @@ function generar_grafico(id, data, type, options_extra) {
                     $(progress).css('width',50+50*(animation.animationObject.currentStep / animation.animationObject.numSteps)+'%');
                 },
                 onComplete:function(){
-                    //$(progress).hide();
+                    $(progress).hide();
                 }
             },
             elements: {
