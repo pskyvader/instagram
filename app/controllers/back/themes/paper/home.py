@@ -115,8 +115,8 @@ class home(base):
                 respuesta[fecha][tag]=cantidad
         
         respuesta2={'follows':{},'unfollows':{},'start_follow':{},'stop_follow':{}}
-        for fecha,tag in respuesta.items():
-            for cantidad in tag:
+        for fecha,elemento in respuesta.items():
+            for tag,cantidad in elemento.items():
                 respuesta2[tag][fecha]=cantidad
         
         respuesta=respuesta2
