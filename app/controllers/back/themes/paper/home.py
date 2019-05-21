@@ -59,7 +59,7 @@ class home(base):
             "body": "",
         }
         respuesta = {}
-        respuesta['total']=igaccounts_model.getAll(select='total')
+        # respuesta['total']=igaccounts_model.getAll(select='total')
         where={'follower':True}
         respuesta['follower']=igaccounts_model.getAll(where,select='total')
         where={'following':True}
@@ -68,12 +68,12 @@ class home(base):
         respuesta['both']=igaccounts_model.getAll(where,select='total')
         where={'favorito':True}
         respuesta['favoritos']=igaccounts_model.getAll(where,select='total')
-        where={'favorito':True,'follower':True}
-        respuesta['favoritos-follower']=igaccounts_model.getAll(where,select='total')
-        where={'favorito':True,'following':True}
-        respuesta['favoritos-following']=igaccounts_model.getAll(where,select='total')
-        where={'favorito':True,'follower':True,'following':True}
-        respuesta['favoritos-follower-following']=igaccounts_model.getAll(where,select='total')
+        # where={'favorito':True,'follower':True}
+        # respuesta['favoritos-follower']=igaccounts_model.getAll(where,select='total')
+        # where={'favorito':True,'following':True}
+        # respuesta['favoritos-following']=igaccounts_model.getAll(where,select='total')
+        # where={'favorito':True,'follower':True,'following':True}
+        # respuesta['favoritos-follower-following']=igaccounts_model.getAll(where,select='total')
         
 
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
