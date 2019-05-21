@@ -47,7 +47,6 @@ function chart_hashtag() {
     var url = create_url(modulo, 'get_hashtag_users');
     post_basic(url, {}, 'Adquiriendo hashtag', function(data) {
         var data_seguidores = generar_response(data.followers, 'Seguidores');
-        console.log(data_seguidores);
         generar_grafico($('#chart-hashtag-followers'), data_seguidores, 'pie');
 
         var data_eficiencia = generar_response(data.eficiencia, 'Eficiencia', 'yellow');
