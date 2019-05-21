@@ -167,7 +167,8 @@ function chart_followers() {
         generar_venn(sets, "#chart-seguidores", 'Usuarios');
         $(window).on('resize', function() {
             var width = $("#chart-seguidores").innerWidth();
-            var chart = venn.VennDiagram().width(width);
+            var height = $( window ).height()*0.75;
+            var chart = venn.VennDiagram().width(width).height(height);
             d3.select("#chart-seguidores").datum(sets).call(chart);
         });
     });
@@ -180,7 +181,7 @@ function chart_followers() {
 
 function generar_venn(sets, id, title) {
     var width = $(id).empty().innerWidth();
-    var height = $( window ).height();
+    var height = $( window ).height()*0.75;
     var progress = $(id).siblings()[0];
     $(progress).show().css('width', '75%');
     var chart = venn.VennDiagram().width(width).height(height);
