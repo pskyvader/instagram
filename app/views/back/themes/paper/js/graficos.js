@@ -12,6 +12,7 @@ function inicio_graficos() {
     chart_followers();
     chart_hashtag();
     chart_total();
+    $('.progress-bar').css('width',"50%");
 }
 
 
