@@ -13,8 +13,14 @@ function chart_total() {
         var data_start_follow = generar_response(data.start_follow, 'Seguidor');
         var data_stop_follow = generar_response(data.stop_follow, 'Dejo de seguir');
 
-
-        generar_grafico($('#chart-total'), data_response, 'line');
+        var datasets=[
+            data_follows.datasets[0],
+            data_unfollows.datasets[0],
+            data_start_follow.datasets[0],
+            data_stop_follow.datasets[0]
+        ];
+        data_follows.datasets=datasets;
+        generar_grafico($('#chart-total'), data_follows, 'line');
     });
 }
 
