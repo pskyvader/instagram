@@ -109,17 +109,24 @@ class home(base):
             cantidad=t['cantidad']
 
             if tag=='follows' or tag=='unfollows' or tag=='start_follow' or tag=='stop_follow':
-                if fecha not in respuesta:
-                    respuesta[fecha]={'follows':0,'unfollows':0,'start_follow':0,'stop_follow':0}
-                    
-                respuesta[fecha][tag]=cantidad
-        
-        respuesta2={'follows':{},'unfollows':{},'start_follow':{},'stop_follow':{}}
-        for fecha,elemento in respuesta.items():
-            for tag,cantidad in elemento.items():
-                respuesta2[tag][fecha]=cantidad
-        
-        respuesta=respuesta2
+                if tag not in respuesta:
+                    respuesta[tag]={}
+                if not fecha in respuesta['follows']:
+                    respuesta['follows'][fecha]=0
+                
+                if not fecha in respuesta['unfollows']:
+                    respuesta['unfollows'][fecha]=0
+                
+                if not fecha in respuesta['start_follow']:
+                    respuesta['start_follow'][fecha]=0
+                
+                if not fecha in respuesta['stop_follow']:
+                    respuesta['stop_follow'][fecha]=0
+                
+                
+                respuesta[tag][fecha]=cantidad
+
+
             
 
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
