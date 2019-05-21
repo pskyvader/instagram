@@ -46,8 +46,8 @@ function chart_total() {
 function chart_hashtag() {
     var url = create_url(modulo, 'get_hashtag_users');
     post_basic(url, {}, 'Adquiriendo hashtag', function(data) {
-        var data_porcentaje = generar_response(data.porcentaje, 'Eficiencia', 'yellow');
-        generar_grafico($('#chart-hashtag-eficiencia'), data_porcentaje, 'bar');
+        var data_eficiencia = generar_response(data.eficiencia, 'Eficiencia', 'yellow');
+        generar_grafico($('#chart-hashtag-eficiencia'), data_eficiencia, 'bar');
 
 
         var data_followers = generar_response(data.followers, 'Seguidores', 'red');

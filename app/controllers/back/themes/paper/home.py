@@ -92,7 +92,7 @@ class home(base):
         followers={}
         following={}
         removed={}
-        porcentaje={}
+        eficiencia={}
         hashtag = ighashtag_model.getAll({'estado':True})
         for h in hashtag:
             nombre=h["hashtag"].capitalize();
@@ -104,8 +104,7 @@ class home(base):
             followers[nombre]=f
             following[nombre]=fl-f
             removed[nombre]=r
-            porcentaje[nombre]=str(porcentaje)
-            porcentaje[nombre]+="%"
+            eficiencia[nombre]=str(porcentaje)+"%"
 
         respuesta['followers']=followers
         respuesta['following']=following
