@@ -1,6 +1,16 @@
 function inicio_graficos() {
     chart_followers();
     chart_hashtag();
+    chart_follows();
+}
+
+
+function chart_follows() {
+    var url = create_url(modulo, 'get_follows');
+    post_basic(url, {}, 'Adquiriendo hashtag', function(data) {
+        var data_response = generar_response(data, 'Usuarios');
+        generar_grafico($('#chart-follows'), data_response, 'line');
+    });
 }
 
 
