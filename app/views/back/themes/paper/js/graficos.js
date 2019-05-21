@@ -44,7 +44,20 @@ function chart_hashtag() {
             data_removed.datasets[0],
         ];
         data_followers.datasets = datasets;
-        generar_grafico($('#chart-hashtag'), data_followers, 'bar');
+        var options = {
+            scales: {
+                xAxes: [{
+                    stacked: true
+                }],
+                yAxes: [{
+                    stacked: true,
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        };
+        generar_grafico($('#chart-hashtag'), data_followers, 'bar', options);
     });
 }
 
@@ -163,11 +176,9 @@ function generar_response(initial_data, title, hue) {
 
 }
 
-function generar_grafico(id, data, type) {
-    var chart = new Chart(id, {
-        type: type,
-        data: data,
-        options: {
+function generar_grafico(id, data, type, options) {
+    if (typeof(options) == 'undefined') {
+        var options = {
             scales: {
                 yAxes: [{
                     ticks: {
@@ -175,7 +186,12 @@ function generar_grafico(id, data, type) {
                     }
                 }]
             }
-        }
+        };
+    }
+    var chart = new Chart(id, {
+        type: type,
+        data: data,
+        options: options
     });
     return chart;
 }
