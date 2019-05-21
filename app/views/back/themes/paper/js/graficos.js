@@ -60,7 +60,7 @@ function generar_venn(sets, id, title) {
     div.selectAll("text").style("fill", "white");
     var tooltip = d3.select(id).append("div").attr("class", "venntooltip");
     $.each(div.selectAll("path")._groups[0], function(k, v) {
-        $(v).css('fill', randomColor({luminosity: 'light',count: 1}));
+        $(v).css('fill', randomColor({luminosity: 'bright'}));
     });
     div.selectAll("g").on("mouseover", function(d, i) {
         venn.sortAreas(div, d);
