@@ -35,8 +35,16 @@ function chart_total() {
 function chart_hashtag() {
     var url = create_url(modulo, 'get_hashtag_users');
     post_basic(url, {}, 'Adquiriendo hashtag', function(data) {
-        var data_response = generar_response(data, 'Usuarios');
-        generar_grafico($('#chart-hashtag'), data_response, 'bar');
+        var data_followers = generar_response(data.followers, 'Seguidores', 'red');
+        var data_following = generar_response(data.following, 'Siguiendo', 'blue');
+        var data_removed = generar_response(data.removed, 'No siguiendo', 'green');
+        var datasets = [
+            data_followers.datasets[0],
+            data_following.datasets[0],
+            data_removed.datasets[0],
+        ];
+        data_followers.datasets = datasets;
+        generar_grafico($('#chart-hashtag'), data_followers, 'bar');
     });
 }
 
