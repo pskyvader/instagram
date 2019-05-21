@@ -114,7 +114,7 @@ function generar_venn(sets, id, title) {
 
 
 
-function generar_response(initial_data, title, color) {
+function generar_response(initial_data, title, hue) {
     var label = []
     var final_data = []
     var color = []
@@ -123,16 +123,14 @@ function generar_response(initial_data, title, color) {
         label.push(k);
         final_data.push(v);
 
-        if (typeof(color) != 'undefined') {
+        if (typeof(hue) != 'undefined') {
             color_base = randomColor({
                 luminosity: 'bright',
-                hue: color,
+                hue: hue,
                 format: 'rgba',
                 alpha: 0.2
             });
-
         } else {
-
             color_base = randomColor({
                 luminosity: 'bright',
                 format: 'rgba',
