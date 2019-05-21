@@ -1,25 +1,3 @@
-var chart_backgrounds = [
-    'rgb(214, 39, 40, 0.2)',
-    'rgba(255, 206, 86, 0.2)',
-    'rgba(75, 192, 192, 0.2)',
-    'rgba(153, 102, 255, 0.2)',
-    'rgba(255, 159, 64, 0.2)',
-    'rgb(44, 160, 44, 0.2)',
-    'rgba(54, 162, 235, 0.2)',
-    'rgba(255, 99, 132, 0.2)'
-]
-var chart_borders = [
-    'rgb(214, 39, 40, 1)',
-    'rgba(255, 206, 86, 1)',
-    'rgba(75, 192, 192, 1)',
-    'rgba(153, 102, 255, 1)',
-    'rgba(255, 159, 64, 1)',
-    'rgb(44, 160, 44, 1)',
-    'rgba(54, 162, 235, 1)',
-    'rgba(255, 99, 132, 1)'
-]
-
-
 function inicio_graficos() {
     chart_followers();
     chart_hashtag();
@@ -83,10 +61,7 @@ function generar_venn(sets, id, title) {
     var tooltip = d3.select(id).append("div").attr("class", "venntooltip");
     var count = 0;
     $.each(div.selectAll("path")._groups[0], function(k, v) {
-        if (typeof(chart_borders[count]) == 'undefined') {
-            count = 0;
-        }
-        $(v).css('fill', chart_borders[count]);
+        $(v).css('fill', randomColor({luminosity: 'light',count: 27}));
         count++;
     });
     div.selectAll("g").on("mouseover", function(d, i) {
@@ -114,23 +89,9 @@ function generar_venn(sets, id, title) {
 function generar_response(initial_data, title) {
     var label = []
     var final_data = []
-    var background = []
-    var border = []
-    var count_background = 0;
-    var count_border = 0;
     $.each(initial_data, function(k, v) {
         label.push(k);
         final_data.push(v);
-        if (typeof(chart_backgrounds[count_background]) == 'undefined') {
-            count_background = 0;
-        }
-        background.push(chart_backgrounds[count_background]);
-        if (typeof(chart_borders[count_border]) == 'undefined') {
-            count_border = 0;
-        }
-        border.push(chart_borders[count_border]);
-        count_background++;
-        count_border++;
     })
     var data_response = {
         labels: label,
