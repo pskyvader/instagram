@@ -30,7 +30,7 @@ function chart_hashtag() {
     var url = create_url(modulo, 'get_hashtag_users');
     post_basic(url, {}, 'Adquiriendo hashtag', function(data) {
         var data_response = generar_response(data, 'Usuarios');
-        generar_grafico($('#chart-seguidores'), data_response, 'bar');
+        generar_grafico($('#chart-hashtag'), data_response, 'bar');
     });
 }
 
