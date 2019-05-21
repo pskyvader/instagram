@@ -14,47 +14,50 @@ import json
 
 
 class home(base):
-    url = ['home']
-    metadata = {'title': 'Home', 'modulo': 'home'}
+    url = ["home"]
+    metadata = {"title": "Home", "modulo": "home"}
 
     @classmethod
     def index(cls):
-        ret = {'body': []}
+        ret = {"body": []}
         url_final = cls.url.copy()
         if not administrador_model.verificar_sesion():
-            url_final = ['login', 'index', 'home']
+            url_final = ["login", "index", "home"]
 
         url_return = functions.url_redirect(url_final)
-        if url_return != '':
-            ret['error'] = 301
-            ret['redirect'] = url_return
+        if url_return != "":
+            ret["error"] = 301
+            ret["redirect"] = url_return
             return ret
 
         h = head(cls.metadata)
         ret_head = h.normal()
-        if ret_head['headers'] != '':
+        if ret_head["headers"] != "":
             return ret_head
-        ret['body'] += ret_head['body']
+        ret["body"] += ret_head["body"]
 
         he = header()
-        ret['body'] += he.normal()['body']
+        ret["body"] += he.normal()["body"]
 
         asi = aside()
-        ret['body'] += asi.normal()['body']
+        ret["body"] += asi.normal()["body"]
         data = {}
-        data['title'] = cls.metadata['title']
-        cls.breadcrumb = [{'url': functions.generar_url(
-            url_final), 'title': cls.metadata['title'], 'active':'active'}]
-        data['breadcrumb'] = cls.breadcrumb
-        ret['body'].append(('home', data))
+        data["title"] = cls.metadata["title"]
+        cls.breadcrumb = [
+            {
+                "url": functions.generar_url(url_final),
+                "title": cls.metadata["title"],
+                "active": "active",
+            }
+        ]
+        data["breadcrumb"] = cls.breadcrumb
+        ret["body"].append(("home", data))
 
         f = footer()
-        ret['body'] += f.normal()['body']
+        ret["body"] += f.normal()["body"]
 
         return ret
 
-
-    
     def get_followers(self):
         ret = {
             "headers": [("Content-Type", "application/json; charset=utf-8")],
@@ -62,14 +65,14 @@ class home(base):
         }
         respuesta = {}
         # respuesta['total']=igaccounts_model.getAll(select='total')
-        where={'follower':True}
-        respuesta['follower']=igaccounts_model.getAll(where,select='total')
-        where={'following':True}
-        respuesta['following']=igaccounts_model.getAll(where,select='total')
-        where={'follower':True,'following':True}
-        respuesta['both']=igaccounts_model.getAll(where,select='total')
-        where={'favorito':True}
-        respuesta['favoritos']=igaccounts_model.getAll(where,select='total')
+        where = {"follower": True}
+        respuesta["follower"] = igaccounts_model.getAll(where, select="total")
+        where = {"following": True}
+        respuesta["following"] = igaccounts_model.getAll(where, select="total")
+        where = {"follower": True, "following": True}
+        respuesta["both"] = igaccounts_model.getAll(where, select="total")
+        where = {"favorito": True}
+        respuesta["favoritos"] = igaccounts_model.getAll(where, select="total")
         # where={'favorito':True,'follower':True}
         # respuesta['favoritos-follower']=igaccounts_model.getAll(where,select='total')
         # where={'favorito':True,'following':True}
@@ -79,21 +82,21 @@ class home(base):
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         return ret
 
-
     def get_hashtag_users(self):
         ret = {
             "headers": [("Content-Type", "application/json; charset=utf-8")],
             "body": "",
         }
         respuesta = {}
-        #respuesta['total']=igaccounts_model.getAll(select='total')
-        hashtag=ighashtag_model.getAll()
+        # respuesta['total']=igaccounts_model.getAll(select='total')
+        hashtag = ighashtag_model.getAll()
         for h in hashtag:
-            respuesta[h['hashtag'].capitalize()]=igaccounts_model.getAll({'hashtag':h['hashtag']},select='total')
+            respuesta[h["hashtag"].capitalize()] = igaccounts_model.getAll(
+                {"hashtag": h["hashtag"]}, select="total"
+            )
 
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         return ret
-
 
     def get_follows(self):
         ret = {
@@ -101,33 +104,57 @@ class home(base):
             "body": "",
         }
         respuesta = {}
-        totales=igtotal_model.getAll(condiciones={'order':'fecha ASC'})
+        totales = igtotal_model.getAll(condiciones={"order": "fecha ASC"})
 
         for t in totales:
-            fecha=t['fecha']
-            tag=t['tag']
-            cantidad=t['cantidad']
+            fecha = t["fecha"]
+            tag = t["tag"]
+            cantidad = t["cantidad"]
 
-            if tag=='follows' or tag=='unfollows' or tag=='start_follow' or tag=='stop_follow':
-                if tag not in respuesta:
-                    respuesta[tag]={}
-                if not fecha in respuesta['follows']:
-                    respuesta['follows'][fecha]=0
-                
-                if not fecha in respuesta['unfollows']:
-                    respuesta['unfollows'][fecha]=0
-                
-                if not fecha in respuesta['start_follow']:
-                    respuesta['start_follow'][fecha]=0
-                
-                if not fecha in respuesta['stop_follow']:
-                    respuesta['stop_follow'][fecha]=0
-                
-                
-                respuesta[tag][fecha]=cantidad
+            if ( tag == "follows" or tag == "unfollows" or tag == "start_follow" or tag == "stop_follow" ):
+                if "follows" not in respuesta:
+                    respuesta["follows"] = {}
+                if "unfollows" not in respuesta:
+                    respuesta["unfollows"] = {}
+                if "start_follow" not in respuesta:
+                    respuesta["start_follow"] = {}
+                if "stop_follow" not in respuesta:
+                    respuesta["stop_follow"] = {}
 
+                if fecha not in respuesta["follows"]:
+                    respuesta["follows"][fecha] = 0
 
-            
+                if fecha not in respuesta["unfollows"]:
+                    respuesta["unfollows"][fecha] = 0
+
+                if fecha not in respuesta["start_follow"]:
+                    respuesta["start_follow"][fecha] = 0
+
+                if fecha not in respuesta["stop_follow"]:
+                    respuesta["stop_follow"][fecha] = 0
+
+                respuesta[tag][fecha] = cantidad
+
+                if fecha not in respuesta:
+                    respuesta[fecha] = {
+                        "follows": 0,
+                        "unfollows": 0,
+                        "start_follow": 0,
+                        "stop_follow": 0,
+                    }
+                respuesta[fecha][tag] = cantidad
+
+        respuesta2 = {
+            "follows": {},
+            "unfollows": {},
+            "start_follow": {},
+            "stop_follow": {},
+        }
+        for fecha, elemento in respuesta.items():
+            for tag, cantidad in elemento.items():
+                respuesta2[tag][fecha] = cantidad
+
+        respuesta = respuesta2
 
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         return ret
