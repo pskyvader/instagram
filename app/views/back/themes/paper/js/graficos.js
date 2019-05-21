@@ -50,9 +50,14 @@ function chart_hashtag() {
         $.each(data.followers,function(k,v){
             seguidores.push({key:k,value:v});
         });
-        console.log(seguidores);
         seguidores =seguidores.sort((a, b) => (a.value > b.value) ? 1 : -1);
         console.log(seguidores);
+        var seg={};
+        $.each(seguidores,function(k,v){
+            seg[v.key]=seg.value;
+        });
+        console.log(seg);
+
         var data_seguidores = generar_response(data.followers, 'Seguidores');
         var options = {
             legend:{
