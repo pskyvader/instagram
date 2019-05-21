@@ -102,7 +102,7 @@ class home(base):
             porcentaje=(f/(fl+r))*100
             porcentaje=round(porcentaje, 2)
             followers[nombre]=f
-            following[nombre]=fl-f
+            following[nombre]=fl
             removed[nombre]=r
             eficiencia[nombre]=porcentaje
 
