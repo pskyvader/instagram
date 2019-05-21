@@ -69,16 +69,16 @@ function chart_hashtag() {
                     gridLines: {
                         display: false
                     },
-                    ticks: {
-                        beginAtZero: true
+                    ticks:{
+                        display:false
                     }
                 }],
                 yAxes: [{
                     gridLines: {
                         display: false
                     },
-                    ticks: {
-                        beginAtZero: true
+                    ticks:{
+                        display:false
                     }
                 }]
             }
