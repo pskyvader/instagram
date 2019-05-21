@@ -212,7 +212,7 @@ function generar_grafico(id, data, type, options_extra) {
             }
         };
     
-        if (typeof(options_extra) == 'undefined') {
+        if (typeof(options_extra) != 'undefined') {
             var options = $.extend(true, options, options_extra);
         }
 
