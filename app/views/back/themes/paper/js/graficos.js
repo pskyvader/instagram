@@ -199,6 +199,11 @@ function generar_grafico(id, data, type, options) {
                 onProgress: function(animation) {
                     progress.value = animation.animationObject.currentStep / animation.animationObject.numSteps;
                 }
+            },
+            elements:{
+                point:{
+                    radius:10
+                }
             }
         };
     }
