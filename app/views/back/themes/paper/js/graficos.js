@@ -8,11 +8,11 @@ function inicio_graficos() {
 function chart_total() {
     var url = create_url(modulo, 'get_total');
     post_basic(url, {}, 'Adquiriendo Totales', function(data) {
-        var data_follows = generar_response(data.follows, 'Usuarios');
-        var data_unfollows = generar_response(data.unfollows, 'Usuarios');
-        var data_start_follow = generar_response(data.start_follow, 'Usuarios');
-        var data_stop_follow = generar_response(data.stop_follow, 'Usuarios');
-        
+        var data_follows = generar_response(data.follows, 'Siguiendo');
+        var data_unfollows = generar_response(data.unfollows, 'No siguiendo');
+        var data_start_follow = generar_response(data.start_follow, 'Seguidor');
+        var data_stop_follow = generar_response(data.stop_follow, 'Dejo de seguir');
+
 
         generar_grafico($('#chart-total'), data_response, 'line');
     });
