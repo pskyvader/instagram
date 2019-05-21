@@ -65,6 +65,11 @@ function chart_hashtag() {
                         beginAtZero: true
                     }
                 }]
+            },
+            animation: {
+                onProgress: function(animation) {
+                    progress.value = animation.animationObject.currentStep / animation.animationObject.numSteps;
+                }
             }
         };
         generar_grafico($('#chart-hashtag'), data_followers, 'bar', options);
@@ -189,6 +194,11 @@ function generar_grafico(id, data, type, options) {
                         beginAtZero: true
                     }
                 }]
+            },
+            animation: {
+                onProgress: function(animation) {
+                    progress.value = animation.animationObject.currentStep / animation.animationObject.numSteps;
+                }
             }
         };
     }
