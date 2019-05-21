@@ -12,7 +12,7 @@ function inicio_graficos() {
     chart_followers();
     chart_hashtag();
     chart_total();
-    $('.progress-bar').css('width',"50%");
+    $('.progress-bar').css('width', "50%");
 }
 
 
@@ -112,13 +112,13 @@ function chart_followers() {
 function generar_venn(sets, id, title) {
     var width = $(id).empty().innerWidth();
     var progress = $(id).siblings()[0];
-    $(progress).show().css('width','75%');
+    $(progress).show().css('width', '75%');
     var chart = venn.VennDiagram().width(width);
     var div = d3.select(id).datum(sets).call(chart);
     div.selectAll(".venn-circle path").style("fill-opacity", .5).style("stroke-width", 3).style("stroke-opacity", 1);
     div.selectAll("text").style("fill", "white");
     var tooltip = d3.select(id).append("div").attr("class", "venntooltip");
-    $(progress).css('width','100%');
+    $(progress).css('width', '100%');
     $(progress).slideUp();
     $.each(div.selectAll("path")._groups[0], function(k, v) {
         $(v).css('fill', randomColor({
@@ -187,36 +187,36 @@ function generar_response(initial_data, title, hue) {
 }
 
 function generar_grafico(id, data, type, options_extra) {
-        var progress = $(id).siblings()[0];
-        $(progress).show();
-        var options = {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            },
-            animation: {
-                onProgress: function(animation) {
-                    $(progress).css('width',50+50*(animation.animationObject.currentStep / animation.animationObject.numSteps)+'%');
-                },
-                onComplete:function(){
-                    $(progress).slideUp();
+    var progress = $(id).siblings()[0];
+    $(progress).show();
+    var options = {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
                 }
+            }]
+        },
+        animation: {
+            onProgress: function(animation) {
+                $(progress).css('width', 50 + 50 * (animation.animationObject.currentStep / animation.animationObject.numSteps) + '%');
             },
-            elements: {
-                point: {
-                    radius: 4,
-                    hoverRadius:5,
-                    hitRadius:3,
-                }
+            onComplete: function() {
+                $(progress).slideUp();
             }
-        };
-    
-        if (typeof(options_extra) != 'undefined') {
-            var options = $.extend(true, options, options_extra);
+        },
+        elements: {
+            point: {
+                radius: 4,
+                hoverRadius: 5,
+                hitRadius: 3,
+            }
         }
+    };
+
+    if (typeof(options_extra) != 'undefined') {
+        var options = $.extend(true, options, options_extra);
+    }
 
 
     var chart = new Chart(id, {
