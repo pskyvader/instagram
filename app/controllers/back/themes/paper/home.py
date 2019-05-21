@@ -101,7 +101,7 @@ class home(base):
             "body": "",
         }
         respuesta = {}
-        totales=igtotal_model.getAll(condiciones={'order':'fecha DESC'})
+        totales=igtotal_model.getAll(condiciones={'order':'fecha ASC'})
 
         for t in totales:
             fecha=t['fecha']
