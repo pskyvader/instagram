@@ -7,6 +7,7 @@ from .aside import aside
 from .footer import footer
 from app.models.administrador import administrador as administrador_model
 from app.models.igaccounts import igaccounts as igaccounts_model
+from app.models.ighashtag import ighashtag as ighashtag_model
 
 import json
 
@@ -79,3 +80,15 @@ class home(base):
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         return ret
 
+
+    def get_hashtag_users(self):
+        ret = {
+            "headers": [("Content-Type", "application/json; charset=utf-8")],
+            "body": "",
+        }
+        respuesta = {}
+        respuesta['total']=igaccounts_model.getAll(select='total')
+        
+
+        ret["body"] = json.dumps(respuesta, ensure_ascii=False)
+        return ret
