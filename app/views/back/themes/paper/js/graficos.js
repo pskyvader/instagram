@@ -60,6 +60,18 @@ function chart_hashtag() {
         var options = {
             legend:{
                 display:false
+            },
+            scales: {
+                xAxes: [{
+                    gridLines: {
+                        display:false
+                    }
+                }],
+                yAxes: [{
+                    gridLines: {
+                        display:false
+                    }   
+                }]
             }
         };
         generar_grafico($('#chart-hashtag-followers'), data_seguidores, 'pie',options);
