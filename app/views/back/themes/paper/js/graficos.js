@@ -13,13 +13,13 @@ function chart_total() {
         var data_start_follow = generar_response(data.start_follow, 'Seguidor');
         var data_stop_follow = generar_response(data.stop_follow, 'Dejo de seguir');
 
-        var datasets=[
+        var datasets = [
             data_follows.datasets[0],
             data_unfollows.datasets[0],
             data_start_follow.datasets[0],
             data_stop_follow.datasets[0]
         ];
-        data_follows.datasets=datasets;
+        data_follows.datasets = datasets;
         generar_grafico($('#chart-total'), data_follows, 'line');
     });
 }
@@ -81,7 +81,9 @@ function generar_venn(sets, id, title) {
     div.selectAll("text").style("fill", "white");
     var tooltip = d3.select(id).append("div").attr("class", "venntooltip");
     $.each(div.selectAll("path")._groups[0], function(k, v) {
-        $(v).css('fill', randomColor({luminosity: 'dark'}));
+        $(v).css('fill', randomColor({
+            luminosity: 'dark'
+        }));
     });
     div.selectAll("g").on("mouseover", function(d, i) {
         venn.sortAreas(div, d);
@@ -105,19 +107,35 @@ function generar_venn(sets, id, title) {
 
 
 
-function generar_response(initial_data, title) {
+function generar_response(initial_data, title, color) {
     var label = []
     var final_data = []
-    var color=[]
-    var border=[]
+    var color = []
+    var border = []
     $.each(initial_data, function(k, v) {
         label.push(k);
         final_data.push(v);
-        color_base=randomColor({luminosity: 'bright',format:'rgba',alpha:0.2});
+
+        if (typeof(color) != 'undefined') {
+            color_base = randomColor({
+                luminosity: 'bright',
+                hue: color,
+                format: 'rgba',
+                alpha: 0.2
+            });
+
+        } else {
+
+            color_base = randomColor({
+                luminosity: 'bright',
+                format: 'rgba',
+                alpha: 0.2
+            });
+        }
         color.push(color_base);
         border.push(color_base.replace("0.2", "1"));
     });
-    
+
     var data_response = {
         labels: label,
         datasets: [{
