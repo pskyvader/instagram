@@ -9,6 +9,7 @@ function chart_total() {
     var url = create_url(modulo, 'get_total');
     post_basic(url, {}, 'Adquiriendo hashtag', function(data) {
         var data_response = generar_response(data, 'Usuarios');
+        
         generar_grafico($('#chart-total'), data_response, 'line');
     });
 }

@@ -111,7 +111,16 @@ class home(base):
             if tag=='follows' or tag=='unfollows' or tag=='start_follow' or tag=='stop_follow':
                 if fecha not in respuesta:
                     respuesta[fecha]={'follows':0,'unfollows':0,'start_follow':0,'stop_follow':0}
+                    
                 respuesta[fecha][tag]=cantidad
+        
+        respuesta2={'follows':{},'unfollows':{},'start_follow':{},'stop_follow':{}}
+        for fecha,tag in respuesta.items():
+            for cantidad in tag:
+                respuesta2[tag][fecha]=cantidad
+        
+        respuesta=respuesta2
+            
 
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         return ret
