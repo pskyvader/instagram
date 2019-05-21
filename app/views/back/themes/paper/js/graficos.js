@@ -147,7 +147,7 @@ function generar_response(initial_data, title, hue) {
         if (typeof(hue) != 'undefined') {
             color_base = randomColor({
                 luminosity: 'bright',
-                seed: hue,
+                hue: hue,
                 format: 'rgba',
                 alpha: 0.2
             });
