@@ -121,7 +121,6 @@ function generar_response(initial_data, title) {
     $.each(initial_data, function(k, v) {
         label.push(k);
         final_data.push(v);
-        console.log(chart_borders[count_border],typeof(chart_borders[count_border]));
         if (typeof(chart_backgrounds[count_background]) == 'undefined') {
             count_background = 0;
         }
