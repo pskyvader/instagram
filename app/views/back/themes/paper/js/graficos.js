@@ -46,6 +46,7 @@ function chart_total() {
 function chart_hashtag() {
     var url = create_url(modulo, 'get_hashtag_users');
     post_basic(url, {}, 'Adquiriendo hashtag', function(data) {
+        console.log(data.followers);
         var data_seguidores = generar_response(data.followers, 'Seguidores');
         var options = {
             legend:{
