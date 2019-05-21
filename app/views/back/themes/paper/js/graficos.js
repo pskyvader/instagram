@@ -69,7 +69,7 @@ function chart_followers() {
         });
         generar_venn(sets, "#chart-seguidores", 'Usuarios');
         $(window).on('resize', function(){
-            var width = $("#chart-seguidores").empty().innerWidth();
+            var width = $("#chart-seguidores").innerWidth();
             var chart = venn.VennDiagram().width(width);
             d3.select("#chart-seguidores").datum(sets).call(chart);
         });
