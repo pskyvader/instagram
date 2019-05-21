@@ -225,11 +225,12 @@ function generar_grafico(id, data, type, options_extra) {
     }
 
 
-
+    
 
     var chart = new Chart(id, {
         type: type,
-        data: data
+        data: data,
+        options: options
     });
     return chart;
 }
