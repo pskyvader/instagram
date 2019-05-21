@@ -103,7 +103,7 @@ class home(base):
             followers[nombre]=f
             following[nombre]=fl-f
             removed[nombre]=r
-            porcentaje[nombre]=round(porcentaje, 2)
+            porcentaje[nombre]=str(round(porcentaje, 2))+"%"
 
         respuesta['followers']=followers
         respuesta['following']=following
