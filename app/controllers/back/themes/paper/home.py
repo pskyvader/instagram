@@ -88,7 +88,7 @@ class home(base):
         #respuesta['total']=igaccounts_model.getAll(select='total')
         hashtag=ighashtag_model.getAll()
         for h in hashtag:
-            respuesta[h['hashtag']]=igaccounts_model.getAll({'hashtag':h['hashtag']},select='total')
+            respuesta[h['hashtag'].capitalize()]=igaccounts_model.getAll({'hashtag':h['hashtag']},select='total')
 
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         return ret
