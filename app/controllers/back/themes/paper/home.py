@@ -75,8 +75,6 @@ class home(base):
         # respuesta['favoritos-following']=igaccounts_model.getAll(where,select='total')
         # where={'favorito':True,'follower':True,'following':True}
         # respuesta['favoritos-follower-following']=igaccounts_model.getAll(where,select='total')
-        
-
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         return ret
 
