@@ -1,11 +1,11 @@
 var chartColors = {
-	red: 'rgba(255, 99, 132, 0.2)',
-	orange: 'rgba(255, 159, 64, 0.2)',
-	yellow: 'rgba(255, 205, 86, 0.2)',
-	green: 'rgba(75, 192, 192, 0.2)',
-	blue: 'rgba(54, 162, 235, 0.2)',
-	purple: 'rgba(153, 102, 255, 0.2)',
-	grey: 'rgba(201, 203, 207, 0.2)'
+    red: 'rgba(255, 99, 132, 0.2)',
+    orange: 'rgba(255, 159, 64, 0.2)',
+    yellow: 'rgba(255, 205, 86, 0.2)',
+    green: 'rgba(75, 192, 192, 0.2)',
+    blue: 'rgba(54, 162, 235, 0.2)',
+    purple: 'rgba(153, 102, 255, 0.2)',
+    grey: 'rgba(201, 203, 207, 0.2)'
 };
 
 function inicio_graficos() {
@@ -162,10 +162,14 @@ function generar_response(initial_data, title, hue) {
         if (typeof(hue) != 'undefined') {
             //color_base = randomColor({ luminosity: 'bright', hue: hue, format: 'rgba', alpha: 0.2 });
             color_base = chartColors[hue];
-            color_border=color_base.replace("0.2", "1");
+            color_border = color_base.replace("0.2", "1");
         } else {
-            color_base = randomColor({ luminosity: 'bright', format: 'rgba', alpha: 0.2 });
-            color_border=color_base.replace("0.2", "1");
+            color_base = randomColor({
+                luminosity: 'bright',
+                format: 'rgba',
+                alpha: 0.2
+            });
+            color_border = color_base.replace("0.2", "1");
         }
         color.push(color_base);
         border.push(color_border);
@@ -186,7 +190,7 @@ function generar_response(initial_data, title, hue) {
 }
 
 function generar_grafico(id, data, type, options) {
-    console.log($(id).siblings()[0]);
+    var progress = $(id).siblings()[0];
     if (typeof(options) == 'undefined') {
         var options = {
             scales: {
@@ -201,9 +205,9 @@ function generar_grafico(id, data, type, options) {
                     progress.value = animation.animationObject.currentStep / animation.animationObject.numSteps;
                 }
             },
-            elements:{
-                point:{
-                    radius:10
+            elements: {
+                point: {
+                    radius: 10
                 }
             }
         };
