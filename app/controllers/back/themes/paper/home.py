@@ -101,7 +101,7 @@ class home(base):
             "body": "",
         }
         respuesta = {}
-        totales=igtotal_model.getAll()
+        totales=igtotal_model.getAll(condiciones={'order':'fecha ASC'})
 
         for t in totales:
             fecha=t['fecha']
@@ -112,12 +112,6 @@ class home(base):
                 if fecha not in respuesta:
                     respuesta[fecha]={'follows':0,'unfollows':0,'start_follow':0,'stop_follow':0}
                 respuesta[fecha][tag]=cantidad
-            
-
-        follows=igtotal_model.getAll({'tag':'follows'})
-        unfollows=igtotal_model.getAll({'tag':'unfollows'})
-        start_follow=igtotal_model.getAll({'tag':'start_follow'})
-        stop_follow=igtotal_model.getAll({'tag':'stop_follow'})
 
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         return ret
