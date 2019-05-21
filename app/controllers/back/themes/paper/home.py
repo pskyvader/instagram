@@ -99,11 +99,12 @@ class home(base):
             f = igaccounts_model.getAll( {"hashtag": h["hashtag"],'follower':True}, select="total" )
             fl = igaccounts_model.getAll( {"hashtag": h["hashtag"],'following':True}, select="total" )
             r = igaccounts_model.getAll( {"hashtag": h["hashtag"],'following':False}, select="total" )
-            porcentaje=(f/(fl+r))*100;
+            porcentaje=(f/(fl+r))*100
+            porcentaje=round(porcentaje, 2)
             followers[nombre]=f
             following[nombre]=fl-f
             removed[nombre]=r
-            porcentaje[nombre]=str(round(porcentaje, 2))+" %"
+            porcentaje[nombre]=str(porcentaje)+" %"
 
         respuesta['followers']=followers
         respuesta['following']=following
