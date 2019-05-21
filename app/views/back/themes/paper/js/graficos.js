@@ -7,7 +7,7 @@ function inicio_graficos() {
 
 function chart_total() {
     var url = create_url(modulo, 'get_total');
-    post_basic(url, {}, 'Adquiriendo hashtag', function(data) {
+    post_basic(url, {}, 'Adquiriendo Totales', function(data) {
         console.log(data);
         var data_response = generar_response(data, 'Usuarios');
 
