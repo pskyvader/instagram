@@ -46,8 +46,14 @@ function chart_total() {
 function chart_hashtag() {
     var url = create_url(modulo, 'get_hashtag_users');
     post_basic(url, {}, 'Adquiriendo hashtag', function(data) {
+        var seguidores=[]
+        $.each(data.followers,function(k,v){
+            seguidores.append({k:v});
+        });
+        console.log(seguidores);
+        seguidores =seguidores.sort((a, b) => (a > b) ? 1 : -1);
+        console.log(seguidores);
         var data_seguidores = generar_response(data.followers, 'Seguidores');
-        console.log(data_seguidores);
         var options = {
             legend:{
                 display:false
