@@ -121,11 +121,12 @@ function generar_response(initial_data, title) {
     $.each(initial_data, function(k, v) {
         label.push(k);
         final_data.push(v);
-        if (!chart_backgrounds[count_background]) {
+        console.log(chart_borders[count_border],typeof(chart_borders[count_border]));
+        if (typeof(chart_backgrounds[count_background]) == 'undefined') {
             count_background = 0;
         }
         background.push(chart_backgrounds[count_background]);
-        if (!chart_borders[count_border]) {
+        if (typeof(chart_borders[count_border]) == 'undefined') {
             count_border = 0;
         }
         border.push(chart_borders[count_border]);
