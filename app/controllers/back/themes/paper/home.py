@@ -89,7 +89,7 @@ class home(base):
         }
         respuesta = {}
         # respuesta['total']=igaccounts_model.getAll(select='total')
-        hashtag = ighashtag_model.getAll()
+        hashtag = ighashtag_model.getAll({'estado':True})
         for h in hashtag:
             respuesta[h["hashtag"].capitalize()] = igaccounts_model.getAll( {"hashtag": h["hashtag"],'follower':True}, select="total" )
 
