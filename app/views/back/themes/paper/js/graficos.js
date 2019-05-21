@@ -49,6 +49,8 @@ function chart_hashtag() {
         var data_followers = generar_response(data.followers, 'Seguidores', 'red');
         var data_following = generar_response(data.following, 'Siguiendo', 'blue');
         var data_removed = generar_response(data.removed, 'No siguiendo', 'green');
+        var data_porcentaje = generar_response(data.porcentaje, 'Eficiencia', 'green');
+
         var datasets = [
             data_followers.datasets[0],
             data_following.datasets[0],
@@ -66,6 +68,7 @@ function chart_hashtag() {
             }
         };
         generar_grafico($('#chart-hashtag'), data_followers, 'bar', options);
+        generar_grafico($('#chart-hashtag-eficiencia'), data_porcentaje, 'bar', options);
     });
 }
 
