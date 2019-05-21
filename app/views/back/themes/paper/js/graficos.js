@@ -48,7 +48,7 @@ function chart_hashtag() {
     post_basic(url, {}, 'Adquiriendo hashtag', function(data) {
         var seguidores=[]
         $.each(data.followers,function(k,v){
-            seguidores.append({k:v});
+            seguidores.push({k:v});
         });
         console.log(seguidores);
         seguidores =seguidores.sort((a, b) => (a > b) ? 1 : -1);
