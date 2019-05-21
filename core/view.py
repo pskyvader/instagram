@@ -262,8 +262,7 @@ class view:
         from os import path, makedirs
 
         dir_resources = theme + "custom_resources/"
-        if not path.exists(dir_resources):
-            makedirs(dir_resources)
+        makedirs(dir_resources,exist_ok=True)
         file = "resources-" + str(nuevo) + "-" + str(len(locales)) + "." + type_resource
         my_file = Path(dir_resources + file)
         if my_file.is_file():
