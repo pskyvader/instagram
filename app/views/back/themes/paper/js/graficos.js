@@ -180,7 +180,7 @@ function chart_followers() {
 
 function generar_venn(sets, id, title) {
     var width = $(id).empty().innerWidth();
-    var height = window.height;
+    var height = $( window ).height();
     var progress = $(id).siblings()[0];
     $(progress).show().css('width', '75%');
     var chart = venn.VennDiagram().width(width).height(height);
