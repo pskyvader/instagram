@@ -14,7 +14,7 @@ var chart_borders = [
     'rgba(75, 192, 192, 1)',
     'rgba(153, 102, 255, 1)',
     'rgba(255, 159, 64, 1)',
-    'rgb(44, 160, 44, 1)',    
+    'rgb(44, 160, 44, 1)',
     'rgba(54, 162, 235, 1)',
     'rgba(255, 99, 132, 1)'
 ]
@@ -22,38 +22,48 @@ var chart_borders = [
 
 function inicio_graficos() {
     chart_followers();
+    chart_hashtag();
 }
 
 
+function chart_hashtag() {
+    var url = create_url(modulo, 'get_hashtag_users');
+    post_basic(url, {}, 'Adquiriendo hashtag', function(data) {
+        var data_response = generar_response(data, 'Usuarios');
+        generar_grafico($('#chart-seguidores'), data_response, 'bar');
+    });
+}
 
 function chart_followers() {
     var url = create_url(modulo, 'get_followers');
     post_basic(url, {}, 'Adquiriendo usuarios', function(data) {
         //var data_response = generar_response(data, 'Usuarios');
         //generar_grafico($('#chart-seguidores'), data_response, 'bar');
-        var sets = [];
-        sets.push({
-            sets: ['Seguidores'],
-            label: 'Seguidores',
-            size: data['follower'],
-        });
-        sets.push({
-            sets: ['Siguiendo'],
-            label: 'Siguiendo',
-            size: data['following'],
-        });
-        sets.push({
-            sets: ['Seguidores', 'Siguiendo'],
-            label: 'Seguidores y Siguiendo',
-            size: data['both'],
-        });
-        sets.push({
-            sets: ['Favoritos'],
-            label: 'Favoritos',
-            size: data['favoritos'],
-        });
+        var sets = [{
+                sets: ['Seguidores'],
+                label: 'Seguidores',
+                size: data['follower']
+            },
+            {
+                sets: ['Siguiendo'],
+                label: 'Siguiendo',
+                size: data['following']
+            },
+            {
+                sets: ['Seguidores', 'Siguiendo'],
+                label: 'Seguidores y Siguiendo',
+                size: data['both']
+            },
+            {
+                sets: ['Favoritos'],
+                label: 'Favoritos',
+                size: data['favoritos']
+            },
+        ];
+
+
         generar_venn(sets, "#chart-seguidores", 'Usuarios');
-        $(window).on('resize', function(){
+        $(window).on('resize', function() {
             var width = $("#chart-seguidores").innerWidth();
             var chart = venn.VennDiagram().width(width);
             d3.select("#chart-seguidores").datum(sets).call(chart);
