@@ -92,7 +92,7 @@ function generar_response(initial_data, title) {
     $.each(initial_data, function(k, v) {
         label.push(k);
         final_data.push(v);
-        color_base=randomColor({luminosity: 'bright',format:'rgba',alpha:0.2});
+        color_base=randomColor({luminosity: 'bright',hue:'red',format:'rgba',alpha:0.2});
         color.push(color_base);
         border.push(color_base.replace("0.2", "1"));
     });
