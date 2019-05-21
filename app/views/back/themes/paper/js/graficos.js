@@ -49,7 +49,7 @@ function chart_hashtag() {
         var data_followers = generar_response(data.followers, 'Seguidores', 'red');
         var data_following = generar_response(data.following, 'Siguiendo', 'blue');
         var data_removed = generar_response(data.removed, 'No siguiendo', 'green');
-        var data_porcentaje = generar_response(data.porcentaje, 'Eficiencia', 'green');
+        var data_porcentaje = generar_response(data.porcentaje, 'Eficiencia', 'yellow');
 
         var datasets = [
             data_followers.datasets[0],
