@@ -95,7 +95,6 @@ function generar_response(initial_data, title) {
         color.push(randomColor({luminosity: 'light',format:'rgba',alpha:1}));
         border.push(randomColor({luminosity: 'light',format:'rgba',alpha:0.2}));
     });
-    console.log(color);
     
     var data_response = {
         labels: label,
