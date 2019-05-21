@@ -111,11 +111,15 @@ function chart_followers() {
 
 function generar_venn(sets, id, title) {
     var width = $(id).empty().innerWidth();
+    var progress = $(id).siblings()[0];
+    $(progress).show().css('width','75%');
     var chart = venn.VennDiagram().width(width);
     var div = d3.select(id).datum(sets).call(chart);
     div.selectAll(".venn-circle path").style("fill-opacity", .5).style("stroke-width", 3).style("stroke-opacity", 1);
     div.selectAll("text").style("fill", "white");
     var tooltip = d3.select(id).append("div").attr("class", "venntooltip");
+    $(progress).css('width','100%');
+    $(progress).slideUp();
     $.each(div.selectAll("path")._groups[0], function(k, v) {
         $(v).css('fill', randomColor({
             luminosity: 'dark'
@@ -198,7 +202,7 @@ function generar_grafico(id, data, type, options_extra) {
                     $(progress).css('width',50+50*(animation.animationObject.currentStep / animation.animationObject.numSteps)+'%');
                 },
                 onComplete:function(){
-                    $(progress).hide();
+                    $(progress).slideUp();
                 }
             },
             elements: {
