@@ -191,6 +191,7 @@ function generar_response(initial_data, title, hue) {
 
 function generar_grafico(id, data, type, options) {
     var progress = $(id).siblings()[0];
+    console.log(id,progress);
     if (typeof(options) == 'undefined') {
         var options = {
             scales: {
