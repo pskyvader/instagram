@@ -74,6 +74,7 @@
         {"url": "assets/ckeditor/ckeditor.js","local":true,"defer":false,"combine":false},
         {"url": "js/Chart.min.js","local":true,"defer":false,"combine":true},
         {"url": "js/venn.min.js","local":true,"defer":false,"combine":true},
+        {"url": "js/randomColor.js","local":true,"defer":false,"combine":true},
         {"url": "js/excel/xlsx.full.min.js","local":true,"defer":false,"combine":false},
         {"url": "js/map.js","local":true,"defer":false,"combine":true},
         {"url": "js/ajax.js","local":true,"defer":false,"combine":true},
