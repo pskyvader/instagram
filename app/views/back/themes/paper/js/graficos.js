@@ -60,16 +60,8 @@ function chart_hashtag() {
                     stacked: true
                 }],
                 yAxes: [{
-                    stacked: true,
-                    ticks: {
-                        beginAtZero: true
-                    }
+                    stacked: true
                 }]
-            },
-            animation: {
-                onProgress: function(animation) {
-                    progress.value = animation.animationObject.currentStep / animation.animationObject.numSteps;
-                }
             }
         };
         generar_grafico($('#chart-hashtag'), data_followers, 'bar', options);
