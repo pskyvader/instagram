@@ -93,9 +93,8 @@ function generar_response(initial_data, title) {
         label.push(k);
         final_data.push(v);
         color_base=randomColor({luminosity: 'light',format:'rgba',alpha:0.2});
-        console.log(color_base);
         color.push(color_base);
-        border.push(color_base);
+        border.push(color_base.replace("0.2", "1"));
     });
     
     var data_response = {
