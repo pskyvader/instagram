@@ -103,12 +103,7 @@ class home(base):
             "headers": [("Content-Type", "application/json; charset=utf-8")],
             "body": "",
         }
-        respuesta = {
-            "follows": {},
-            "unfollows": {},
-            "start_follow": {},
-            "stop_follow": {},
-        }
+        respuesta = { "follows": {}, "unfollows": {}, "start_follow": {}, "stop_follow": {}, }
         totales = igtotal_model.getAll(condiciones={"order": "fecha ASC"})
 
         for t in totales:
@@ -116,12 +111,7 @@ class home(base):
             tag = t["tag"]
             cantidad = t["cantidad"]
 
-            if (
-                tag == "follows"
-                or tag == "unfollows"
-                or tag == "start_follow"
-                or tag == "stop_follow"
-            ):
+            if ( tag == "follows" or tag == "unfollows" or tag == "start_follow" or tag == "stop_follow" ):
                 if fecha not in respuesta["follows"]:
                     respuesta["follows"][fecha] = 0
 
