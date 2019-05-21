@@ -67,8 +67,10 @@ function chart_followers() {
             label: 'Favoritos',
             size: data['favoritos-follower-following'],
         });
-        chart=generar_venn(sets, "#chart-seguidores", 'Usuarios');
+        generar_venn(sets, "#chart-seguidores", 'Usuarios');
         $(window).on('resize', function(){
+            var width = $("#chart-seguidores").empty().innerWidth();
+            var chart = venn.VennDiagram().width(width);
             d3.select("#chart-seguidores").datum(sets).call(chart);
         });
     });
