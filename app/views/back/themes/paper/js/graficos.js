@@ -126,14 +126,19 @@ function chart_followers() {
                 size: data['follower']
             },
             {
-                sets: ['Totales', 'Seguidores'],
-                label: 'Seguidores',
-                size: data['follower']
-            },
-            {
                 sets: ['Siguiendo'],
                 label: 'Siguiendo',
                 size: data['following']
+            },
+            {
+                sets: ['Favoritos'],
+                label: 'Favoritos',
+                size: data['favoritos']
+            },
+            {
+                sets: ['Totales', 'Seguidores'],
+                label: 'Seguidores',
+                size: data['follower']
             },
             {
                 sets: ['Totales', 'Siguiendo'],
@@ -144,17 +149,6 @@ function chart_followers() {
                 sets: ['Seguidores', 'Siguiendo'],
                 label: 'Seguidores y Siguiendo',
                 size: data['both']
-            },
-            {
-                sets: ['Totales', 'Seguidores', 'Siguiendo'],
-                label: 'Seguidores y Siguiendo',
-                size: data['both']
-            },
-
-            {
-                sets: ['Favoritos'],
-                label: 'Favoritos',
-                size: data['favoritos']
             },
             {
                 sets: ['Totales', 'Favoritos'],
@@ -171,16 +165,21 @@ function chart_followers() {
                 label: 'Favoritos',
                 size: data['favoritos-follower']
             },
-            {
-                sets: ['Favoritos', 'Seguidores', 'Siguiendo'],
-                label: 'Favoritos',
-                size: data['favoritos-follower-following']
-            },
-            {
-                sets: ['Totales', 'Favoritos', 'Seguidores', 'Siguiendo'],
-                label: 'Favoritos',
-                size: data['favoritos-follower-following']
-            },
+            // {
+            //     sets: ['Totales', 'Seguidores', 'Siguiendo'],
+            //     label: 'Seguidores y Siguiendo',
+            //     size: data['both']
+            // },
+            // {
+            //     sets: ['Favoritos', 'Seguidores', 'Siguiendo'],
+            //     label: 'Favoritos',
+            //     size: data['favoritos-follower-following']
+            // },
+            // {
+            //     sets: ['Totales', 'Favoritos', 'Seguidores', 'Siguiendo'],
+            //     label: 'Favoritos',
+            //     size: data['favoritos-follower-following']
+            // },
         ];
 
 
