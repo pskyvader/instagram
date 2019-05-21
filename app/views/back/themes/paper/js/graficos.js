@@ -69,16 +69,16 @@ function chart_hashtag() {
                     gridLines: {
                         display: false
                     },
-                    ticks:{
-                        display:false
+                    ticks: {
+                        display: false
                     }
                 }],
                 yAxes: [{
                     gridLines: {
                         display: false
                     },
-                    ticks:{
-                        display:false
+                    ticks: {
+                        display: false
                     }
                 }]
             }
