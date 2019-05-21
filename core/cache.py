@@ -170,6 +170,7 @@ class cache:
                 from gzip import compress
 
                 test = os.listdir(theme + "cache/")
+                print(test)
                 for item in test:
                     if "resources" in resource and item.endswith(extension):
                         os.remove(os.path.join(theme + "cache/", item))
@@ -177,6 +178,8 @@ class cache:
                         os.remove(os.path.join(theme + "cache/", item))
                 f = open(resource_url, "rb").read()
                 f = compress(f)
+                print(f)
+                print(cache_file)
 
                 file_write = open(cache_file, "wb")
                 file_write.write(f)
