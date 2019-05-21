@@ -67,9 +67,9 @@ function chart_followers() {
             label: 'Favoritos',
             size: data['favoritos-follower-following'],
         });
-        generar_venn(sets, "#chart-seguidores", 'Usuarios');
+        chart=generar_venn(sets, "#chart-seguidores", 'Usuarios');
         $(window).on('resize', function(){
-            generar_venn(sets, "#chart-seguidores", 'Usuarios');
+            d3.select("#chart-seguidores").datum(sets).call(chart);
         });
     });
 }
