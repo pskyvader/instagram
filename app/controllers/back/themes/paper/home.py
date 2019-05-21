@@ -107,7 +107,7 @@ class home(base):
         totales = igtotal_model.getAll(condiciones={"order": "fecha ASC"})
 
         for t in totales:
-            fecha = t["fecha"]
+            fecha = functions.formato_fecha(t["fecha"],'%d-%m-%Y')
             tag = t["tag"]
             cantidad = t["cantidad"]
 
