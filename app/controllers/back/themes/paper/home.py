@@ -103,7 +103,12 @@ class home(base):
             "headers": [("Content-Type", "application/json; charset=utf-8")],
             "body": "",
         }
-        respuesta = {}
+        respuesta = {
+            "follows": {},
+            "unfollows": {},
+            "start_follow": {},
+            "stop_follow": {},
+        }
         totales = igtotal_model.getAll(condiciones={"order": "fecha ASC"})
 
         for t in totales:
@@ -111,16 +116,12 @@ class home(base):
             tag = t["tag"]
             cantidad = t["cantidad"]
 
-            if ( tag == "follows" or tag == "unfollows" or tag == "start_follow" or tag == "stop_follow" ):
-                if "follows" not in respuesta:
-                    respuesta["follows"] = {}
-                if "unfollows" not in respuesta:
-                    respuesta["unfollows"] = {}
-                if "start_follow" not in respuesta:
-                    respuesta["start_follow"] = {}
-                if "stop_follow" not in respuesta:
-                    respuesta["stop_follow"] = {}
-
+            if (
+                tag == "follows"
+                or tag == "unfollows"
+                or tag == "start_follow"
+                or tag == "stop_follow"
+            ):
                 if fecha not in respuesta["follows"]:
                     respuesta["follows"][fecha] = 0
 
@@ -134,27 +135,6 @@ class home(base):
                     respuesta["stop_follow"][fecha] = 0
 
                 respuesta[tag][fecha] = cantidad
-
-                if fecha not in respuesta:
-                    respuesta[fecha] = {
-                        "follows": 0,
-                        "unfollows": 0,
-                        "start_follow": 0,
-                        "stop_follow": 0,
-                    }
-                respuesta[fecha][tag] = cantidad
-
-        respuesta2 = {
-            "follows": {},
-            "unfollows": {},
-            "start_follow": {},
-            "stop_follow": {},
-        }
-        for fecha, elemento in respuesta.items():
-            for tag, cantidad in elemento.items():
-                respuesta2[tag][fecha] = cantidad
-
-        respuesta = respuesta2
 
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         return ret
