@@ -207,7 +207,9 @@ function generar_grafico(id, data, type, options_extra) {
             },
             elements: {
                 point: {
-                    radius: 5
+                    radius: 5,
+                    hitRadius:3,
+                    hoverRadius:6
                 }
             }
         };
