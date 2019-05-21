@@ -94,8 +94,19 @@ function chart_hashtag() {
 function chart_followers() {
     var url = create_url(modulo, 'get_followers');
     post_basic(url, {}, 'Adquiriendo usuarios', function(data) {
-        var sets = [{
+        var sets = [
+            {
+                sets: ['Totales'],
+                label: 'Totales',
+                size: data['total']
+            },
+            {
                 sets: ['Seguidores'],
+                label: 'Seguidores',
+                size: data['follower']
+            },
+            {
+                sets: ['Totales','Seguidores'],
                 label: 'Seguidores',
                 size: data['follower']
             },
@@ -105,14 +116,50 @@ function chart_followers() {
                 size: data['following']
             },
             {
+                sets: ['Totales','Siguiendo'],
+                label: 'Siguiendo',
+                size: data['following']
+            },
+            {
                 sets: ['Seguidores', 'Siguiendo'],
                 label: 'Seguidores y Siguiendo',
                 size: data['both']
             },
             {
+                sets: ['Totales','Seguidores', 'Siguiendo'],
+                label: 'Seguidores y Siguiendo',
+                size: data['both']
+            },
+            
+            {
                 sets: ['Favoritos'],
                 label: 'Favoritos',
                 size: data['favoritos']
+            },
+            {
+                sets: ['Totales','Favoritos'],
+                label: 'Favoritos',
+                size: data['favoritos']
+            },
+            {
+                sets: ['Favoritos', 'Seguidores'],
+                label: 'Favoritos',
+                size: data['favoritos-following']
+            },
+            {
+                sets: ['Favoritos', 'Siguiendo'],
+                label: 'Favoritos',
+                size: data['favoritos-follower']
+            },
+            {
+                sets: ['Favoritos','Seguidores', 'Siguiendo'],
+                label: 'Favoritos',
+                size: data['favoritos-follower-following']
+            },
+            {
+                sets: ['Totales','Favoritos','Seguidores', 'Siguiendo'],
+                label: 'Favoritos',
+                size: data['favoritos-follower-following']
             },
         ];
 
