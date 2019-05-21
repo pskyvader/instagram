@@ -37,8 +37,6 @@ function chart_hashtag() {
 function chart_followers() {
     var url = create_url(modulo, 'get_followers');
     post_basic(url, {}, 'Adquiriendo usuarios', function(data) {
-        //var data_response = generar_response(data, 'Usuarios');
-        //generar_grafico($('#chart-seguidores'), data_response, 'bar');
         var sets = [{
                 sets: ['Seguidores'],
                 label: 'Seguidores',
