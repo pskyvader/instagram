@@ -109,6 +109,7 @@ function generar_venn(sets, id, title) {
         var opacity = d.sets.length == 1 ? .5 : 0;
         selection.select("path").style("stroke-width", 3).style("fill-opacity", opacity).style("stroke", "none");
     });
+    return chart;
 }
 
 
