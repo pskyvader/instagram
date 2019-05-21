@@ -104,11 +104,12 @@ class home(base):
             followers[nombre]=f
             following[nombre]=fl-f
             removed[nombre]=r
-            eficiencia[nombre]=porcentaje
+            eficiencia[nombre]=str(porcentaje)+'%'
 
         respuesta['followers']=followers
         respuesta['following']=following
         respuesta['removed']=removed
+        respuesta['eficiencia']=eficiencia
 
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         return ret
