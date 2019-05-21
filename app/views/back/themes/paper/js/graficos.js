@@ -175,11 +175,11 @@ function chart_followers() {
                 label: 'Favoritos',
                 size: data['favoritos-follower-following']
             },
-            // {
-            //     sets: ['Totales', 'Favoritos', 'Seguidores', 'Siguiendo'],
-            //     label: 'Favoritos',
-            //     size: data['favoritos-follower-following']
-            // },
+            {
+                sets: ['Totales', 'Favoritos', 'Seguidores', 'Siguiendo'],
+                label: 'Favoritos',
+                size: data['favoritos-follower-following']
+            },
         ];
 
 
