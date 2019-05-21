@@ -54,7 +54,7 @@ function chart_hashtag() {
         console.log(seguidores);
         var seg={};
         $.each(seguidores,function(k,v){
-            seg[v.key]=seg.value;
+            seg[v.key]=v.value;
         });
         console.log(seg);
 
