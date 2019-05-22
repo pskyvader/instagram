@@ -173,6 +173,7 @@ class home(base):
         }
         respuesta = {}
         fecha = (datetime.now() - timedelta(month=1)).strftime("%Y-%m-%d")
+        print(fecha)
         cuentas = igaccounts_model.getAll(
             {"follower": True, "DATE(fecha) <": fecha}, {"order": "fecha ASC"}, "fecha"
         )
