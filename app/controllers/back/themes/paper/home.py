@@ -9,6 +9,7 @@ from app.models.administrador import administrador as administrador_model
 from app.models.igaccounts import igaccounts as igaccounts_model
 from app.models.ighashtag import ighashtag as ighashtag_model
 from app.models.igtotal import igtotal as igtotal_model
+from app.models.configuracion import configuracion as configuracion_model
 
 import json
 
@@ -171,8 +172,10 @@ class home(base):
             "headers": [("Content-Type", "application/json; charset=utf-8")],
             "body": "",
         }
+        
+        days_seguidores_estadistica=int(configuracion_model.getByVariable('days_seguidores_estadistica',30))
         respuesta = {}
-        fecha = (datetime.now() - timedelta(days=10)).strftime("%Y-%m-%d")
+        fecha = (datetime.now() - timedelta(days=days_seguidores_estadistica)).strftime("%Y-%m-%d")
         cuentas = igaccounts_model.getAll(
             {"follower": True, "DATE(fecha) >": fecha}, {"order": "fecha ASC"}, "fecha"
         )
