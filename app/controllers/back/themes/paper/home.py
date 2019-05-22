@@ -170,7 +170,7 @@ class home(base):
             "body": "",
         }
         respuesta = {}
-        cuentas = igaccounts_model.getAll( {"follower": True}, {"order": "fecha ASC"}, "fecha" )
+        cuentas = igaccounts_model.getAll( {"follower": True,'fecha<':'CURDATE() - INTERVAL 10 DAY'}, {"order": "fecha ASC"}, "fecha" )
         for c in cuentas:
             fecha = functions.formato_fecha(c["fecha"], "%d-%m-%Y")
             if not fecha in respuesta:
