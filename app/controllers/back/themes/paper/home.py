@@ -165,12 +165,18 @@ class home(base):
         return ret
 
     def get_total_followers(self):
+        from datetime import datetime, timedelta
+
         ret = {
             "headers": [("Content-Type", "application/json; charset=utf-8")],
             "body": "",
         }
         respuesta = {}
-        cuentas = igaccounts_model.getAll( {"follower": True,'fecha<':'CURDATE() - INTERVAL 10 DAY'}, {"order": "fecha ASC"}, "fecha" )
+        fecha = datetime.now() - timedelta(month=1)
+        fecha = functions.formato_fecha(fecha, "%d-%m-%Y")
+        cuentas = igaccounts_model.getAll(
+            {"follower": True, "DATE(fecha)<": fecha}, {"order": "fecha ASC"}, "fecha"
+        )
         for c in cuentas:
             fecha = functions.formato_fecha(c["fecha"], "%d-%m-%Y")
             if not fecha in respuesta:
