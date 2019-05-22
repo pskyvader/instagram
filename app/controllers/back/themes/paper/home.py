@@ -174,7 +174,7 @@ class home(base):
         respuesta = {}
         fecha = (datetime.now() - timedelta(days=10)).strftime("%Y-%m-%d")
         cuentas = igaccounts_model.getAll(
-            {"follower": True, "DATE(fecha) <": fecha}, {"order": "fecha ASC"}, "fecha"
+            {"follower": True, "DATE(fecha) >": fecha}, {"order": "fecha ASC"}, "fecha"
         )
         for c in cuentas:
             fecha = functions.formato_fecha(c["fecha"], "%d-%m-%Y")
