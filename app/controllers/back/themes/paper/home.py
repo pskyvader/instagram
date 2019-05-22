@@ -164,7 +164,7 @@ class home(base):
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         return ret
 
-    def get_total(self):
+    def get_total_followers(self):
         ret = {
             "headers": [("Content-Type", "application/json; charset=utf-8")],
             "body": "",
