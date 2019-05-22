@@ -172,10 +172,9 @@ class home(base):
             "body": "",
         }
         respuesta = {}
-        fecha = datetime.now() - timedelta(month=1)
-        fecha = functions.formato_fecha(fecha, "%d-%m-%Y")
+        fecha = datetime.now() - timedelta(month=1).strftime("%Y-%m-%d")
         cuentas = igaccounts_model.getAll(
-            {"follower": True, "DATE(fecha)<": fecha}, {"order": "fecha ASC"}, "fecha"
+            {"follower": True, "DATE(fecha) <": fecha}, {"order": "fecha ASC"}, "fecha"
         )
         for c in cuentas:
             fecha = functions.formato_fecha(c["fecha"], "%d-%m-%Y")
