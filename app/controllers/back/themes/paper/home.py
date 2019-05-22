@@ -64,7 +64,7 @@ class home(base):
             "body": "",
         }
         respuesta = {}
-        respuesta['total']=igaccounts_model.getAll(select='total')
+        respuesta["total"] = igaccounts_model.getAll(select="total")
         where = {"follower": True}
         respuesta["follower"] = igaccounts_model.getAll(where, select="total")
         where = {"following": True}
@@ -73,12 +73,16 @@ class home(base):
         respuesta["both"] = igaccounts_model.getAll(where, select="total")
         where = {"favorito": True}
         respuesta["favoritos"] = igaccounts_model.getAll(where, select="total")
-        where={'favorito':True,'follower':True}
-        respuesta['favoritos-follower']=igaccounts_model.getAll(where,select='total')
-        where={'favorito':True,'following':True}
-        respuesta['favoritos-following']=igaccounts_model.getAll(where,select='total')
-        where={'favorito':True,'follower':True,'following':True}
-        respuesta['favoritos-follower-following']=igaccounts_model.getAll(where,select='total')
+        where = {"favorito": True, "follower": True}
+        respuesta["favoritos-follower"] = igaccounts_model.getAll(where, select="total")
+        where = {"favorito": True, "following": True}
+        respuesta["favoritos-following"] = igaccounts_model.getAll(
+            where, select="total"
+        )
+        where = {"favorito": True, "follower": True, "following": True}
+        respuesta["favoritos-follower-following"] = igaccounts_model.getAll(
+            where, select="total"
+        )
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         return ret
 
@@ -88,28 +92,33 @@ class home(base):
             "body": "",
         }
         respuesta = {}
-        # respuesta['total']=igaccounts_model.getAll(select='total')
-        followers={}
-        following={}
-        removed={}
-        eficiencia={}
-        hashtag = ighashtag_model.getAll({'estado':True})
+        followers = {}
+        following = {}
+        removed = {}
+        eficiencia = {}
+        hashtag = ighashtag_model.getAll({"estado": True})
         for h in hashtag:
-            nombre=h["hashtag"].capitalize();
-            f = igaccounts_model.getAll( {"hashtag": h["hashtag"],'follower':True}, select="total" )
-            fl = igaccounts_model.getAll( {"hashtag": h["hashtag"],'following':True}, select="total" )
-            r = igaccounts_model.getAll( {"hashtag": h["hashtag"],'following':False}, select="total" )
-            porcentaje=(f/(fl+r))*100
-            porcentaje=round(porcentaje, 2)
-            followers[nombre]=f
-            following[nombre]=fl
-            removed[nombre]=r
-            eficiencia[nombre]=porcentaje
+            nombre = h["hashtag"].capitalize()
+            f = igaccounts_model.getAll(
+                {"hashtag": h["hashtag"], "follower": True}, select="total"
+            )
+            fl = igaccounts_model.getAll(
+                {"hashtag": h["hashtag"], "following": True}, select="total"
+            )
+            r = igaccounts_model.getAll(
+                {"hashtag": h["hashtag"], "following": False}, select="total"
+            )
+            porcentaje = (f / (fl + r)) * 100
+            porcentaje = round(porcentaje, 2)
+            followers[nombre] = f
+            following[nombre] = fl
+            removed[nombre] = r
+            eficiencia[nombre] = porcentaje
 
-        respuesta['followers']=followers
-        respuesta['following']=following
-        respuesta['removed']=removed
-        respuesta['eficiencia']=eficiencia
+        respuesta["followers"] = followers
+        respuesta["following"] = following
+        respuesta["removed"] = removed
+        respuesta["eficiencia"] = eficiencia
 
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         return ret
@@ -119,15 +128,25 @@ class home(base):
             "headers": [("Content-Type", "application/json; charset=utf-8")],
             "body": "",
         }
-        respuesta = { "follows": {}, "unfollows": {}, "start_follow": {}, "stop_follow": {}, }
+        respuesta = {
+            "follows": {},
+            "unfollows": {},
+            "start_follow": {},
+            "stop_follow": {},
+        }
         totales = igtotal_model.getAll(condiciones={"order": "fecha ASC"})
 
         for t in totales:
-            fecha = functions.formato_fecha(t["fecha"],'%d-%m-%Y')
+            fecha = functions.formato_fecha(t["fecha"], "%d-%m-%Y")
             tag = t["tag"]
             cantidad = t["cantidad"]
 
-            if ( tag == "follows" or tag == "unfollows" or tag == "start_follow" or tag == "stop_follow" ):
+            if (
+                tag == "follows"
+                or tag == "unfollows"
+                or tag == "start_follow"
+                or tag == "stop_follow"
+            ):
                 if fecha not in respuesta["follows"]:
                     respuesta["follows"][fecha] = 0
 
@@ -142,5 +161,20 @@ class home(base):
 
                 respuesta[tag][fecha] = cantidad
 
+        ret["body"] = json.dumps(respuesta, ensure_ascii=False)
+        return ret
+
+    def get_total(self):
+        ret = {
+            "headers": [("Content-Type", "application/json; charset=utf-8")],
+            "body": "",
+        }
+        respuesta = {}
+        cuentas = igaccounts_model.getAll( {"follower": True}, {"order": "fecha ASC"}, "fecha" )
+        for c in cuentas:
+            fecha = functions.formato_fecha(c["fecha"], "%d-%m-%Y")
+            if not fecha in respuesta:
+                respuesta[fecha] = 0
+            respuesta[fecha] += 1
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         return ret
