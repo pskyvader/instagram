@@ -10,9 +10,9 @@ var chartColors = {
 
 function inicio_graficos() {
     chart_followers();
+    chart_total_followers();
     chart_hashtag();
     chart_total();
-    chart_total_followers();
     $('.progress-bar').css('width', "50%");
 }
 
