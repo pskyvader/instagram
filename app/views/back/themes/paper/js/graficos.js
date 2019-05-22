@@ -12,11 +12,22 @@ function inicio_graficos() {
     chart_followers();
     chart_hashtag();
     chart_total();
+    chart_total_followers();
     $('.progress-bar').css('width', "50%");
 }
 
 
 function chart_total() {
+    var url = create_url(modulo, 'get_total_followers');
+    post_basic(url, {}, 'Adquiriendo Seguidores Totales', function(data) {
+        var data_follows = generar_response(data, 'Usuarios', 'orange');
+        generar_grafico($('#chart-total-followers'), data_follows, 'line');
+    });
+}
+
+
+
+function chart_total_followers() {
     var url = create_url(modulo, 'get_total');
     post_basic(url, {}, 'Adquiriendo Totales', function(data) {
         var data_follows = generar_response(data.follows, 'Siguiendo', 'red');
