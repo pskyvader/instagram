@@ -183,7 +183,6 @@ class instagram_bot():
                     h['followers'] = igaccounts_model.getAll( {"hashtag": h["hashtag"]}, select="total")
                 
                 hashtags=sorted(hashtags, key = lambda i: i['followers'])
-                print('hashtags',hashtags,sep='\n')
 
                 hashtags_total=len(hashtags)
                 proporcion=100/hashtags_total
