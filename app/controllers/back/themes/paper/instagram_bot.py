@@ -193,8 +193,8 @@ class instagram_bot():
                         if not bot.reached_limit('follows'):
                             bot.console_print("Siguiendo usuarios con hashtag: " + h)
                             users = bot.get_hashtag_users(h)
-                            #primeros 20 usuarios solamente, para emparejar la cantidad de usuarios por hashtag
-                            users=users[:20]
+                            #primeros 50 usuarios solamente, para emparejar la cantidad de usuarios por hashtag
+                            users=users[:50]
                             bot.follow_users(users,base,proporcion,h)
                             if bot.api.fatal_error:
                                 respuesta['exito']=False
