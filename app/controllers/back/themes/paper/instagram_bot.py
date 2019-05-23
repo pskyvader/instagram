@@ -167,6 +167,7 @@ class instagram_bot():
 
 
     def follow(self,accion):
+        from math import log10
         respuesta = {"exito": False, "mensaje": ""}
 
         if self.bot==None:
@@ -193,8 +194,10 @@ class instagram_bot():
                         if not bot.reached_limit('follows'):
                             bot.console_print("Siguiendo usuarios con hashtag: " + h)
                             users = bot.get_hashtag_users(h)
-                            #primeros 20 usuarios solamente, para emparejar la cantidad de usuarios por hashtag
-                            users=users[:20]
+                            #Calculo para emparejar la cantidad de usuarios por hashtag
+                            this_hashtag= (65/(log10(k+1)+1))-20 #curva logaritmica inversa (1,45) (40,4.98)
+                            this_hashtag=int(this_hashtag)
+                            users=users[:this_hashtag]
                             bot.follow_users(users,base,proporcion,h)
                             if bot.api.fatal_error:
                                 respuesta['exito']=False
