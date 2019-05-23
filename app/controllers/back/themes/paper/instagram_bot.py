@@ -179,6 +179,12 @@ class instagram_bot():
         if respuesta['exito']:
             if accion=='hashtag':
                 hashtags = ighashtag_model.getAll({'estado':True})
+                for h in hashtags:
+                    h['followers'] = igaccounts_model.getAll( {"hashtag": h["hashtag"]}, select="total")
+                
+                hashtags=sorted(hashtags, key = lambda i: i['followers'])
+                print(hashtags)
+
                 hashtags_total=len(hashtags)
                 proporcion=100/hashtags_total
                 while not bot.reached_limit('follows') and not bot.api.fatal_error:
