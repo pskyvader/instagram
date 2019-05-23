@@ -227,7 +227,8 @@ class API(object):
             except JSONDecodeError:
                 return False
         else:
-            self.logger.error("Request returns {} error!".format(response.status_code))
+            if response.status_code != 429:
+                self.logger.error("Request returns {} error!".format(response.status_code))
             bot_support.console_print(
                 bot_support,
                 "Request returns {} error!".format(response.status_code),
