@@ -113,8 +113,9 @@ class instagram(base):
     
         ig=instagram_bot()
         bot=ig.bot
-        for u in users:
-            bot.unfollowed_file.append(u['pk'],show_message=False)
+        for k,u in enumerate(users):
+            show_message=True if (k%100)==0 else False
+            bot.unfollowed_file.append(u['pk'],show_message=show_message)
             igaccounts_model.delete(u[0],False)
         
         respuesta['exito']=True
