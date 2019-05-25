@@ -28,9 +28,9 @@ class file(object):
     def __len__(self):
         return len(self.list)
 
-    def append(self, item, allow_duplicates=False):
+    def append(self, item, allow_duplicates=False,show_message=True):
         from instabot.bot import bot_support
-        if self.verbose:
+        if self.verbose and show_message:
             msg = "Adding '{}' to `{}`.".format(item, self.fname)
             bot_support.console_print(bot_support,msg,color='green',bold_text=True)
 
