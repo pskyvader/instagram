@@ -117,6 +117,8 @@ class instagram(base):
             bot.unfollowed_file.append(u['pk'],show_message=False)
             igaccounts_model.delete(u[0],False)
         
+        respuesta['exito']=True
+        
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         socket.close()
         return ret
