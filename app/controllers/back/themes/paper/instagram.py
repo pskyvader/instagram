@@ -114,7 +114,7 @@ class instagram(base):
         ig=instagram_bot()
         bot=ig.bot
         for u in users:
-            bot.unfollowed_file.append(u['pk'])
+            bot.unfollowed_file.append(u['pk'],show_message=False)
             igaccounts_model.delete(u[0],False)
         
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
