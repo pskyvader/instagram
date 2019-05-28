@@ -221,28 +221,39 @@ class instagram_bot():
         else:
             bot=self.bot
             respuesta['exito']=True
+
+        if respuesta['exito'] and bot.reached_limit('unfollows'):
+            bot.console_print("Limite alcanzado por hoy.")
+            respuesta['exito']=False
+            respuesta['mensaje']='Limite alcanzado'
         
         if respuesta['exito']:
             if accion=='nonfollower':
                 days_unfollow=int(configuracion_model.getByVariable('days_unfollow',5))
                 fecha_limite=(datetime.datetime.now() - datetime.timedelta(days=days_unfollow)).strftime("%Y-%m-%d")
-                non_followers=igaccounts_model.getAll({'following':True,'follower':False,'favorito':False,'DATE(fecha) <':fecha_limite})
-                non_followers=list(f['pk'] for f in non_followers)
-                total_non_followers=len(non_followers)
+                user_list=igaccounts_model.getAll({'following':True,'follower':False,'favorito':False,'DATE(fecha) <':fecha_limite})
+            elif accion=='old':
+                days_unfollow=int(configuracion_model.getByVariable('days_unfollow_old',20))
+                fecha_limite=(datetime.datetime.now() - datetime.timedelta(days=days_unfollow)).strftime("%Y-%m-%d")
+                user_list=igaccounts_model.getAll({'following':True,'favorito':False,'DATE(fecha) <':fecha_limite})
 
-                for k, user_id in enumerate(non_followers):
-                    if bot.reached_limit('unfollows'):
-                        bot.console_print("Limite alcanzado por hoy.")
-                        respuesta['exito']=False
-                        respuesta['mensaje']='Limite alcanzado'
+            user_list=list(f['pk'] for f in user_list)
+            total_user_list=len(user_list)
+
+            for k, user_id in enumerate(user_list):
+                if bot.reached_limit('unfollows'):
+                    bot.console_print("Limite alcanzado por hoy.")
+                    respuesta['exito']=False
+                    respuesta['mensaje']='Limite alcanzado'
+                    break
+                progress=(k/total_user_list)*100
+                respuesta['exito']=bot.unfollow(user_id,progress)
+                if not respuesta['exito']:
+                    if bot.api.fatal_error:
+                        respuesta['mensaje']='Error Fatal'
                         break
-                    progress=(k/total_non_followers)*100
-                    respuesta['exito']=bot.unfollow(user_id,progress)
-                    if not respuesta['exito']:
-                        if bot.api.fatal_error:
-                            respuesta['mensaje']='Error Fatal'
 
-                            break
+
             bot.console_print("Completado", progress=100)
         return respuesta
 

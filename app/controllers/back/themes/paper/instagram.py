@@ -213,7 +213,18 @@ class instagram(base):
 
         ig.bot.console_print("Siguiendo por hashtag") 
         respuesta = ig.follow('hashtag')
+
+        if not respuesta['exito']:
+            ig.bot.console_print("Hubo un error al seguir por hashtag. Reiniciando bot para el siguiente paso")
+            ig=instagram_bot()
+
+        ig.bot.console_print("Dejando de seguir seguidores antiguos")
+        respuesta = ig.unfollow('old')
+
         ig.bot.console_print("Todos los pasos completados")
+
+
+
         if len(var)==0:
             ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         socket.close()
