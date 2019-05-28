@@ -20,6 +20,17 @@ function accion_instagram(accion,id,mensaje){
 
 
 function fin_instagram(data) {
+    if (typeof(data) != 'object') {
+        try {
+            data = JSON.parse(data);
+        } catch (e) {
+            data = {
+                mensaje: data,
+                exito: false
+            };
+        }
+    }
+    
     if (data.exito){
         if(data.mensaje){
             notificacion('Completado', data.mensaje, 'success');
