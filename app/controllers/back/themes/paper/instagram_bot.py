@@ -231,11 +231,11 @@ class instagram_bot():
             if accion=='nonfollower':
                 days_unfollow=int(configuracion_model.getByVariable('days_unfollow',5))
                 fecha_limite=(datetime.datetime.now() - datetime.timedelta(days=days_unfollow)).strftime("%Y-%m-%d")
-                user_list=igaccounts_model.getAll({'following':True,'follower':False,'favorito':False,'DATE(fecha) <':fecha_limite})
+                user_list=igaccounts_model.getAll({'following':True,'follower':False,'favorito':False,'DATE(fecha) <':fecha_limite},select='pk')
             elif accion=='old':
                 days_unfollow=int(configuracion_model.getByVariable('days_unfollow_old',20))
                 fecha_limite=(datetime.datetime.now() - datetime.timedelta(days=days_unfollow)).strftime("%Y-%m-%d")
-                user_list=igaccounts_model.getAll({'following':True,'favorito':False,'DATE(fecha) <':fecha_limite})
+                user_list=igaccounts_model.getAll({'following':True,'favorito':False,'DATE(fecha) <':fecha_limite},select='pk')
 
             user_list=list(f['pk'] for f in user_list)
             total_user_list=len(user_list)
