@@ -205,7 +205,7 @@ class igaccounts(base_model):
         data["is_business"] = user_info["is_business"]
         data["is_verified"] = user_info["is_verified"]
         data["media_count"] = user_info["media_count"]
-        data["datos"] = json.dumps(user_info)
+        #data["datos"] = json.dumps(user_info)
         data["fecha"] = functions.current_time()
         data["following"] = False
         data["follower"] = False
@@ -245,5 +245,5 @@ class igaccounts(base_model):
         data["is_business"] = user_info["is_business"]
         data["is_verified"] = user_info["is_verified"]
         data["media_count"] = user_info["media_count"]
-        data["datos"] = json.dumps(user_info)
+        #data["datos"] = json.dumps(user_info)
         return cls.update(data, False)
