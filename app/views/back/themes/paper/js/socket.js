@@ -7,6 +7,7 @@ websocket = null;
 function websocket_start() {
     if (window.WebSocket !== undefined) {
         if (websocket == null) {
+            websocket=0;
             $.ajax({
                 url: wsUri_start + 'port.txt',
                 crossDomain: true,

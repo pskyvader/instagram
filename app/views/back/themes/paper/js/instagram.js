@@ -7,7 +7,7 @@ $('body').on('click', 'button.accion_instagram', function() {
 });
 
 function accion_instagram(accion,id,mensaje){
-    websocket_start()
+    websocket_start();
     if(websocket == null){
         leer_log_instagram();
     }
