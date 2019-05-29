@@ -1,16 +1,17 @@
-instagram_finalizado=false;
+instagram_finalizado = false;
 $('body').on('click', 'button.accion_instagram', function() {
     var accion = $(this).data('action');
     var id = $(this).data('id');
     var mensaje = $(this).data('mensaje');
-    accion_instagram(accion,id,mensaje);
+    accion_instagram(accion, id, mensaje);
 });
 
-function accion_instagram(accion,id,mensaje){
-    websocket_start();
-    if(websocket == null){
-        leer_log_instagram();
-    }
+function accion_instagram(accion, id, mensaje) {
+    websocket_start(function() {
+        if (websocket == null) {
+            leer_log_instagram();
+        }
+    });
     post(create_url(modulo, accion), {
         id: id
     }, mensaje, false, null, fin_instagram);
@@ -30,9 +31,9 @@ function fin_instagram(data) {
             };
         }
     }
-    
-    if (data.exito){
-        if(data.mensaje){
+
+    if (data.exito) {
+        if (data.mensaje) {
             notificacion('Completado', data.mensaje, 'success');
         }
         if (data.porcentaje) {
@@ -43,7 +44,7 @@ function fin_instagram(data) {
         }
     }
     setTimeout(websocket_stop, 1000);
-    instagram_finalizado=true;
+    instagram_finalizado = true;
 }
 
 

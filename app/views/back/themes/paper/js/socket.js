@@ -27,8 +27,9 @@ function websocket_start(callback) {
                     websocket.onerror = function(evt) {
                         onError(evt)
                     };
-                },error: function () {
-                    if (typeof(callback)!='undefined'){
+                },
+                error: function() {
+                    if (typeof(callback) != 'undefined') {
                         callback();
                     }
                 }
@@ -36,7 +37,7 @@ function websocket_start(callback) {
         }
     } else {
         console.log("sockets not supported");
-        if (typeof(callback)!='undefined'){
+        if (typeof(callback) != 'undefined') {
             callback();
         }
     }
@@ -84,16 +85,16 @@ function onMessage(evt) {
             if (message != '') {
                 notificacion_footer(message);
                 if ($('#log_instagram').length > 0) {
-                    p=$('<p></p>');
-                    if(data && data.color){
-                        p.css('color',data.color);
+                    p = $('<p></p>');
+                    if (data && data.color) {
+                        p.css('color', data.color);
                     }
-                    if(data && data.bold){
-                        p.css('font-weight','bold');
-                    }else{
-                        p.css('font-weight','regular');
+                    if (data && data.bold) {
+                        p.css('font-weight', 'bold');
+                    } else {
+                        p.css('font-weight', 'regular');
                     }
-                    
+
                     $('#log_instagram').prepend(p.append(message));
                 }
             }
