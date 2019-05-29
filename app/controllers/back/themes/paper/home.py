@@ -100,7 +100,7 @@ class home(base):
         hashtag = ighashtag_model.getAll({"estado": True})
 
         hashtag2= {h['hashtag']:{'follower':0,'following':0,'removed':0} for h in hashtag }
-        users=igaccounts_model.getAll( {"hashtag !": ""},select='pk,follower,following')
+        users=igaccounts_model.getAll( {"hashtag !": ""},select='hashtag,follower,following')
         for u in users:
             if u['hashtag'] in hashtag2:
                 hashtag2[u['hashtag']]['follower']+=(1 if u['follower'] else 0)
