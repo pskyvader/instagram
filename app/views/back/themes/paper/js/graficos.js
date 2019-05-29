@@ -201,7 +201,6 @@ function chart_followers() {
                 var height = Math.max($(window).height() * 0.5, 500);
                 var chart = venn.VennDiagram().width(width).height(height);
                 d3.select("#chart-seguidores").datum(sets).call(chart);
-
             }
         });
     });
