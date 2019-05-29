@@ -4,10 +4,9 @@ var wsUri_start = "http://socket.mysitio.cl/";
 var intento = 0;
 websocket = null;
 
-function websocket_start() {
+function websocket_start(callback) {
     if (window.WebSocket !== undefined) {
         if (websocket == null) {
-            websocket=0;
             $.ajax({
                 url: wsUri_start + 'port.txt',
                 crossDomain: true,
@@ -28,11 +27,18 @@ function websocket_start() {
                     websocket.onerror = function(evt) {
                         onError(evt)
                     };
-                },
+                },error: function () {
+                    if (typeof(callback)!='undefined'){
+                        callback();
+                    }
+                }
             });
         }
     } else {
         console.log("sockets not supported");
+        if (typeof(callback)!='undefined'){
+            callback();
+        }
     }
 }
 
