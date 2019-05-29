@@ -196,10 +196,14 @@ function chart_followers() {
 
         generar_venn(sets, "#chart-seguidores", 'Usuarios');
         $(window).on('resize', function() {
-            var width = $("#chart-seguidores").innerWidth();
-            var height = Math.max($(window).height() * 0.5, 500);
-            var chart = venn.VennDiagram().width(width).height(height);
-            d3.select("#chart-seguidores").datum(sets).call(chart);
+            console.log($("#chart-seguidores").length());
+            if ($("#chart-seguidores").length() > 0) {
+                var width = $("#chart-seguidores").innerWidth();
+                var height = Math.max($(window).height() * 0.5, 500);
+                var chart = venn.VennDiagram().width(width).height(height);
+                d3.select("#chart-seguidores").datum(sets).call(chart);
+
+            }
         });
     });
 }
