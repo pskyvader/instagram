@@ -99,43 +99,43 @@ class home(base):
         eficiencia = {}
         hashtag = ighashtag_model.getAll({"estado": True})
 
-        hashtag2= {h['hashtag']:{'follower':0,'following':0,'removed':0} for h in hashtag }
-        users=igaccounts_model.getAll( {"hashtag !": ""},select='hashtag,follower,following')
-        for u in users:
-            if u['hashtag'] in hashtag2:
-                hashtag2[u['hashtag']]['follower']+=(1 if u['follower'] else 0)
-                hashtag2[u['hashtag']]['following']+=(1 if u['following'] else 0)
-                hashtag2[u['hashtag']]['removed']+=(1 if not u['following'] else 0)
-        for k,h in hashtag2.items():
-            nombre = k.capitalize()
-            f = h['follower']
-            fl = h['following']
-            r = h['removed']
-            porcentaje = (f / (fl + r)) * 100
-            porcentaje = round(porcentaje, 2)
-            followers[nombre] = f
-            following[nombre] = fl
-            removed[nombre] = r
-            eficiencia[nombre] = porcentaje
-
-
-        # for h in hashtag:
-        #     nombre = h["hashtag"].capitalize()
-        #     f = igaccounts_model.getAll(
-        #         {"hashtag": h["hashtag"], "follower": True}, select="total"
-        #     )
-        #     fl = igaccounts_model.getAll(
-        #         {"hashtag": h["hashtag"], "following": True}, select="total"
-        #     )
-        #     r = igaccounts_model.getAll(
-        #         {"hashtag": h["hashtag"], "following": False}, select="total"
-        #     )
+        # hashtag2= {h['hashtag']:{'follower':0,'following':0,'removed':0} for h in hashtag }
+        # users=igaccounts_model.getAll( {"hashtag !": ""},select='hashtag,follower,following')
+        # for u in users:
+        #     if u['hashtag'] in hashtag2:
+        #         hashtag2[u['hashtag']]['follower']+=(1 if u['follower'] else 0)
+        #         hashtag2[u['hashtag']]['following']+=(1 if u['following'] else 0)
+        #         hashtag2[u['hashtag']]['removed']+=(1 if not u['following'] else 0)
+        # for k,h in hashtag2.items():
+        #     nombre = k.capitalize()
+        #     f = h['follower']
+        #     fl = h['following']
+        #     r = h['removed']
         #     porcentaje = (f / (fl + r)) * 100
         #     porcentaje = round(porcentaje, 2)
         #     followers[nombre] = f
         #     following[nombre] = fl
         #     removed[nombre] = r
         #     eficiencia[nombre] = porcentaje
+
+
+        for h in hashtag:
+            nombre = h["hashtag"].capitalize()
+            f = igaccounts_model.getAll(
+                {"hashtag": h["hashtag"], "follower": True}, select="total"
+            )
+            fl = igaccounts_model.getAll(
+                {"hashtag": h["hashtag"], "following": True}, select="total"
+            )
+            r = igaccounts_model.getAll(
+                {"hashtag": h["hashtag"], "following": False}, select="total"
+            )
+            porcentaje = (f / (fl + r)) * 100
+            porcentaje = round(porcentaje, 2)
+            followers[nombre] = f
+            following[nombre] = fl
+            removed[nombre] = r
+            eficiencia[nombre] = porcentaje
 
         respuesta["followers"] = followers
         respuesta["following"] = following
