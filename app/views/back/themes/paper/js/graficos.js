@@ -196,6 +196,7 @@ function chart_followers() {
 
         generar_venn(sets, "#chart-seguidores", 'Usuarios');
         $(window).on('resize', function() {
+            console.log($("#chart-seguidores"));
             console.log($("#chart-seguidores").size());
             if ($("#chart-seguidores").size() > 0) {
                 var width = $("#chart-seguidores").innerWidth();
