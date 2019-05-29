@@ -56,7 +56,7 @@ def follow_users(self, user_ids,base=0,proporcion=1,hashtag=''):
     unfollowed = self.unfollowed_file
 
     # Remove skipped and already followed and unfollowed list from user_ids
-    following=igaccounts_model.getAll()
+    following=igaccounts_model.getAll(select='pk')
     following=(f['pk'] for f in following)
     user_ids = list(set(user_ids) - skipped.set - followed.set - unfollowed.set - set(following))
 
