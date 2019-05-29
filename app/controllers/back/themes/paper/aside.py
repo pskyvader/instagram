@@ -140,7 +140,7 @@ class aside:
             data['name'] = administrador["nombre"]
             data['email'] = administrador["email"]
             data['url_admin'] = functions.generar_url(
-                ["administrador", "detail", administrador[0], 'profile'], {'tipo': tipo_admin})
+                ["administrador", "detail", administrador[0]], {'tipo': tipo_admin})
             data['img_admin'] = image.generar_url(
                 administrador["foto"][0], 'profile')
 
