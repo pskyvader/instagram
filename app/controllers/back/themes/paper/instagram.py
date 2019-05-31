@@ -9,6 +9,7 @@ from app.models.configuracion import configuracion as configuracion_model
 
 from app.models.igusuario import igusuario as igusuario_model
 from app.models.igaccounts import igaccounts as igaccounts_model
+from app.models.ighashtag import ighashtag as ighashtag_model
 
 # from .detalle import detalle as detalle_class
 # from .lista import lista as lista_class
@@ -109,6 +110,21 @@ class instagram(base):
             "body": "",
         }
         respuesta={'exito':False,'mensaje':''}
+
+        
+        hashtag = ighashtag_model.getAll({"estado": True})
+        hashtag2 = { h["hashtag"]: {"follower": 0, "following": 0, "removed": 0} for h in hashtag }
+        f = igaccounts_model.getAll( {"follower": True,'hashtag!':''}, {"group": "hashtag"}, "count(pk) as total,hashtag" )
+
+        delete_hashtag=set()
+        for u in f:
+            if u["hashtag"] in hashtag2:
+                hashtag2[u["hashtag"]]["follower"] = u["total"]
+            else:
+                delete_hashtag.add(u["hashtag"])
+
+
+
         users=igaccounts_model.getAll({'follower':False,'following':False,'favorito':False,'hashtag':''})
     
         ig=instagram_bot()
