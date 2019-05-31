@@ -111,17 +111,19 @@ class instagram(base):
         }
         respuesta={'exito':False,'mensaje':''}
 
-        
-        hashtag = ighashtag_model.getAll({"estado": True})
-        hashtag2 = { h["hashtag"]: {"follower": 0, "following": 0, "removed": 0} for h in hashtag }
-        f = igaccounts_model.getAll( {"follower": True,'hashtag!':''}, {"group": "hashtag"}, "count(pk) as total,hashtag" )
+        hashtag = ighashtag_model.getAll({"estado": False})
+        hashtag = [ h["hashtag"] for h in hashtag ]
+        f = igaccounts_model.getAll( {'hashtag!':''}, {"group": "hashtag"}, "count(pk) as total,hashtag" )
 
-        delete_hashtag=set()
+        delete_hashtag=[]
         for u in f:
-            if u["hashtag"] in hashtag2:
-                hashtag2[u["hashtag"]]["follower"] = u["total"]
-            else:
-                delete_hashtag.add(u["hashtag"])
+            if u["hashtag"] in hashtag and u['total']>0:
+                delete_hashtag.append(u["hashtag"])
+        
+        for d in delete_hashtag:
+            user = igaccounts_model.getAll({'hashtag':d})
+            for u in user:
+                igaccounts_model.update({'id':u[0],'hashtag':''},False)
 
 
 
