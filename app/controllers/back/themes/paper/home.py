@@ -200,11 +200,11 @@ class home(base):
             'following':{}
         }
         fecha = (datetime.now() - timedelta(days=days_seguidores_estadistica)).strftime("%Y-%m-%d")
-        follower = igaccounts_model.getAll( {'follower':True,"DATE(fecha) >": fecha}, {"order": "fecha ASC"}, "fecha" )
-        following = igaccounts_model.getAll( {'following':True,"DATE(fecha) >": fecha}, {"order": "fecha ASC"}, "fecha" )
+        follower = igaccounts_model.getAll( {'follower':True,"DATE(fecha) >": fecha}, {"order": "fecha ASC"}, 'DATE_FORMAT(fecha, "%d-%m-%Y") as fecha' )
+        following = igaccounts_model.getAll( {'following':True,"DATE(fecha) >": fecha}, {"order": "fecha ASC"}, 'DATE_FORMAT(fecha, "%d-%m-%Y") as fecha' )
 
         for c in follower:
-            fecha = functions.formato_fecha(c["fecha"], "%d-%m-%Y")
+            #fecha = functions.formato_fecha(c["fecha"], "%d-%m-%Y")
             if not fecha in respuesta['follower']:
                 respuesta['follower'][fecha] = 0
             if not fecha in respuesta['following']:
@@ -213,7 +213,7 @@ class home(base):
             respuesta['follower'][fecha] += 1
         
         for c in following:
-            fecha = functions.formato_fecha(c["fecha"], "%d-%m-%Y")
+            #fecha = functions.formato_fecha(c["fecha"], "%d-%m-%Y")
             if not fecha in respuesta['follower']:
                 respuesta['follower'][fecha] = 0
             if not fecha in respuesta['following']:
