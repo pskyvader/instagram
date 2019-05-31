@@ -230,7 +230,7 @@ function generar_venn(sets, id, title) {
     $(progress).slideUp();
     $.each(div.selectAll("path")._groups[0], function(k, v) {
         $(v).css('fill', randomColor({
-            luminosity: 'dark'
+            luminosity: 'random'
         }));
     });
     div.selectAll("g").on("mouseover", function(d, i) {
