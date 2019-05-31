@@ -221,7 +221,7 @@ function generar_response(initial_data, title, hue,random_hue) {
 
         if (typeof(hue) != 'undefined') {
             if (typeof(random_hue) != 'undefined') {
-                color_base = randomColor({ luminosity: 'bright', hue: hue, format: 'rgba', alpha: 0.2 });
+                color_base = randomColor({ luminosity: 'dark', hue: hue, format: 'rgba', alpha: 0.2 });
             }else{
                 color_base = chartColors[hue];
             }
