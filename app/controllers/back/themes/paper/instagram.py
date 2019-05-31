@@ -92,7 +92,7 @@ class instagram(base):
         return ret
 
     def update(self):
-        ig=instagram_bot()
+        ig = instagram_bot()
         ret = {
             "headers": [("Content-Type", "application/json; charset=utf-8")],
             "body": "",
@@ -102,42 +102,43 @@ class instagram(base):
         socket.close()
         return ret
 
-
     def delete(self):
-        ig=instagram_bot()
+        ig = instagram_bot()
         ret = {
             "headers": [("Content-Type", "application/json; charset=utf-8")],
             "body": "",
         }
-        respuesta={'exito':False,'mensaje':''}
+        respuesta = {"exito": False, "mensaje": ""}
 
         hashtag = ighashtag_model.getAll({"estado": False})
-        hashtag = [ h["hashtag"] for h in hashtag ]
-        f = igaccounts_model.getAll( {'hashtag!':''}, {"group": "hashtag"}, "count(pk) as total,hashtag" )
+        hashtag = [h["hashtag"] for h in hashtag]
+        f = igaccounts_model.getAll(
+            {"hashtag!": ""}, {"group": "hashtag"}, "count(pk) as total,hashtag"
+        )
 
-        delete_hashtag=[]
+        delete_hashtag = []
         for u in f:
-            if u["hashtag"] in hashtag and u['total']>0:
+            if u["hashtag"] in hashtag and u["total"] > 0:
                 delete_hashtag.append(u["hashtag"])
-        
+
         for d in delete_hashtag:
-            user = igaccounts_model.getAll({'hashtag':d})
+            user = igaccounts_model.getAll({"hashtag": d})
             for u in user:
-                igaccounts_model.update({'id':u[0],'hashtag':''},False)
+                igaccounts_model.update({"id": u[0], "hashtag": ""}, False)
 
+        users = igaccounts_model.getAll(
+            {"follower": False, "following": False, "favorito": False, "hashtag": ""}
+        )
 
+        ig = instagram_bot()
+        bot = ig.bot
+        for k, u in enumerate(users):
+            show_message = True if (k % 100) == 0 else False
+            bot.unfollowed_file.append(u["pk"], show_message=show_message)
+            igaccounts_model.delete(u[0], False)
 
-        users=igaccounts_model.getAll({'follower':False,'following':False,'favorito':False,'hashtag':''})
-    
-        ig=instagram_bot()
-        bot=ig.bot
-        for k,u in enumerate(users):
-            show_message=True if (k%100)==0 else False
-            bot.unfollowed_file.append(u['pk'],show_message=show_message)
-            igaccounts_model.delete(u[0],False)
-        
-        respuesta['exito']=True
-        
+        respuesta["exito"] = True
+
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         socket.close()
         return ret
@@ -148,29 +149,28 @@ class instagram(base):
             "body": "",
         }
         respuesta = {"exito": False, "mensaje": ""}
-        if 'campos' in app.post and 'id' in app.post['campos']:
+        if "campos" in app.post and "id" in app.post["campos"]:
             campos = app.post["campos"]
             id = campos["id"]
-            ig=instagram_bot()
-            bot=ig.bot
+            ig = instagram_bot()
+            bot = ig.bot
             if id.isdigit():
-                user=bot.get_user_info(id)
+                user = bot.get_user_info(id)
             else:
-                user_id=bot.get_user_id_from_username(id)
-                user=bot.get_user_info(user_id)
-                
-            if 'pk' not in user:
-                respuesta['mensaje']="No se encontro un usuario valido"
+                user_id = bot.get_user_id_from_username(id)
+                user = bot.get_user_info(user_id)
+
+            if "pk" not in user:
+                respuesta["mensaje"] = "No se encontro un usuario valido"
             else:
-                respuesta['exito']=True
-                respuesta['mensaje']="Usuario: "+user['full_name']
+                respuesta["exito"] = True
+                respuesta["mensaje"] = "Usuario: " + user["full_name"]
         else:
-            respuesta['mensaje']="No se encontraron datos validos"
+            respuesta["mensaje"] = "No se encontraron datos validos"
 
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         socket.close()
         return ret
-
 
     def follow(self):
         ret = {
@@ -178,18 +178,17 @@ class instagram(base):
             "body": "",
         }
         respuesta = {"exito": False, "mensaje": ""}
-        if 'campos' in app.post and 'id' in app.post['campos']:
+        if "campos" in app.post and "id" in app.post["campos"]:
             campos = app.post["campos"]
             accion = campos["id"]
-            ig=instagram_bot()
+            ig = instagram_bot()
             respuesta = ig.follow(accion)
         else:
-            respuesta['mensaje']="No se encontraron datos validos"
+            respuesta["mensaje"] = "No se encontraron datos validos"
 
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         socket.close()
         return ret
-
 
     def unfollow(self):
         ret = {
@@ -197,55 +196,59 @@ class instagram(base):
             "body": "",
         }
         respuesta = {"exito": False, "mensaje": ""}
-        if 'campos' in app.post and 'id' in app.post['campos']:
+        if "campos" in app.post and "id" in app.post["campos"]:
             campos = app.post["campos"]
             accion = campos["id"]
-            ig=instagram_bot()
+            ig = instagram_bot()
             respuesta = ig.unfollow(accion)
         else:
-            respuesta['mensaje']="No se encontraron datos validos"
+            respuesta["mensaje"] = "No se encontraron datos validos"
 
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         socket.close()
         return ret
-    
-    def complete_process(self,var=[]):
+
+    def complete_process(self, var=[]):
         ret = {
             "headers": [("Content-Type", "application/json; charset=utf-8")],
             "body": "",
         }
         respuesta = {"exito": False, "mensaje": ""}
-        ig=instagram_bot()
+        ig = instagram_bot()
         ig.bot.console_print("Actualizando usuarios")
         respuesta = ig.update()
-        if not respuesta['exito']:
-            ig.bot.console_print("Hubo un error al actualizar usuarios. Reiniciando bot para el siguiente paso")
-            ig=instagram_bot()
+        if not respuesta["exito"]:
+            ig.bot.console_print(
+                "Hubo un error al actualizar usuarios. Reiniciando bot para el siguiente paso"
+            )
+            ig = instagram_bot()
 
         ig.bot.console_print("Dejando de seguir no seguidores")
-        respuesta = ig.unfollow('nonfollower')
-        
-        if not respuesta['exito']:
-            ig.bot.console_print("Hubo un error al dejar de seguir. Reiniciando bot para el siguiente paso")
-            ig=instagram_bot()
+        respuesta = ig.unfollow("nonfollower")
 
-        ig.bot.console_print("Siguiendo por hashtag") 
-        respuesta = ig.follow('hashtag')
+        if not respuesta["exito"]:
+            ig.bot.console_print(
+                "Hubo un error al dejar de seguir. Reiniciando bot para el siguiente paso"
+            )
+            ig = instagram_bot()
 
-        if not respuesta['exito']:
-            ig.bot.console_print("Hubo un error al seguir por hashtag. Reiniciando bot para el siguiente paso")
-            ig=instagram_bot()
+        ig.bot.console_print("Siguiendo por hashtag")
+        respuesta = ig.follow("hashtag")
+
+        if not respuesta["exito"]:
+            ig.bot.console_print(
+                "Hubo un error al seguir por hashtag. Reiniciando bot para el siguiente paso"
+            )
+            ig = instagram_bot()
 
         ig.bot.console_print("Dejando de seguir seguidores antiguos")
-        respuesta = ig.unfollow('old')
+        respuesta = ig.unfollow("old")
 
         ig.bot.console_print("Todos los pasos completados")
 
-
-
-        if len(var)==0:
+        if len(var) == 0:
             ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         socket.close()
-        
 
         return ret
+
