@@ -177,6 +177,8 @@ class cache:
                         os.remove(os.path.join(theme + "cache/", item))
                 f = open(resource_url, "rb").read()
                 f = compress(f)
+                
+                os.makedirs(os.path.join(theme + "cache/"), exist_ok=True)
 
                 file_write = open(cache_file, "wb")
                 file_write.write(f)
