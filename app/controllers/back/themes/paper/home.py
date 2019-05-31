@@ -120,24 +120,36 @@ class home(base):
         #     eficiencia[nombre] = porcentaje
 
         f = igaccounts_model.getAll(
-            {"follower": True}, {"group": "hashtag"}, "count(pk) as total,hashtag"
+            {"follower": True,'hashtag!':''}, {"group": "hashtag"}, "count(pk) as total,hashtag"
         )
         fl = igaccounts_model.getAll(
-            {"following": True}, {"group": "hashtag"}, "count(pk) as total,hashtag"
+            {"following": True,'hashtag!':''}, {"group": "hashtag"}, "count(pk) as total,hashtag"
         )
         r = igaccounts_model.getAll(
-            {"following": False}, {"group": "hashtag"}, "count(pk) as total,hashtag"
+            {"following": False,'hashtag!':''}, {"group": "hashtag"}, "count(pk) as total,hashtag"
         )
 
+        delete_hashtag=[]
         for u in f:
             if u["hashtag"] in hashtag2:
                 hashtag2[u["hashtag"]]["follower"] = u["total"]
+            else:
+                delete_hashtag.append(u["hashtag"])
         for u in fl:
             if u["hashtag"] in hashtag2:
                 hashtag2[u["hashtag"]]["following"] = u["total"]
+            else:
+                delete_hashtag.append(u["hashtag"])
         for u in r:
             if u["hashtag"] in hashtag2:
                 hashtag2[u["hashtag"]]["removed"] = u["total"]
+            else:
+                delete_hashtag.append(u["hashtag"])
+        
+        print(delete_hashtag)
+
+
+        
 
         for k, h in hashtag2.items():
             nombre = k.capitalize()
