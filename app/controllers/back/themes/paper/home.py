@@ -210,14 +210,14 @@ class home(base):
             fecha_inicio += timedelta(days=1)
 
         fecha = (fecha_actual - timedelta(days=days_seguidores_estadistica)).strftime("%Y-%m-%d")
-        follower = igaccounts_model.getAll( {'follower':True,"DATE(fecha) >": fecha}, {"order": "fecha ASC"}, 'DATE_FORMAT(fecha, "%d-%m-%Y") as fecha' )
-        following = igaccounts_model.getAll( {'following':True,"DATE(fecha) >": fecha}, {"order": "fecha ASC"}, 'DATE_FORMAT(fecha, "%d-%m-%Y") as fecha' )
+        follower = igaccounts_model.getAll( {'follower':True,"DATE(fecha) >": fecha}, {"order": "fecha ASC",'group':'DATE_FORMAT(fecha, "%d-%m-%Y")'}, 'count(pk) as total,DATE_FORMAT(fecha, "%d-%m-%Y") as fecha' )
+        following = igaccounts_model.getAll( {'following':True,"DATE(fecha) >": fecha}, {"order": "fecha ASC",'group':'DATE_FORMAT(fecha, "%d-%m-%Y")'}, 'count(pk) as total,DATE_FORMAT(fecha, "%d-%m-%Y") as fecha' )
 
         for c in follower:
-            respuesta['follower'][c["fecha"]] += 1
+            respuesta['follower'][c["fecha"]] =c['total']
         
         for c in following:
-            respuesta['following'][c["fecha"]] += 1
+            respuesta['following'][c["fecha"]] =c['total']
 
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         return ret
