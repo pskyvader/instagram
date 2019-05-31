@@ -205,21 +205,21 @@ class home(base):
 
         for c in follower:
             #fecha = functions.formato_fecha(c["fecha"], "%d-%m-%Y")
-            if not fecha in respuesta['follower']:
-                respuesta['follower'][fecha] = 0
-            if not fecha in respuesta['following']:
-                respuesta['following'][fecha] = 0
+            if not c["fecha"] in respuesta['follower']:
+                respuesta['follower'][c["fecha"]] = 0
+            if not c["fecha"] in respuesta['following']:
+                respuesta['following'][c["fecha"]] = 0
 
-            respuesta['follower'][fecha] += 1
+            respuesta['follower'][c["fecha"]] += 1
         
         for c in following:
             #fecha = functions.formato_fecha(c["fecha"], "%d-%m-%Y")
-            if not fecha in respuesta['follower']:
-                respuesta['follower'][fecha] = 0
-            if not fecha in respuesta['following']:
-                respuesta['following'][fecha] = 0
+            if not c["fecha"] in respuesta['follower']:
+                respuesta['follower'][c["fecha"]] = 0
+            if not c["fecha"] in respuesta['following']:
+                respuesta['following'][c["fecha"]] = 0
 
-            respuesta['following'][fecha] += 1
+            respuesta['following'][c["fecha"]] += 1
         
 
 
