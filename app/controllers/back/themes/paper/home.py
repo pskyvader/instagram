@@ -200,6 +200,7 @@ class home(base):
             'following':{}
         }
 
+        fecha_actual=datetime.now()
         fecha = (fecha_actual - timedelta(days=days_seguidores_estadistica)).strftime("%Y-%m-%d")
         follower = igaccounts_model.getAll( {'follower':True,"DATE(fecha) >": fecha}, {"order": "fecha ASC",'group':'DATE_FORMAT(fecha, "%d-%m-%Y")'}, 'count(pk) as total,DATE_FORMAT(fecha, "%d-%m-%Y") as fecha' )
 
