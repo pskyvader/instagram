@@ -17,7 +17,7 @@ class cache:
             cache.data.append(content)
 
     @staticmethod
-    def delete_cache():
+    def delete_cache2():
         import shutil
         import os
         from .app import app
