@@ -115,7 +115,6 @@ class Bot(object):
         blacklist_file="blacklist.txt",
         comments_file="comments.txt",
         followed_file="followed.txt",
-        followed_date_file="followed_date.txt",
         unfollowed_file="unfollowed.txt",
         skipped_file="skipped.txt",
         friends_file="friends.txt",
@@ -271,7 +270,6 @@ class Bot(object):
 
         # Database files
         self.followed_file = utils.file(followed_file)
-        self.followed_date_file = utils.file(followed_date_file)
         self.unfollowed_file = utils.file(unfollowed_file)
         self.skipped_file = utils.file(skipped_file)
         self.friends_file = utils.file(friends_file)
