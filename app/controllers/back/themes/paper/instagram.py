@@ -110,7 +110,7 @@ class instagram(base):
         }
         respuesta = {"exito": False, "mensaje": ""}
 
-        hashtag = ighashtag_model.getAll({"estado": False})
+        hashtag = ighashtag_model.getAll({"estado": True})
         hashtag = [h["hashtag"] for h in hashtag]
         f = igaccounts_model.getAll(
             {"hashtag!": ""}, {"group": "hashtag"}, "count(pk) as total,hashtag"
@@ -118,7 +118,7 @@ class instagram(base):
 
         delete_hashtag = []
         for u in f:
-            if u["hashtag"] in hashtag and u["total"] > 0:
+            if u["hashtag"] not in hashtag and u["total"] > 0:
                 delete_hashtag.append(u["hashtag"])
 
         for d in delete_hashtag:
