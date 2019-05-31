@@ -210,7 +210,7 @@ function generar_venn(sets, id, title,color) {
 
 
 
-function generar_response(initial_data, title, hue) {
+function generar_response(initial_data, title, hue,random_hue) {
     var label = []
     var final_data = []
     var color = []
@@ -220,17 +220,20 @@ function generar_response(initial_data, title, hue) {
         final_data.push(v);
 
         if (typeof(hue) != 'undefined') {
-            //color_base = randomColor({ luminosity: 'bright', hue: hue, format: 'rgba', alpha: 0.2 });
-            color_base = chartColors[hue];
-            color_border = color_base.replace("0.2", "1");
+            if (typeof(random_hue) != 'undefined') {
+                color_base = randomColor({ luminosity: 'bright', hue: hue, format: 'rgba', alpha: 0.2 });
+            }else{
+                color_base = chartColors[hue];
+            }
         } else {
             color_base = randomColor({
                 luminosity: 'bright',
                 format: 'rgba',
                 alpha: 0.2
             });
-            color_border = color_base.replace("0.2", "1");
         }
+        color_border = color_base.replace("0.2", "1");
+        
         color.push(color_base);
         border.push(color_border);
     });
