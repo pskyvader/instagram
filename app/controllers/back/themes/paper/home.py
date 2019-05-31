@@ -99,43 +99,57 @@ class home(base):
         eficiencia = {}
         hashtag = ighashtag_model.getAll({"estado": True})
 
-        hashtag2= {h['hashtag']:{'follower':0,'following':0,'removed':0} for h in hashtag }
-        users=igaccounts_model.getAll( {"hashtag !": ""},select='hashtag,follower,following')
-        for u in users:
-            if u['hashtag'] in hashtag2:
-                hashtag2[u['hashtag']]['follower']+=(1 if u['follower'] else 0)
-                hashtag2[u['hashtag']]['following']+=(1 if u['following'] else 0)
-                hashtag2[u['hashtag']]['removed']+=(1 if not u['following'] else 0)
-        for k,h in hashtag2.items():
-            nombre = k.capitalize()
-            f = h['follower']
-            fl = h['following']
-            r = h['removed']
-            porcentaje = (f / (fl + r)) * 100
-            porcentaje = round(porcentaje, 2)
-            followers[nombre] = f
-            following[nombre] = fl
-            removed[nombre] = r
-            eficiencia[nombre] = porcentaje
+        hashtag2 = { h["hashtag"]: {"follower": 0, "following": 0, "removed": 0} for h in hashtag }
 
-
-        # for h in hashtag:
-        #     nombre = h["hashtag"].capitalize()
-        #     f = igaccounts_model.getAll(
-        #         {"hashtag": h["hashtag"], "follower": True}, select="total"
-        #     )
-        #     fl = igaccounts_model.getAll(
-        #         {"hashtag": h["hashtag"], "following": True}, select="total"
-        #     )
-        #     r = igaccounts_model.getAll(
-        #         {"hashtag": h["hashtag"], "following": False}, select="total"
-        #     )
+        # users=igaccounts_model.getAll( {"hashtag !": ""},select='hashtag,follower,following')
+        # for u in users:
+        #     if u['hashtag'] in hashtag2:
+        #         hashtag2[u['hashtag']]['follower']+=(1 if u['follower'] else 0)
+        #         hashtag2[u['hashtag']]['following']+=(1 if u['following'] else 0)
+        #         hashtag2[u['hashtag']]['removed']+=(1 if not u['following'] else 0)
+        # for k,h in hashtag2.items():
+        #     nombre = k.capitalize()
+        #     f = h['follower']
+        #     fl = h['following']
+        #     r = h['removed']
         #     porcentaje = (f / (fl + r)) * 100
         #     porcentaje = round(porcentaje, 2)
         #     followers[nombre] = f
         #     following[nombre] = fl
         #     removed[nombre] = r
         #     eficiencia[nombre] = porcentaje
+
+        f = igaccounts_model.getAll(
+            {"follower": True}, {"group": "hashtag"}, "count(pk) as total,hashtag"
+        )
+        fl = igaccounts_model.getAll(
+            {"following": True}, {"group": "hashtag"}, "count(pk) as total,hashtag"
+        )
+        r = igaccounts_model.getAll(
+            {"following": False}, {"group": "hashtag"}, "count(pk) as total,hashtag"
+        )
+
+        for u in f:
+            if u["hashtag"] in hashtag2:
+                hashtag2[u["hashtag"]]["follower"] = u["total"]
+        for u in fl:
+            if u["hashtag"] in hashtag2:
+                hashtag2[u["hashtag"]]["following"] = u["total"]
+        for u in r:
+            if u["hashtag"] in hashtag2:
+                hashtag2[u["hashtag"]]["removed"] = u["total"]
+
+        for k, h in hashtag2.items():
+            nombre = k.capitalize()
+            f = h["follower"]
+            fl = h["following"]
+            r = h["removed"]
+            porcentaje = (f / (fl + r)) * 100
+            porcentaje = round(porcentaje, 2)
+            followers[nombre] = f
+            following[nombre] = fl
+            removed[nombre] = r
+            eficiencia[nombre] = porcentaje
 
         respuesta["followers"] = followers
         respuesta["following"] = following
@@ -193,31 +207,41 @@ class home(base):
             "headers": [("Content-Type", "application/json; charset=utf-8")],
             "body": "",
         }
-        
-        days_seguidores_estadistica=int(configuracion_model.getByVariable('days_seguidores_estadistica',30))
-        respuesta = {
-            'follower':{},
-            'following':{}
-        }
 
-        fecha_actual=datetime.now()
-        fecha_inicio=(fecha_actual - timedelta(days=days_seguidores_estadistica))
+        days_seguidores_estadistica = int(
+            configuracion_model.getByVariable("days_seguidores_estadistica", 30)
+        )
+        respuesta = {"follower": {}, "following": {}}
+
+        fecha_actual = datetime.now()
+        fecha_inicio = fecha_actual - timedelta(days=days_seguidores_estadistica)
 
         while fecha_inicio <= fecha_actual:
             fecha = fecha_inicio.strftime("%d-%m-%Y")
-            respuesta['follower'][fecha] = 0
-            respuesta['following'][fecha] = 0
+            respuesta["follower"][fecha] = 0
+            respuesta["following"][fecha] = 0
             fecha_inicio += timedelta(days=1)
 
-        fecha = (fecha_actual - timedelta(days=days_seguidores_estadistica)).strftime("%Y-%m-%d")
-        follower = igaccounts_model.getAll( {'follower':True,"DATE(fecha) >": fecha}, {"order": "fecha ASC",'group':'DATE_FORMAT(fecha, "%d-%m-%Y")'}, 'count(pk) as total,DATE_FORMAT(fecha, "%d-%m-%Y") as fecha' )
-        following = igaccounts_model.getAll( {'following':True,"DATE(fecha) >": fecha}, {"order": "fecha ASC",'group':'DATE_FORMAT(fecha, "%d-%m-%Y")'}, 'count(pk) as total,DATE_FORMAT(fecha, "%d-%m-%Y") as fecha' )
+        fecha = (fecha_actual - timedelta(days=days_seguidores_estadistica)).strftime(
+            "%Y-%m-%d"
+        )
+        follower = igaccounts_model.getAll(
+            {"follower": True, "DATE(fecha) >": fecha},
+            {"order": "fecha ASC", "group": 'DATE_FORMAT(fecha, "%d-%m-%Y")'},
+            'count(pk) as total,DATE_FORMAT(fecha, "%d-%m-%Y") as fecha',
+        )
+        following = igaccounts_model.getAll(
+            {"following": True, "DATE(fecha) >": fecha},
+            {"order": "fecha ASC", "group": 'DATE_FORMAT(fecha, "%d-%m-%Y")'},
+            'count(pk) as total,DATE_FORMAT(fecha, "%d-%m-%Y") as fecha',
+        )
 
         for c in follower:
-            respuesta['follower'][c["fecha"]] =c['total']
-        
+            respuesta["follower"][c["fecha"]] = c["total"]
+
         for c in following:
-            respuesta['following'][c["fecha"]] =c['total']
+            respuesta["following"][c["fecha"]] = c["total"]
 
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         return ret
+
