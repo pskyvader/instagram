@@ -141,10 +141,10 @@ function chart_followers() {
             // { sets: ['Totales', 'Siguiendo'], label: 'Siguiendo', size: data['following'] },
             { sets: ['Seguidores', 'Siguiendo'], label: 'Seguidores y Siguiendo', size: data['both'] },
             // { sets: ['Totales', 'Favoritos'], label: 'Favoritos', size: data['favoritos'] },
-            // { sets: ['Favoritos', 'Seguidores'], label: 'Favoritos', size: data['favoritos-following'] },
-            // { sets: ['Favoritos', 'Siguiendo'], label: 'Favoritos', size: data['favoritos-follower'] },
+             { sets: ['Favoritos', 'Seguidores'], label: 'Favoritos', size: data['favoritos-following'] },
+             { sets: ['Favoritos', 'Siguiendo'], label: 'Favoritos', size: data['favoritos-follower'] },
             // { sets: ['Totales', 'Seguidores', 'Siguiendo'], label: 'Seguidores y Siguiendo', size: data['both'] },
-            { sets: ['Favoritos', 'Seguidores', 'Siguiendo'], label: 'Favoritos', size: data['favoritos-follower-following'] },
+            // { sets: ['Favoritos', 'Seguidores', 'Siguiendo'], label: 'Favoritos', size: data['favoritos-follower-following'] },
             // { sets: ['Totales', 'Favoritos', 'Seguidores', 'Siguiendo'], label: 'Favoritos', size: data['favoritos-follower-following'] },
         ];
 
