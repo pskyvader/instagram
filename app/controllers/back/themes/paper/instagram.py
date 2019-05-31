@@ -137,6 +137,7 @@ class instagram(base):
             igaccounts_model.delete(u[0], False)
 
         respuesta["exito"] = True
+        respuesta["mensaje"] = "Limpieza completada"
 
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         socket.close()
