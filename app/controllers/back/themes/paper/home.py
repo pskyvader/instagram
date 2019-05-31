@@ -65,7 +65,7 @@ class home(base):
             "body": "",
         }
         respuesta = {}
-        respuesta["total"] = igaccounts_model.getAll(select="total")
+        # respuesta["total"] = igaccounts_model.getAll(select="total")
         where = {"follower": True}
         respuesta["follower"] = igaccounts_model.getAll(where, select="total")
         where = {"following": True}
