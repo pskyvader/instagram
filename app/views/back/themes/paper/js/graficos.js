@@ -75,7 +75,7 @@ function chart_hashtag() {
             seg[v.key] = v.value;
         });
 
-        var data_seguidores = generar_response(seg, 'Seguidores');
+        var data_seguidores = generar_response(seg, 'Seguidores','red',true);
         var options = {
             legend: {
                 display: false
