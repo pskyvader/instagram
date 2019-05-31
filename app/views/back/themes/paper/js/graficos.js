@@ -182,7 +182,7 @@ function generar_venn(sets, id, title) {
     $.each(div.selectAll("path")._groups[0], function(k, v) {
         $(v).css('fill', randomColor({
             luminosity: 'bright',
-            hue: 'random'
+            hue: 'purple'
         }));
     });
     div.selectAll("g").on("mouseover", function(d, i) {
