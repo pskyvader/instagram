@@ -167,7 +167,10 @@ function chart_followers() {
 
 
 
-function generar_venn(sets, id, title) {
+function generar_venn(sets, id, title,color) {
+    if(typeof(color)=='undefined'){
+        color='random';
+    }
     var width = $(id).empty().innerWidth();
     var height = Math.max($(window).height() * 0.5, 500);
     var progress = $(id).siblings()[0];
@@ -182,7 +185,7 @@ function generar_venn(sets, id, title) {
     $.each(div.selectAll("path")._groups[0], function(k, v) {
         $(v).css('fill', randomColor({
             luminosity: 'bright',
-            hue: 'red'
+            hue: color
         }));
     });
     div.selectAll("g").on("mouseover", function(d, i) {
