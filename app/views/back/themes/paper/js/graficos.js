@@ -143,7 +143,7 @@ function chart_followers() {
             // { sets: ['Totales', 'Favoritos'], label: 'Favoritos', size: data['favoritos'] },
             { sets: ['Favoritos', 'Seguidores'], label: 'Favoritos', size: data['favoritos-following'] },
             { sets: ['Favoritos', 'Siguiendo'], label: 'Favoritos', size: data['favoritos-follower'] },
-            
+
             // { sets: ['Totales', 'Seguidores', 'Siguiendo'], label: 'Seguidores y Siguiendo', size: data['both'] },
             { sets: ['Favoritos', 'Seguidores', 'Siguiendo'], label: 'Favoritos', size: data['favoritos-follower-following'] },
             // { sets: ['Totales', 'Favoritos', 'Seguidores', 'Siguiendo'], label: 'Favoritos', size: data['favoritos-follower-following'] },
@@ -174,7 +174,7 @@ function generar_venn(sets, id, title) {
     $(progress).show().css('width', '75%');
     var chart = venn.VennDiagram().width(width).height(height);
     var div = d3.select(id).datum(sets).call(chart);
-    div.selectAll(".venn-circle path").style("fill-opacity", .5).style("stroke-width", 3).style("stroke-opacity", 1);
+    div.selectAll(".venn-circle path").style("fill-opacity", .6).style("stroke-width", 3).style("stroke-opacity", 1);
     div.selectAll("text").style("fill", "white");
     var tooltip = d3.select(id).append("div").attr("class", "venntooltip");
     $(progress).css('width', '100%');
@@ -190,14 +190,14 @@ function generar_venn(sets, id, title) {
         tooltip.transition().duration(40).style("opacity", 1);
         tooltip.text(d.size + " " + title + " " + d.label);
         var selection = d3.select(this).transition("tooltip").duration(400);
-        var opacity = d.sets.length >= 1 ? .8 : 0;
+        var opacity = d.sets.length >= 1 ? .9 : 0;
         selection.select("path").style("stroke-width", 3).style("fill-opacity", opacity).style("stroke", "fff");
     }).on("mousemove", function() {
         tooltip.style("left", (d3.event.offsetX - 30) + "px").style("top", (d3.event.offsetY + 50) + "px");
     }).on("mouseout", function(d, i) {
         tooltip.transition().duration(100).style("opacity", 0);
         var selection = d3.select(this).transition("tooltip").duration(200);
-        var opacity = d.sets.length == 1 ? .5 : 0;
+        var opacity = d.sets.length == 1 ? .6 : 0;
         selection.select("path").style("stroke-width", 3).style("fill-opacity", opacity).style("stroke", "none");
     });
     return chart;
