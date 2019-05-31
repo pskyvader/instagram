@@ -96,11 +96,11 @@ class database():
                 sql += " OR " if (count < len(condiciones['buscar'])) else ""
             sql += ") "
 
-        if 'order' in condiciones:
-            sql += " ORDER BY " + condiciones['order']
-
         if 'group' in condiciones:
             sql += " GROUP BY " + condiciones['group']
+
+        if 'order' in condiciones:
+            sql += " ORDER BY " + condiciones['order']
 
         if 'limit' in condiciones:
             sql += " LIMIT " + str(condiciones['limit'])
