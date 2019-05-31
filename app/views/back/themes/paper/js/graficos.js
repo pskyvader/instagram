@@ -20,7 +20,7 @@ function inicio_graficos() {
 function chart_total() {
     var url = create_url(modulo, 'get_total_followers');
     post_basic(url, {}, 'Adquiriendo Seguidores Totales', function(data) {
-        var data_follower = generar_response(data.follower, 'Seguidores', 'yellow');
+        var data_follower = generar_response(data.follower, 'Seguidores', 'purple');
         var data_following = generar_response(data.following, 'Siguiendo', 'red');
         data_follower.datasets = [
             data_follower.datasets[0],
