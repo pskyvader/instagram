@@ -104,24 +104,15 @@ class home(base):
         fl = igaccounts_model.getAll( {"following": True,'hashtag!':''}, {"group": "hashtag"}, "count(pk) as total,hashtag" )
         r = igaccounts_model.getAll( {"following": False,'hashtag!':''}, {"group": "hashtag"}, "count(pk) as total,hashtag" )
 
-        delete_hashtag=set()
         for u in f:
             if u["hashtag"] in hashtag2:
                 hashtag2[u["hashtag"]]["follower"] = u["total"]
-            else:
-                delete_hashtag.add(u["hashtag"])
         for u in fl:
             if u["hashtag"] in hashtag2:
                 hashtag2[u["hashtag"]]["following"] = u["total"]
-            else:
-                delete_hashtag.add(u["hashtag"])
         for u in r:
             if u["hashtag"] in hashtag2:
                 hashtag2[u["hashtag"]]["removed"] = u["total"]
-            else:
-                delete_hashtag.add(u["hashtag"])
-        
-        print(delete_hashtag)
 
 
         
