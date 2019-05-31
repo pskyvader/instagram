@@ -199,29 +199,25 @@ class home(base):
             'follower':{},
             'following':{}
         }
-        fecha = (datetime.now() - timedelta(days=days_seguidores_estadistica)).strftime("%Y-%m-%d")
+
+        fecha_actual=datetime.now()
+        fecha_inicio=(fecha_actual - timedelta(days=days_seguidores_estadistica))
+
+        while fecha_inicio <= fecha_actual:
+            fecha = fecha_inicio.strftime("%d-%m-%Y")
+            respuesta['follower'][fecha] = 0
+            respuesta['following'][fecha] = 0
+            fecha_inicio += timedelta(days=1)
+
+        fecha = (fecha_actual - timedelta(days=days_seguidores_estadistica)).strftime("%Y-%m-%d")
         follower = igaccounts_model.getAll( {'follower':True,"DATE(fecha) >": fecha}, {"order": "fecha ASC"}, 'DATE_FORMAT(fecha, "%d-%m-%Y") as fecha' )
         following = igaccounts_model.getAll( {'following':True,"DATE(fecha) >": fecha}, {"order": "fecha ASC"}, 'DATE_FORMAT(fecha, "%d-%m-%Y") as fecha' )
 
         for c in follower:
-            #fecha = functions.formato_fecha(c["fecha"], "%d-%m-%Y")
-            if not c["fecha"] in respuesta['follower']:
-                respuesta['follower'][c["fecha"]] = 0
-            if not c["fecha"] in respuesta['following']:
-                respuesta['following'][c["fecha"]] = 0
-
             respuesta['follower'][c["fecha"]] += 1
         
         for c in following:
-            #fecha = functions.formato_fecha(c["fecha"], "%d-%m-%Y")
-            if not c["fecha"] in respuesta['follower']:
-                respuesta['follower'][c["fecha"]] = 0
-            if not c["fecha"] in respuesta['following']:
-                respuesta['following'][c["fecha"]] = 0
-
             respuesta['following'][c["fecha"]] += 1
-        
-
 
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         return ret
