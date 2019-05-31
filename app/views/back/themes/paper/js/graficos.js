@@ -20,8 +20,13 @@ function inicio_graficos() {
 function chart_total() {
     var url = create_url(modulo, 'get_total_followers');
     post_basic(url, {}, 'Adquiriendo Seguidores Totales', function(data) {
-        var data_follows = generar_response(data, 'Usuarios', 'orange');
-        generar_grafico($('#chart-total-followers'), data_follows, 'line');
+        var data_follower = generar_response(data.follower, 'Seguidores', 'orange');
+        var data_following = generar_response(data.following, 'Siguiendo', 'purple');
+        data_follower.datasets = [
+            data_follower.datasets[0],
+            data_following.datasets[0]
+        ];
+        generar_grafico($('#chart-total-followers'), data_follower, 'line');
     });
 }
 

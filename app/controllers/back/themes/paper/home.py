@@ -195,15 +195,24 @@ class home(base):
         }
         
         days_seguidores_estadistica=int(configuracion_model.getByVariable('days_seguidores_estadistica',30))
-        respuesta = {}
+        respuesta = {
+            'follower':{},
+            'following':{}
+        }
         fecha = (datetime.now() - timedelta(days=days_seguidores_estadistica)).strftime("%Y-%m-%d")
-        cuentas = igaccounts_model.getAll(
-            {"follower": True, "DATE(fecha) >": fecha}, {"order": "fecha ASC"}, "fecha"
-        )
+        cuentas = igaccounts_model.getAll( {"DATE(fecha) >": fecha}, {"order": "fecha ASC"}, "fecha,follower,following" )
         for c in cuentas:
             fecha = functions.formato_fecha(c["fecha"], "%d-%m-%Y")
-            if not fecha in respuesta:
-                respuesta[fecha] = 0
-            respuesta[fecha] += 1
+            if not fecha in respuesta['follower']:
+                respuesta['follower'][fecha] = 0
+            if not fecha in respuesta['following']:
+                respuesta['following'][fecha] = 0
+
+            if c['follower']:
+                respuesta['follower'][fecha] += 1
+            if c['following']:
+                respuesta['following'][fecha] += 1
+
+
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         return ret
