@@ -17,7 +17,7 @@ class cache:
             cache.data.append(content)
 
     @staticmethod
-    def delete_cache2():
+    def delete_cache():
         import shutil
         import os
         from .app import app
@@ -40,9 +40,8 @@ class cache:
         if os.path.exists(directory):
             shutil.rmtree(directory)
 
-        directory = (
-            app.app_dir + "views/back/themes/" + config["theme_back"] + "/cache/"
-        )
+        directory = app.app_dir + "views/back/themes/" + config["theme_back"] + "/cache/"
+        
         if os.path.exists(directory):
             shutil.rmtree(directory)
 
