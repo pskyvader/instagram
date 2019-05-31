@@ -103,7 +103,6 @@ class instagram(base):
         return ret
 
     def delete(self):
-        ig = instagram_bot()
         ret = {
             "headers": [("Content-Type", "application/json; charset=utf-8")],
             "body": "",
