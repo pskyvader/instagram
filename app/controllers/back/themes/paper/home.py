@@ -200,17 +200,10 @@ class home(base):
             'following':{}
         }
 
-        fecha_actual=datetime.now()
-        fecha_inicio=(fecha_actual - timedelta(days=days_seguidores_estadistica))
-
-        while fecha_inicio <= fecha_actual:
-            fecha = fecha_inicio.strftime("%d-%m-%Y")
-            respuesta['follower'][fecha] = 0
-            respuesta['following'][fecha] = 0
-            fecha_inicio += timedelta(days=1)
-
         fecha = (fecha_actual - timedelta(days=days_seguidores_estadistica)).strftime("%Y-%m-%d")
         follower = igaccounts_model.getAll( {'follower':True,"DATE(fecha) >": fecha}, {"order": "fecha ASC",'group':'DATE_FORMAT(fecha, "%d-%m-%Y")'}, 'count(pk) as total,DATE_FORMAT(fecha, "%d-%m-%Y") as fecha' )
+
+        fecha = (fecha_actual - timedelta(days=10)).strftime("%Y-%m-%d")
         following = igaccounts_model.getAll( {'following':True,"DATE(fecha) >": fecha}, {"order": "fecha ASC",'group':'DATE_FORMAT(fecha, "%d-%m-%Y")'}, 'count(pk) as total,DATE_FORMAT(fecha, "%d-%m-%Y") as fecha' )
 
         for c in follower:
