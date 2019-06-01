@@ -221,6 +221,7 @@ class instagram(base):
             ig.bot.console_print(
                 "Hubo un error al actualizar usuarios. Reiniciando bot para el siguiente paso"
             )
+            ig.bot.api.logout()
             ig = instagram_bot()
 
         ig.bot.console_print("Dejando de seguir no seguidores")
@@ -230,6 +231,7 @@ class instagram(base):
             ig.bot.console_print(
                 "Hubo un error al dejar de seguir. Reiniciando bot para el siguiente paso"
             )
+            ig.bot.api.logout()
             ig = instagram_bot()
 
         ig.bot.console_print("Siguiendo por hashtag")
@@ -239,6 +241,7 @@ class instagram(base):
             ig.bot.console_print(
                 "Hubo un error al seguir por hashtag. Reiniciando bot para el siguiente paso"
             )
+            ig.bot.api.logout()
             ig = instagram_bot()
 
         ig.bot.console_print("Dejando de seguir seguidores antiguos")
