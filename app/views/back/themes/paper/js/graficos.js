@@ -12,10 +12,10 @@ var char_list={};
 
 function inicio_graficos() {
     $('.progress-bar').show().css('width', "50%");
-    setTimeout(chart_followers, 200);
+    setTimeout(chart_followers, 500);
     setTimeout(chart_total, 1000);
-    setTimeout(chart_hashtag, 2000);
-    setTimeout(chart_total_followers, 3000);
+    setTimeout(chart_hashtag, 1500);
+    setTimeout(chart_total_followers, 2000);
 
     setTimeout(inicio_graficos, 30000);
 }
