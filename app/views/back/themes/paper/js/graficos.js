@@ -173,7 +173,7 @@ function chart_followers() {
 function generar_venn(sets, id, title,color) {
     if (typeof(char_list[id])!='undefined'){
         console.log(id,char_list[id]);
-        char_list[id].remove();
+        char_list[id].empty();
     }
 
     if(typeof(color)=='undefined'){
