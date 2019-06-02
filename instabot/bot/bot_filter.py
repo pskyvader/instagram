@@ -147,8 +147,8 @@ def check_user(self, user_id, unfollowing=False):
 
 
     # msg = 'USER_NAME: {username}, FOLLOWER: {followers}, FOLLOWING: {following}'
-    # follower_count = user_info["follower_count"]
-    # following_count = user_info["following_count"]
+    follower_count = user_info["follower_count"]
+    following_count = user_info["following_count"]
     # self.console_print(msg.format( username=user_info["username"], followers=follower_count, following=following_count ))
     
 
