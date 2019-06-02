@@ -10,7 +10,7 @@ def follow(self, user_id,force=False,hashtag='',progress=None):
     user_id = self.convert_to_user_id(user_id)
     user_info = self.get_user_info(user_id)
     username = user_info["username"]
-    self.console_print('===> Going to Follow `user_id`: {} with username: {}'.format(user_id, username),progress=progress)
+    #self.console_print('===> Going to Follow `user_id`: {} with username: {}'.format(user_id, username),progress=progress)
     error_check=False
     if not self.check_user(user_id):
         if not force: 
