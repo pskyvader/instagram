@@ -20,7 +20,7 @@ function update_orden(b) {
 function post_basic(url_post, info, mensaje_inicial, callback) {
     if (mensaje_inicial) notificacion_footer(mensaje_inicial);
     $.post(url_post, info, function(data) {
-        if (mensaje_inicial) notificacion_footer('');
+        if (mensaje_inicial) notificacion_footer(false);
         if (callback) callback(data);
     }).fail(function(jqXHR, textStatus, errorThrown) {
         console.log(textStatus);
