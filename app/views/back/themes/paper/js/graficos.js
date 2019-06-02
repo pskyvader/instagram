@@ -293,5 +293,8 @@ function generar_grafico(id, data, type, options_extra) {
         data: data,
         options: options
     });
+
+    $(progress).slideUp();
+
     return chart;
 }
