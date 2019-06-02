@@ -267,6 +267,7 @@ function generar_grafico(id, data, type, options_extra) {
     // }
 
     var progress = $(id).siblings()[0];
+    console.log(progress);
     $(progress).show();
     
     var options = {
