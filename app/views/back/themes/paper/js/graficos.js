@@ -8,16 +8,18 @@ var chartColors = {
     grey: 'rgba(201, 203, 207, 0.2)'
 };
 
-var char_list={};
+var char_list = {};
 
 function inicio_graficos() {
-    $('.progress-bar').show().css('width', "50%");
-    setTimeout(chart_followers, 500);
-    setTimeout(chart_total, 1000);
-    setTimeout(chart_hashtag, 1500);
-    setTimeout(chart_total_followers, 2000);
+    if ($('div#graficos').length > 0) {
+        $('.progress-bar').show().css('width', "50%");
+        setTimeout(chart_followers, 500);
+        setTimeout(chart_total, 1000);
+        setTimeout(chart_hashtag, 1500);
+        setTimeout(chart_total_followers, 2000);
 
-    setTimeout(inicio_graficos, 30000);
+        setTimeout(inicio_graficos, 30000);
+    }
 }
 
 
@@ -137,24 +139,52 @@ function chart_followers() {
     post_basic(url, {}, 'Adquiriendo usuarios', function(data) {
         var sets = [
             //{ sets: ['Totales'], label: 'Totales', size: data['total'] },
-            { sets: ['Seguidores'], label: 'Seguidores', size: data['follower'] },
-            { sets: ['Siguiendo'], label: 'Siguiendo', size: data['following'] },
-            { sets: ['Favoritos'], label: 'Favoritos', size: data['favoritos'] },
-            
+            {
+                sets: ['Seguidores'],
+                label: 'Seguidores',
+                size: data['follower']
+            },
+            {
+                sets: ['Siguiendo'],
+                label: 'Siguiendo',
+                size: data['following']
+            },
+            {
+                sets: ['Favoritos'],
+                label: 'Favoritos',
+                size: data['favoritos']
+            },
+
             // { sets: ['Totales', 'Seguidores'], label: 'Seguidores', size: data['follower'] },
             // { sets: ['Totales', 'Siguiendo'], label: 'Siguiendo', size: data['following'] },
-            { sets: ['Seguidores', 'Siguiendo'], label: 'Seguidores y Siguiendo', size: data['both'] },
+            {
+                sets: ['Seguidores', 'Siguiendo'],
+                label: 'Seguidores y Siguiendo',
+                size: data['both']
+            },
             // { sets: ['Totales', 'Favoritos'], label: 'Favoritos', size: data['favoritos'] },
-            { sets: ['Favoritos', 'Seguidores'], label: 'Favoritos', size: data['favoritos-following'] },
-            { sets: ['Favoritos', 'Siguiendo'], label: 'Favoritos', size: data['favoritos-follower'] },
+            {
+                sets: ['Favoritos', 'Seguidores'],
+                label: 'Favoritos',
+                size: data['favoritos-following']
+            },
+            {
+                sets: ['Favoritos', 'Siguiendo'],
+                label: 'Favoritos',
+                size: data['favoritos-follower']
+            },
 
             // { sets: ['Totales', 'Seguidores', 'Siguiendo'], label: 'Seguidores y Siguiendo', size: data['both'] },
-            { sets: ['Favoritos', 'Seguidores', 'Siguiendo'], label: 'Favoritos', size: data['favoritos-follower-following'] },
+            {
+                sets: ['Favoritos', 'Seguidores', 'Siguiendo'],
+                label: 'Favoritos',
+                size: data['favoritos-follower-following']
+            },
             // { sets: ['Totales', 'Favoritos', 'Seguidores', 'Siguiendo'], label: 'Favoritos', size: data['favoritos-follower-following'] },
         ];
 
 
-        generar_venn(sets, "#chart-seguidores", 'Usuarios','blue');
+        generar_venn(sets, "#chart-seguidores", 'Usuarios', 'blue');
         $(window).on('resize', function() {
             if ($("#chart-seguidores").length > 0) {
                 var width = $("#chart-seguidores").innerWidth();
@@ -171,21 +201,21 @@ function chart_followers() {
 
 
 
-function generar_venn(sets, id, title,color) {
-    if (typeof(char_list[id])!='undefined'){
+function generar_venn(sets, id, title, color) {
+    if (typeof(char_list[id]) != 'undefined') {
         char_list[id].empty();
         $(id).empty();
     }
 
-    if(typeof(color)=='undefined'){
-        color='random';
+    if (typeof(color) == 'undefined') {
+        color = 'random';
     }
     var width = $(id).empty().innerWidth();
     var height = Math.max($(window).height() * 0.5, 500);
     var progress = $(id).siblings('.progress-bar')[0];
     $(progress).show().css('width', '75%');
     var char = venn.VennDiagram().width(width).height(height);
-    var div=char_list[id] = d3.select(id).datum(sets).call(char);
+    var div = char_list[id] = d3.select(id).datum(sets).call(char);
     div.selectAll(".venn-circle path").style("fill-opacity", .6).style("stroke-width", 3).style("stroke-opacity", 1);
     div.selectAll("text").style("fill", "white");
     var tooltip = d3.select(id).append("div").attr("class", "venntooltip");
@@ -219,7 +249,7 @@ function generar_venn(sets, id, title,color) {
 
 
 
-function generar_response(initial_data, title, hue,random_hue) {
+function generar_response(initial_data, title, hue, random_hue) {
     var label = []
     var final_data = []
     var color = []
@@ -230,8 +260,13 @@ function generar_response(initial_data, title, hue,random_hue) {
 
         if (typeof(hue) != 'undefined') {
             if (typeof(random_hue) != 'undefined') {
-                color_base = randomColor({ luminosity: 'light', hue: hue, format: 'rgba', alpha: 0.2 });
-            }else{
+                color_base = randomColor({
+                    luminosity: 'light',
+                    hue: hue,
+                    format: 'rgba',
+                    alpha: 0.2
+                });
+            } else {
                 color_base = chartColors[hue];
             }
         } else {
@@ -242,7 +277,7 @@ function generar_response(initial_data, title, hue,random_hue) {
             });
         }
         color_border = color_base.replace("0.2", "1");
-        
+
         color.push(color_base);
         border.push(color_border);
     });
@@ -265,7 +300,7 @@ function generar_response(initial_data, title, hue,random_hue) {
 function generar_grafico(id, data, type, options_extra) {
     var progress = $(id).siblings('.progress-bar')[0];
     $(progress).show();
-    
+
     var options = {
         scales: {
             yAxes: [{
@@ -297,13 +332,13 @@ function generar_grafico(id, data, type, options_extra) {
 
 
 
-    
-    if (typeof(char_list[id])!='undefined'){
-        char_list[id].type=type;
-        char_list[id].data=data;
-        char_list[id].options=options;
+
+    if (typeof(char_list[id]) != 'undefined') {
+        char_list[id].type = type;
+        char_list[id].data = data;
+        char_list[id].options = options;
         char_list[id].update();
-    }else{
+    } else {
         char_list[id] = new Chart($(id), {
             type: type,
             data: data,
