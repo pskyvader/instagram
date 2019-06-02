@@ -262,6 +262,7 @@ function generar_response(initial_data, title, hue,random_hue) {
 
 function generar_grafico(id, data, type, options_extra) {
     if (typeof(char_list[id])!='undefined'){
+        console.log(id,char_list[id]);
         char_list[id].destroy();
     }
 
