@@ -34,89 +34,98 @@ from instabot import Bot
 import datetime
 
 
-class instagram_bot():
+class instagram_bot:
     bot = None
-    error_mensaje=''
+    error_mensaje = ""
+
     def __init__(self):
         self.get_bot()
         respuesta = self.login()
-        if not respuesta['exito']:
-            bot=None
-            self.error_mensaje=respuesta['mensaje']
-        
+        if not respuesta["exito"]:
+            bot = None
+            self.error_mensaje = respuesta["mensaje"]
+
     def update(self):
         respuesta = {"exito": False, "mensaje": ""}
 
-        if self.bot==None:
-            respuesta['mensaje']=self.error_mensaje
+        if self.bot == None:
+            respuesta["mensaje"] = self.error_mensaje
             return respuesta
         else:
-            bot=self.bot
-            respuesta['exito']=True
-        
-        if respuesta['exito']:
+            bot = self.bot
+            respuesta["exito"] = True
+
+        if respuesta["exito"]:
             bot.console_print("Adquiriendo usuarios", progress=5)
             users_total = igaccounts_model.getAll()
             bot.console_print("Adquiriendo seguidores", progress=10)
             followers = bot.followers.copy()
-            if len(followers)==0:
-                respuesta['exito']=False
-                respuesta['mensaje']='Error al obtener seguidores'
+            if len(followers) == 0:
+                respuesta["exito"] = False
+                respuesta["mensaje"] = "Error al obtener seguidores"
             else:
-                bot.console_print("total seguidores:"+str(len(followers)), progress=10)
-        if respuesta['exito']:
+                bot.console_print(
+                    "total seguidores:" + str(len(followers)), progress=10
+                )
+        if respuesta["exito"]:
             bot.console_print("Adquiriendo siguiendo", progress=15)
             following = bot.following.copy()
-            if len(following)==0:
-                respuesta['exito']=False
-                respuesta['mensaje']='Error al obtener seguidos'
+            if len(following) == 0:
+                respuesta["exito"] = False
+                respuesta["mensaje"] = "Error al obtener seguidos"
             else:
-                bot.console_print("total siguiendo:"+str(len(following)), progress=10)
+                bot.console_print("total siguiendo:" + str(len(following)), progress=10)
 
-        if respuesta['exito']:
+        if respuesta["exito"]:
             c_time = functions.current_time("%Y-%m-%d")
-            start_follow=0
-            stop_follow=0
+            start_follow = 0
+            stop_follow = 0
 
             bot.console_print("Actualizando Usuarios actuales", progress=20)
             count_users = len(users_total)
             for k, u in enumerate(users_total):
                 k += 1
                 progress = 19 + ((k / count_users) * 40)
-                msg=u["username"] + " - " + str(k) + "/" + str(count_users)
-                
-                if u['profile_pic_url']=='':
-                    bot.console_print( "Actualizando datos de " +msg, progress=progress )
-                    u = bot.get_user_info(u['pk'],False)
+                msg = u["username"] + " - " + str(k) + "/" + str(count_users)
+
+                if u["profile_pic_url"] == "":
+                    bot.console_print("Actualizando datos de " + msg, progress=progress)
+                    u = bot.get_user_info(u["pk"], False)
 
                 if str(u["pk"]) in followers:
                     followers.remove(str(u["pk"]))
                     if not u["follower"]:
-                        start_follow+=1
-                        bot.console_print( "Actualizando seguidor " +msg, progress=progress )
-                        igaccounts_model.update({"id": u[0], "follower": True},False)
+                        start_follow += 1
+                        bot.console_print(
+                            "Actualizando seguidor " + msg, progress=progress
+                        )
+                        igaccounts_model.update({"id": u[0], "follower": True}, False)
                 else:
                     if u["follower"]:
-                        stop_follow+=1
-                        bot.console_print( "Actualizando No seguidor " +msg, progress=progress )
-                        igaccounts_model.update({"id": u[0], "follower": False},False)
+                        stop_follow += 1
+                        bot.console_print(
+                            "Actualizando No seguidor " + msg, progress=progress
+                        )
+                        igaccounts_model.update({"id": u[0], "follower": False}, False)
 
                 if str(u["pk"]) in following:
                     following.remove(str(u["pk"]))
                     if not u["following"]:
-                        bot.console_print( "Actualizando siguiendo " +msg, progress=progress )
-                        igaccounts_model.update({"id": u[0], "following": True},False)
+                        bot.console_print(
+                            "Actualizando siguiendo " + msg, progress=progress
+                        )
+                        igaccounts_model.update({"id": u[0], "following": True}, False)
                 else:
                     if u["following"]:
-                        bot.console_print( "Actualizando No siguiendo " +msg, progress=progress )
-                        igaccounts_model.update({"id": u[0], "following": False},False)
-                
-                if not respuesta['exito']:
+                        bot.console_print(
+                            "Actualizando No siguiendo " + msg, progress=progress
+                        )
+                        igaccounts_model.update({"id": u[0], "following": False}, False)
+
+                if not respuesta["exito"]:
                     break
-            
 
-
-        if respuesta['exito']:
+        if respuesta["exito"]:
             bot.console_print("Ingresando nuevos seguidores", progress=60)
             count_followers = len(followers)
             for k, f in enumerate(followers):
@@ -125,17 +134,25 @@ class instagram_bot():
                 u = bot.get_user_info(f)
                 if not u:
                     if bot.api.fatal_error:
-                        respuesta['exito']=False
+                        respuesta["exito"] = False
                         break
                 else:
-                    start_follow+=1
-                    bot.console_print( "agregando " + u["username"] + " - " + str(k) + "/" + str(count_followers), progress=progress )
+                    start_follow += 1
+                    bot.console_print(
+                        "agregando "
+                        + u["username"]
+                        + " - "
+                        + str(k)
+                        + "/"
+                        + str(count_followers),
+                        progress=progress,
+                    )
                     if not u["follower"]:
-                        igaccounts_model.update({"id": u[0], "follower": True},False)
+                        igaccounts_model.update({"id": u[0], "follower": True}, False)
                     if not u["following"] and f in following:
-                        igaccounts_model.update({"id": u[0], "following": True},False)
+                        igaccounts_model.update({"id": u[0], "following": True}, False)
 
-        if respuesta['exito']:
+        if respuesta["exito"]:
             bot.console_print("Ingresando nuevos siguiendo", progress=80)
             count_following = len(following)
             for k, f in enumerate(following):
@@ -144,119 +161,145 @@ class instagram_bot():
                 u = bot.get_user_info(f)
                 if not u:
                     if bot.api.fatal_error:
-                        respuesta['exito']=False
+                        respuesta["exito"] = False
                         break
                 else:
-                    bot.console_print( "agregando " + u["username"] + " - " + str(k) + "/" + str(count_following), progress=progress )
+                    bot.console_print(
+                        "agregando "
+                        + u["username"]
+                        + " - "
+                        + str(k)
+                        + "/"
+                        + str(count_following),
+                        progress=progress,
+                    )
                     if not u["following"]:
-                        igaccounts_model.update({"id": u[0], "following": True},False)
+                        igaccounts_model.update({"id": u[0], "following": True}, False)
                     if not u["follower"] and f in followers:
-                        igaccounts_model.update({"id": u[0], "follower": True},False)
+                        igaccounts_model.update({"id": u[0], "follower": True}, False)
 
-        if respuesta['exito']:
+        if respuesta["exito"]:
             bot.console_print("Completado", progress=100)
         else:
             bot.console_print("Completado con errores", progress=100)
 
-        
-        igtotal_model.set_total("start_follow",c_time,start_follow)
-        igtotal_model.set_total("stop_follow",c_time,stop_follow)
+        igtotal_model.set_total("start_follow", c_time, start_follow)
+        igtotal_model.set_total("stop_follow", c_time, stop_follow)
         return respuesta
 
-
-
-
-    def follow(self,accion):
+    def follow(self, accion):
         from math import log10
+
         respuesta = {"exito": False, "mensaje": ""}
 
-        if self.bot==None:
-            respuesta['mensaje']=self.error_mensaje
+        if self.bot == None:
+            respuesta["mensaje"] = self.error_mensaje
             return respuesta
         else:
-            bot=self.bot
-            respuesta['exito']=True
-        
-        if respuesta['exito']:
-            if accion=='hashtag':
-                hashtags = ighashtag_model.getAll({'estado':True})
-                for h in hashtags:
-                    h['followers'] = igaccounts_model.getAll( {"hashtag": h["hashtag"]}, select="total")
-                
-                hashtags=sorted(hashtags, key = lambda i: i['followers'])
+            bot = self.bot
+            respuesta["exito"] = True
 
-                hashtags_total=len(hashtags)
-                proporcion=100/hashtags_total
-                while not bot.reached_limit('follows') and not bot.api.fatal_error:
-                    for k,hashtag in enumerate(hashtags):
-                        base=(k/hashtags_total)*100
-                        h= hashtag['hashtag']
-                        if not bot.reached_limit('follows'):
+        if respuesta["exito"]:
+            if accion == "hashtag":
+                hashtags = ighashtag_model.getAll({"estado": True})
+                for h in hashtags:
+                    h["followers"] = igaccounts_model.getAll(
+                        {"hashtag": h["hashtag"]}, select="total"
+                    )
+
+                hashtags = sorted(hashtags, key=lambda i: i["followers"])
+
+                hashtags_total = len(hashtags)
+                proporcion = 100 / hashtags_total
+                while not bot.reached_limit("follows") and not bot.api.fatal_error:
+                    for k, hashtag in enumerate(hashtags):
+                        base = (k / hashtags_total) * 100
+                        h = hashtag["hashtag"]
+                        if not bot.reached_limit("follows"):
                             bot.console_print("Siguiendo usuarios con hashtag: " + h)
                             users = bot.get_hashtag_users(h)
-                            #Calculo para emparejar la cantidad de usuarios por hashtag
-                            this_hashtag= (65/(log10(k+1)+1))-20 #curva logaritmica inversa (1,45) (40,4.98)
-                            this_hashtag=int(this_hashtag)
-                            users=users[:this_hashtag]
-                            bot.follow_users(users,base,proporcion,h)
+                            # Calculo para emparejar la cantidad de usuarios por hashtag, minimo 5
+                            # curva logaritmica inversa (k+1=1,x=50) (k+1=20,x=10.421) (k+1=50,x=5.936)
+                            this_hashtag = (70 / (log10(k + 1) + 1)) - 20
+                            this_hashtag = 5 if this_hashtag < 5 else int(this_hashtag)
+                            users = users[:this_hashtag]
+                            bot.follow_users(users, base, proporcion, h)
                             if bot.api.fatal_error:
-                                respuesta['exito']=False
-                                respuesta['mensaje']='Error Fatal'
+                                respuesta["exito"] = False
+                                respuesta["mensaje"] = "Error Fatal"
                                 break
                         else:
-                            respuesta['exito']=False
-                            respuesta['mensaje']='Limite alcanzado'
+                            respuesta["exito"] = False
+                            respuesta["mensaje"] = "Limite alcanzado"
                             break
             bot.console_print("Completado", progress=100)
         return respuesta
 
-
-
-
-    def unfollow(self,accion):
+    def unfollow(self, accion):
         respuesta = {"exito": False, "mensaje": ""}
-        if self.bot==None:
-            respuesta['mensaje']=self.error_mensaje
+        if self.bot == None:
+            respuesta["mensaje"] = self.error_mensaje
             return respuesta
         else:
-            bot=self.bot
-            respuesta['exito']=True
+            bot = self.bot
+            respuesta["exito"] = True
 
-        if respuesta['exito'] and bot.reached_limit('unfollows'):
+        if respuesta["exito"] and bot.reached_limit("unfollows"):
             bot.console_print("Limite alcanzado por hoy.")
-            respuesta['exito']=False
-            respuesta['mensaje']='Limite alcanzado'
-        
-        if respuesta['exito']:
-            if accion=='nonfollower':
-                days_unfollow=int(configuracion_model.getByVariable('days_unfollow',5))
-                fecha_limite=(datetime.datetime.now() - datetime.timedelta(days=days_unfollow)).strftime("%Y-%m-%d")
-                user_list=igaccounts_model.getAll({'following':True,'follower':False,'favorito':False,'DATE(fecha) <':fecha_limite},select='pk')
-            elif accion=='old':
-                days_unfollow=int(configuracion_model.getByVariable('days_unfollow_old',20))
-                fecha_limite=(datetime.datetime.now() - datetime.timedelta(days=days_unfollow)).strftime("%Y-%m-%d")
-                user_list=igaccounts_model.getAll({'following':True,'favorito':False,'DATE(fecha) <':fecha_limite},select='pk')
+            respuesta["exito"] = False
+            respuesta["mensaje"] = "Limite alcanzado"
 
-            user_list=list(f['pk'] for f in user_list)
-            total_user_list=len(user_list)
+        if respuesta["exito"]:
+            if accion == "nonfollower":
+                days_unfollow = int(
+                    configuracion_model.getByVariable("days_unfollow", 5)
+                )
+                fecha_limite = (
+                    datetime.datetime.now() - datetime.timedelta(days=days_unfollow)
+                ).strftime("%Y-%m-%d")
+                user_list = igaccounts_model.getAll(
+                    {
+                        "following": True,
+                        "follower": False,
+                        "favorito": False,
+                        "DATE(fecha) <": fecha_limite,
+                    },
+                    select="pk",
+                )
+            elif accion == "old":
+                days_unfollow = int(
+                    configuracion_model.getByVariable("days_unfollow_old", 20)
+                )
+                fecha_limite = (
+                    datetime.datetime.now() - datetime.timedelta(days=days_unfollow)
+                ).strftime("%Y-%m-%d")
+                user_list = igaccounts_model.getAll(
+                    {
+                        "following": True,
+                        "favorito": False,
+                        "DATE(fecha) <": fecha_limite,
+                    },
+                    select="pk",
+                )
+
+            user_list = list(f["pk"] for f in user_list)
+            total_user_list = len(user_list)
 
             for k, user_id in enumerate(user_list):
-                if bot.reached_limit('unfollows'):
+                if bot.reached_limit("unfollows"):
                     bot.console_print("Limite alcanzado por hoy.")
-                    respuesta['exito']=False
-                    respuesta['mensaje']='Limite alcanzado'
+                    respuesta["exito"] = False
+                    respuesta["mensaje"] = "Limite alcanzado"
                     break
-                progress=(k/total_user_list)*100
-                respuesta['exito']=bot.unfollow(user_id,progress)
-                if not respuesta['exito']:
+                progress = (k / total_user_list) * 100
+                respuesta["exito"] = bot.unfollow(user_id, progress)
+                if not respuesta["exito"]:
                     if bot.api.fatal_error:
-                        respuesta['mensaje']='Error Fatal'
+                        respuesta["mensaje"] = "Error Fatal"
                         break
-
 
             bot.console_print("Completado", progress=100)
         return respuesta
-
 
     def get_bot(self):
         get_var = configuracion_model.getByVariable
