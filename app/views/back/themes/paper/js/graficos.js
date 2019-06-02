@@ -13,7 +13,7 @@ function inicio_graficos() {
     chart_total_followers();
     chart_hashtag();
     chart_total();
-    $('.progress-bar').css('width', "50%");
+    $('.progress-bar').slideDown().css('width', "50%");
     setTimeout(inicio_graficos, 30000);
 }
 
