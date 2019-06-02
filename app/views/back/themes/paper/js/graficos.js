@@ -182,7 +182,7 @@ function generar_venn(sets, id, title,color) {
     var height = Math.max($(window).height() * 0.5, 500);
     var progress = $(id).siblings()[0];
     $(progress).show().css('width', '75%');
-    var char_list[id] = venn.VennDiagram().width(width).height(height);
+    char_list[id] = venn.VennDiagram().width(width).height(height);
     var div = d3.select(id).datum(sets).call(char_list[id]);
     div.selectAll(".venn-circle path").style("fill-opacity", .6).style("stroke-width", 3).style("stroke-opacity", 1);
     div.selectAll("text").style("fill", "white");
