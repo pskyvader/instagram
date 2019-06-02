@@ -181,7 +181,7 @@ function generar_venn(sets, id, title,color) {
     }
     var width = $(id).empty().innerWidth();
     var height = Math.max($(window).height() * 0.5, 500);
-    var progress = $(id).siblings()[0];
+    var progress = $(id).siblings('.progress-bar')[0];
     $(progress).show().css('width', '75%');
     var char = venn.VennDiagram().width(width).height(height);
     var div=char_list[id] = d3.select(id).datum(sets).call(char);
