@@ -169,6 +169,10 @@ function chart_followers() {
 
 
 function generar_venn(sets, id, title,color) {
+    if (typeof(char_list[id])!='undefined'){
+        char_list[id].remove();
+    }
+
     if(typeof(color)=='undefined'){
         color='random';
     }
@@ -176,8 +180,8 @@ function generar_venn(sets, id, title,color) {
     var height = Math.max($(window).height() * 0.5, 500);
     var progress = $(id).siblings()[0];
     $(progress).show().css('width', '75%');
-    var chart = venn.VennDiagram().width(width).height(height);
-    var div = d3.select(id).datum(sets).call(chart);
+    var char_list[id] = venn.VennDiagram().width(width).height(height);
+    var div = d3.select(id).datum(sets).call(char_list[id]);
     div.selectAll(".venn-circle path").style("fill-opacity", .6).style("stroke-width", 3).style("stroke-opacity", 1);
     div.selectAll("text").style("fill", "white");
     var tooltip = d3.select(id).append("div").attr("class", "venntooltip");
@@ -204,7 +208,7 @@ function generar_venn(sets, id, title,color) {
         var opacity = d.sets.length == 1 ? .6 : 0;
         selection.select("path").style("stroke-width", 3).style("fill-opacity", opacity).style("stroke", "none");
     });
-    return chart;
+    return char_list[id];
 }
 
 
