@@ -6,11 +6,11 @@ from app.models.igtotal import igtotal as igtotal_model
 from core.functions import functions
 
 
-def follow(self, user_id,force=False,hashtag=''):
+def follow(self, user_id,force=False,hashtag='',progress=None):
     user_id = self.convert_to_user_id(user_id)
     user_info = self.get_user_info(user_id)
     username = user_info["username"]
-    self.console_print('===> Going to Follow `user_id`: {} with username: {}'.format(user_id, username))
+    self.console_print('===> Going to Follow `user_id`: {} with username: {}'.format(user_id, username),progress=progress)
     error_check=False
     if not self.check_user(user_id):
         if not force: 
@@ -72,8 +72,8 @@ def follow_users(self, user_ids,base=0,proporcion=1,hashtag=''):
         if self.reached_limit('follows'):
             self.console_print("Out of follows for today.")
             break
-        self.console_print(user_id,progress=base+(count/len(user_ids))*proporcion)
-        if not self.follow(user_id,hashtag=hashtag):
+        #self.console_print(user_id,progress=base+(count/len(user_ids))*proporcion)
+        if not self.follow(user_id,hashtag=hashtag,progress=base+(count/len(user_ids))*proporcion):
             if self.api.fatal_error:
                 i = user_ids.index(user_id)
                 broken_items += user_ids[i-1:]
