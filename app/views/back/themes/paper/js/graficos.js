@@ -305,6 +305,7 @@ function generar_grafico(id, data, type, options_extra) {
         char_list[id].type=type;
         char_list[id].data=data;
         char_list[id].options=options;
+        char_list[id].update();
     }else{
         char_list[id] = new Chart($(id), {
             type: type,
