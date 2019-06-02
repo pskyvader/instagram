@@ -266,7 +266,7 @@ function generar_grafico(id, data, type, options_extra) {
     //     char_list[id].destroy();
     // }
 
-    var progress = $(id).siblings()[0];
+    var progress = $(id).siblings('.progress-bar')[0];
     console.log(progress);
     $(progress).show();
     
