@@ -209,6 +209,7 @@ class instagram(base):
         return ret
 
     def complete_process(self, var=[]):
+        from time import sleep
         ret = {
             "headers": [("Content-Type", "application/json; charset=utf-8")],
             "body": "",
@@ -222,6 +223,7 @@ class instagram(base):
                 "Hubo un error al actualizar usuarios. Reiniciando bot para el siguiente paso"
             )
             ig.bot.api.logout()
+            sleep(5)
             ig = instagram_bot()
 
         ig.bot.console_print("Dejando de seguir no seguidores")
@@ -232,6 +234,7 @@ class instagram(base):
                 "Hubo un error al dejar de seguir. Reiniciando bot para el siguiente paso"
             )
             ig.bot.api.logout()
+            sleep(5)
             ig = instagram_bot()
 
         ig.bot.console_print("Siguiendo por hashtag")
@@ -242,6 +245,7 @@ class instagram(base):
                 "Hubo un error al seguir por hashtag. Reiniciando bot para el siguiente paso"
             )
             ig.bot.api.logout()
+            sleep(5)
             ig = instagram_bot()
 
         ig.bot.console_print("Dejando de seguir seguidores antiguos")
