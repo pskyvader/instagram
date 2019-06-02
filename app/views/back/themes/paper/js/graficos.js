@@ -8,6 +8,8 @@ var chartColors = {
     grey: 'rgba(201, 203, 207, 0.2)'
 };
 
+var char_list={};
+
 function inicio_graficos() {
     $('.progress-bar').show().css('width', "50%");
     chart_followers();
@@ -257,7 +259,6 @@ function generar_response(initial_data, title, hue,random_hue) {
 
 }
 
-var char_list={};
 
 function generar_grafico(id, data, type, options_extra) {
     if (typeof(char_list[id])!='undefined'){
