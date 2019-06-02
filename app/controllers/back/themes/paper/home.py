@@ -98,11 +98,25 @@ class home(base):
         removed = {}
         eficiencia = {}
         hashtag = ighashtag_model.getAll({"estado": True})
-        hashtag2 = { h["hashtag"]: {"follower": 0, "following": 0, "removed": 0} for h in hashtag }
+        hashtag2 = {
+            h["hashtag"]: {"follower": 0, "following": 0, "removed": 0} for h in hashtag
+        }
 
-        f = igaccounts_model.getAll( {"follower": True,'hashtag!':''}, {"group": "hashtag"}, "count(pk) as total,hashtag" )
-        fl = igaccounts_model.getAll( {"following": True,'hashtag!':''}, {"group": "hashtag"}, "count(pk) as total,hashtag" )
-        r = igaccounts_model.getAll( {"following": False,'hashtag!':''}, {"group": "hashtag"}, "count(pk) as total,hashtag" )
+        f = igaccounts_model.getAll(
+            {"follower": True, "hashtag!": ""},
+            {"group": "hashtag"},
+            "count(pk) as total,hashtag",
+        )
+        fl = igaccounts_model.getAll(
+            {"following": True, "hashtag!": ""},
+            {"group": "hashtag"},
+            "count(pk) as total,hashtag",
+        )
+        r = igaccounts_model.getAll(
+            {"following": False, "hashtag!": ""},
+            {"group": "hashtag"},
+            "count(pk) as total,hashtag",
+        )
 
         for u in f:
             if u["hashtag"] in hashtag2:
@@ -114,15 +128,13 @@ class home(base):
             if u["hashtag"] in hashtag2:
                 hashtag2[u["hashtag"]]["removed"] = u["total"]
 
-
-        
-
         for k, h in hashtag2.items():
             nombre = k.capitalize()
             f = h["follower"]
             fl = h["following"]
             r = h["removed"]
-            porcentaje = (f / (fl + r)) * 100
+            porcentaje = (f / (fl + r)) * 100 if (fl + r > 0) else 0
+
             porcentaje = round(porcentaje, 2)
             followers[nombre] = f
             following[nombre] = fl
