@@ -189,7 +189,7 @@ def get_user_info(self, user_id, use_cache=True):
     if not use_cache or user_id not in self._user_infos:
         user_info=None
         user=igaccounts_model.getByPK(user_id)
-        if 'datos' in user:
+        if 'pk' in user:
             user_info=user
         if user_info==None:
             self.delay("get")
