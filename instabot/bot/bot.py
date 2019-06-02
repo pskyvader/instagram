@@ -691,8 +691,8 @@ class Bot(object):
 
     # follow
 
-    def follow(self, user_id, force=False, hashtag=""):
-        return follow(self, user_id, force, hashtag)
+    def follow(self, user_id, force=False, hashtag="",progress=None):
+        return follow(self, user_id, force, hashtag,progress)
 
     def follow_users(self, user_ids, base=0, proporcion=1, hashtag=""):
         return follow_users(self, user_ids, base, proporcion, hashtag)
