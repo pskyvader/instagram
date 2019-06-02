@@ -28,7 +28,7 @@ def follow(self, user_id,force=False,hashtag='',progress=None):
             self.console_print(msg, 'green')
             
             if user_id not in self.following:
-                self.following.append(user_id)
+                self.following.append(user_id,show_message=False)
             
             if not error_check:
                 data={'id':user_info[0],'following':True}
