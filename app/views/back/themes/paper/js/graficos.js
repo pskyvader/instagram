@@ -253,7 +253,13 @@ function generar_response(initial_data, title, hue,random_hue) {
 
 }
 
+var char_list={};
+
 function generar_grafico(id, data, type, options_extra) {
+    if (typeof(char_list[id])!='undefined'){
+        char_list[id].destroy();
+    }
+
     var progress = $(id).siblings()[0];
     $(progress).show();
     var options = {
@@ -288,7 +294,7 @@ function generar_grafico(id, data, type, options_extra) {
 
 
 
-    var chart = new Chart(id, {
+    char_list[id] = new Chart(id, {
         type: type,
         data: data,
         options: options
