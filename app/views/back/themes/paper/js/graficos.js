@@ -262,12 +262,7 @@ function generar_response(initial_data, title, hue,random_hue) {
 
 
 function generar_grafico(id, data, type, options_extra) {
-    // if (typeof(char_list[id])!='undefined'){
-    //     char_list[id].destroy();
-    // }
-
     var progress = $(id).siblings('.progress-bar')[0];
-    console.log(progress);
     $(progress).show();
     
     var options = {
