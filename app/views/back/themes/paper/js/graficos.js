@@ -262,9 +262,9 @@ function generar_response(initial_data, title, hue,random_hue) {
 
 
 function generar_grafico(id, data, type, options_extra) {
-    if (typeof(char_list[id])!='undefined'){
-        char_list[id].destroy();
-    }
+    // if (typeof(char_list[id])!='undefined'){
+    //     char_list[id].destroy();
+    // }
 
     var progress = $(id).siblings()[0];
     $(progress).show();
@@ -299,12 +299,19 @@ function generar_grafico(id, data, type, options_extra) {
 
 
 
+    
+    if (typeof(char_list[id])!='undefined'){
+        char_list[id].type=type;
+        char_list[id].data=data;
+        char_list[id].options=options;
+    }else{
+        char_list[id] = new Chart($(id), {
+            type: type,
+            data: data,
+            options: options
+        });
+    }
 
-    char_list[id] = new Chart($(id), {
-        type: type,
-        data: data,
-        options: options
-    });
 
     $(progress).slideUp();
 
