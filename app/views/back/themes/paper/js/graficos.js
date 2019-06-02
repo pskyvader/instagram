@@ -302,5 +302,5 @@ function generar_grafico(id, data, type, options_extra) {
 
     $(progress).slideUp();
 
-    return chart;
+    return char_list[id];
 }
