@@ -29,7 +29,7 @@ function chart_total() {
             data_follower.datasets[0],
             data_following.datasets[0]
         ];
-        generar_grafico($('#chart-total-followers'), data_follower, 'line');
+        generar_grafico('#chart-total-followers', data_follower, 'line');
     });
 }
 
@@ -53,10 +53,10 @@ function chart_total_followers() {
         ];
 
         data_follows.datasets = datasets;
-        generar_grafico($('#chart-total'), data_follows, 'line');
+        generar_grafico('#chart-total', data_follows, 'line');
 
         data_start_follow.datasets = datasets2;
-        generar_grafico($('#chart-total-seguidores'), data_start_follow, 'line');
+        generar_grafico('#chart-total-seguidores', data_start_follow, 'line');
 
     });
 }
@@ -102,10 +102,10 @@ function chart_hashtag() {
                 }]
             }
         };
-        generar_grafico($('#chart-hashtag-followers'), data_seguidores, 'pie', options);
+        generar_grafico('#chart-hashtag-followers', data_seguidores, 'pie', options);
 
         var data_eficiencia = generar_response(data.eficiencia, 'Eficiencia', 'yellow');
-        generar_grafico($('#chart-hashtag-eficiencia'), data_eficiencia, 'bar');
+        generar_grafico('#chart-hashtag-eficiencia', data_eficiencia, 'bar');
 
 
         var data_followers = generar_response(data.followers, 'Seguidores', 'red');
@@ -127,7 +127,7 @@ function chart_hashtag() {
                 }]
             }
         };
-        generar_grafico($('#chart-hashtag'), data_followers, 'bar', options);
+        generar_grafico('#chart-hashtag', data_followers, 'bar', options);
     });
 }
 
@@ -300,7 +300,7 @@ function generar_grafico(id, data, type, options_extra) {
 
 
 
-    char_list[id] = new Chart(id, {
+    char_list[id] = new Chart($(id), {
         type: type,
         data: data,
         options: options
