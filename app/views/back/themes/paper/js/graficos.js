@@ -12,7 +12,7 @@ var char_list = {};
 
 function inicio_graficos() {
     if ($('div#graficos').length > 0) {
-        $('.progress-bar').show().css('width', "50%");
+        $('.progress-bar').css('width', "50%");
         setTimeout(chart_followers, 500);
         setTimeout(chart_total, 1000);
         setTimeout(chart_hashtag, 1500);
