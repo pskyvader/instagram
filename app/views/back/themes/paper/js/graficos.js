@@ -14,6 +14,7 @@ function inicio_graficos() {
     chart_hashtag();
     chart_total();
     $('.progress-bar').css('width', "50%");
+    setTimeout(inicio_graficos, 30000);
 }
 
 
