@@ -268,6 +268,7 @@ function generar_grafico(id, data, type, options_extra) {
 
     var progress = $(id).siblings()[0];
     $(progress).show();
+    
     var options = {
         scales: {
             yAxes: [{
