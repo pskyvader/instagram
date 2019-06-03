@@ -382,16 +382,13 @@ $.fn.serializeObject = function() {
     }), a
 };
 
-$.fn.equals = function(compareTo) {
-    if (!compareTo || this.length != compareTo.length) {
-        console.log('length', compareTo,this.length,compareTo.length);
-        return false;
-    }
-    for (var i = 0; i < this.length; ++i) {
-        if (this[i] !== compareTo[i]) {
-            console.log('object',this[i],compareTo[i]);
-            return false;
-        }
-    }
-    return true;
-};
+const isEqual = (a, b) => {
+    if (a === b) return true;
+    if (a instanceof Date && b instanceof Date) return a.getTime() === b.getTime();
+    if (!a || !b || (typeof a !== 'object' && typeof b !== 'object')) return a === b;
+    if (a === null || a === undefined || b === null || b === undefined) return false;
+    if (a.prototype !== b.prototype) return false;
+    let keys = Object.keys(a);
+    if (keys.length !== Object.keys(b).length) return false;
+    return keys.every(k => isEqual(a[k], b[k]));
+  };

@@ -36,7 +36,7 @@ function chart_total() {
     post_basic(url, {}, 'Adquiriendo Seguidores Totales', function(data) {
         var id = '#chart-total-followers';
         if (typeof(data_list[id]) != 'undefined') {
-            if ($(data_list[id]).equals($(data))) {
+            if (isEqual(data_list[id],data)) {
                 console.log('equal', data_list[id], data);
             } else {
                 console.log('not equal', data_list[id], data);
