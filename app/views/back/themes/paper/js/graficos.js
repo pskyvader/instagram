@@ -34,13 +34,20 @@ function inicio_graficos() {
 function chart_total() {
     var url = create_url(modulo, 'get_total_followers');
     post_basic(url, {}, 'Adquiriendo Seguidores Totales', function(data) {
-        var data_follower = generar_response(data.follower, 'Seguidores', 'orange');
-        var data_following = generar_response(data.following, 'Siguiendo', 'blue');
-        data_follower.datasets = [
-            data_follower.datasets[0],
-            data_following.datasets[0]
-        ];
-        generar_grafico('#chart-total-followers', data_follower, 'line');
+        var id = '#chart-total-followers';
+        if (typeof(data_list[id]) != 'undefined' && !isEqual(data_list[id], data)) {
+            return true;
+        } else {
+            data_list[id] = data;
+
+            var data_follower = generar_response(data.follower, 'Seguidores', 'orange');
+            var data_following = generar_response(data.following, 'Siguiendo', 'blue');
+            data_follower.datasets = [
+                data_follower.datasets[0],
+                data_following.datasets[0]
+            ];
+            generar_grafico(id, data_follower, 'line');
+        }
     });
 }
 
@@ -49,26 +56,34 @@ function chart_total() {
 function chart_total_followers() {
     var url = create_url(modulo, 'get_total');
     post_basic(url, {}, 'Adquiriendo Totales', function(data) {
-        var data_follows = generar_response(data.follows, 'Siguiendo', 'red');
-        var data_unfollows = generar_response(data.unfollows, 'Ya No siguiendo', 'blue');
-        var data_start_follow = generar_response(data.start_follow, 'Seguidor', 'yellow');
-        var data_stop_follow = generar_response(data.stop_follow, 'Dejo de seguir', 'green');
+        var data1 = [data.follows, data.unfollows];
+        var id = '#chart-total';
+        if (typeof(data_list[id]) == 'undefined' || !isEqual(data_list[id], data1)) {
+            data_list[id] = data1;
+            var data_follows = generar_response(data.follows, 'Siguiendo', 'red');
+            var data_unfollows = generar_response(data.unfollows, 'Ya No siguiendo', 'blue');
+            var datasets = [
+                data_follows.datasets[0],
+                data_unfollows.datasets[0]
+            ];
+            data_follows.datasets = datasets;
+            generar_grafico(id, data_follows, 'line');
+        }
 
-        var datasets = [
-            data_follows.datasets[0],
-            data_unfollows.datasets[0]
-        ];
-        var datasets2 = [
-            data_start_follow.datasets[0],
-            data_stop_follow.datasets[0]
-        ];
 
-        data_follows.datasets = datasets;
-        generar_grafico('#chart-total', data_follows, 'line');
-
-        data_start_follow.datasets = datasets2;
-        generar_grafico('#chart-total-seguidores', data_start_follow, 'line');
-
+        var data2 = [data.start_follow, data.stop_follow];
+        var id = '#chart-total-seguidores';
+        if (typeof(data_list[id]) == 'undefined' || !isEqual(data_list[id], data2)) {
+            data_list[id] = data2;
+            var data_start_follow = generar_response(data.start_follow, 'Seguidor', 'yellow');
+            var data_stop_follow = generar_response(data.stop_follow, 'Dejo de seguir', 'green');
+            var datasets2 = [
+                data_start_follow.datasets[0],
+                data_stop_follow.datasets[0]
+            ];
+            data_start_follow.datasets = datasets2;
+            generar_grafico(id, data_start_follow, 'line');
+        }
     });
 }
 
@@ -78,10 +93,7 @@ function chart_hashtag() {
     post_basic(url, {}, 'Adquiriendo hashtag', function(data) {
         var seguidores = []
         $.each(data.followers, function(k, v) {
-            seguidores.push({
-                key: k,
-                value: v
-            });
+            seguidores.push({ key: k, value: v });
         });
         seguidores = seguidores.sort((a, b) => (a.value > b.value) ? 1 : -1);
         var seg = {};
@@ -89,118 +101,90 @@ function chart_hashtag() {
             seg[v.key] = v.value;
         });
 
-        var data_seguidores = generar_response(seg, 'Seguidores');
-        var options = {
-            legend: {
-                display: false
-            },
-            scales: {
-                xAxes: [{
-                    gridLines: {
-                        display: false
-                    },
-                    ticks: {
-                        display: false
-                    }
-                }],
-                yAxes: [{
-                    gridLines: {
-                        display: false
-                    },
-                    ticks: {
-                        display: false
-                    }
-                }]
-            }
-        };
-        generar_grafico('#chart-hashtag-followers', data_seguidores, 'pie', options);
+        var id = '#chart-hashtag-followers';
+        if (typeof(data_list[id]) == 'undefined' || !isEqual(data_list[id], seg)) {
+            data_list[id] = seg;
+            var data_seguidores = generar_response(seg, 'Seguidores');
+            var options = {
+                legend: { display: false },
+                scales: {
+                    xAxes: [{ gridLines: { display: false }, ticks: { display: false } }],
+                    yAxes: [{ gridLines: { display: false }, ticks: { display: false } }]
+                }
+            };
+            generar_grafico(id, data_seguidores, 'pie', options);
+        }
 
-        var data_eficiencia = generar_response(data.eficiencia, 'Eficiencia', 'yellow');
-        generar_grafico('#chart-hashtag-eficiencia', data_eficiencia, 'bar');
+        var id = '#chart-hashtag-eficiencia';
+        if (typeof(data_list[id]) == 'undefined' || !isEqual(data_list[id], data.eficiencia)) {
+            data_list[id] = data.eficiencia;
+            var data_eficiencia = generar_response(data.eficiencia, 'Eficiencia', 'yellow');
+            generar_grafico(id, data_eficiencia, 'bar');
+        }
 
 
-        var data_followers = generar_response(data.followers, 'Seguidores', 'red');
-        var data_following = generar_response(data.following, 'Siguiendo', 'blue');
-        var data_removed = generar_response(data.removed, 'No siguiendo', 'green');
-        var datasets = [
-            data_following.datasets[0],
-            data_followers.datasets[0],
-            data_removed.datasets[0],
-        ];
-        data_followers.datasets = datasets;
-        var options = {
-            scales: {
-                xAxes: [{
-                    stacked: true
-                }],
-                yAxes: [{
-                    stacked: true
-                }]
-            }
-        };
-        generar_grafico('#chart-hashtag', data_followers, 'bar', options);
+
+        var id = '#chart-hashtag';
+        var data1 = [data.followers, data.following, data.removed];
+        if (typeof(data_list[id]) == 'undefined' || !isEqual(data_list[id], data1)) {
+            data_list[id] = data1;
+            var data_followers = generar_response(data.followers, 'Seguidores', 'red');
+            var data_following = generar_response(data.following, 'Siguiendo', 'blue');
+            var data_removed = generar_response(data.removed, 'No siguiendo', 'green');
+            var datasets = [
+                data_following.datasets[0],
+                data_followers.datasets[0],
+                data_removed.datasets[0],
+            ];
+            data_followers.datasets = datasets;
+            var options = {
+                scales: {
+                    xAxes: [{
+                        stacked: true
+                    }],
+                    yAxes: [{
+                        stacked: true
+                    }]
+                }
+            };
+            generar_grafico('#chart-hashtag', data_followers, 'bar', options);
+        }
     });
 }
 
 function chart_followers() {
     var url = create_url(modulo, 'get_followers');
     post_basic(url, {}, 'Adquiriendo usuarios', function(data) {
-        var sets = [
-            //{ sets: ['Totales'], label: 'Totales', size: data['total'] },
-            {
-                sets: ['Seguidores'],
-                label: 'Seguidores',
-                size: data['follower']
-            },
-            {
-                sets: ['Siguiendo'],
-                label: 'Siguiendo',
-                size: data['following']
-            },
-            {
-                sets: ['Favoritos'],
-                label: 'Favoritos',
-                size: data['favoritos']
-            },
+        if (typeof(data_list[id]) == 'undefined' || !isEqual(data_list[id], data)) {
+            data_list[id] = data;
+            var sets = [
+                //{ sets: ['Totales'], label: 'Totales', size: data['total'] },
+                { sets: ['Seguidores'], label: 'Seguidores', size: data['follower'] },
+                { sets: ['Siguiendo'], label: 'Siguiendo', size: data['following'] },
+                { sets: ['Favoritos'], label: 'Favoritos', size: data['favoritos'] },
 
-            // { sets: ['Totales', 'Seguidores'], label: 'Seguidores', size: data['follower'] },
-            // { sets: ['Totales', 'Siguiendo'], label: 'Siguiendo', size: data['following'] },
-            {
-                sets: ['Seguidores', 'Siguiendo'],
-                label: 'Seguidores y Siguiendo',
-                size: data['both']
-            },
-            // { sets: ['Totales', 'Favoritos'], label: 'Favoritos', size: data['favoritos'] },
-            {
-                sets: ['Favoritos', 'Seguidores'],
-                label: 'Favoritos',
-                size: data['favoritos-following']
-            },
-            {
-                sets: ['Favoritos', 'Siguiendo'],
-                label: 'Favoritos',
-                size: data['favoritos-follower']
-            },
+                // { sets: ['Totales', 'Seguidores'], label: 'Seguidores', size: data['follower'] },
+                // { sets: ['Totales', 'Siguiendo'], label: 'Siguiendo', size: data['following'] },
+                { sets: ['Seguidores', 'Siguiendo'], label: 'Seguidores y Siguiendo', size: data['both'] },
+                // { sets: ['Totales', 'Favoritos'], label: 'Favoritos', size: data['favoritos'] },
+                { sets: ['Favoritos', 'Seguidores'], label: 'Favoritos', size: data['favoritos-following'] },
+                { sets: ['Favoritos', 'Siguiendo'], label: 'Favoritos', size: data['favoritos-follower'] },
 
-            // { sets: ['Totales', 'Seguidores', 'Siguiendo'], label: 'Seguidores y Siguiendo', size: data['both'] },
-            {
-                sets: ['Favoritos', 'Seguidores', 'Siguiendo'],
-                label: 'Favoritos',
-                size: data['favoritos-follower-following']
-            },
-            // { sets: ['Totales', 'Favoritos', 'Seguidores', 'Siguiendo'], label: 'Favoritos', size: data['favoritos-follower-following'] },
-        ];
+                // { sets: ['Totales', 'Seguidores', 'Siguiendo'], label: 'Seguidores y Siguiendo', size: data['both'] },
+                { sets: ['Favoritos', 'Seguidores', 'Siguiendo'], label: 'Favoritos', size: data['favoritos-follower-following'] },
+                // { sets: ['Totales', 'Favoritos', 'Seguidores', 'Siguiendo'], label: 'Favoritos', size: data['favoritos-follower-following'] },
+            ];
 
-
-        generar_venn(sets, "#chart-seguidores", 'Usuarios', 'red');
-        $(window).on('resize', function() {
-            if ($("#chart-seguidores").length > 0) {
-                var width = $("#chart-seguidores").innerWidth();
-                var height = Math.max($(window).height() * 0.5, 500);
-                var chart = venn.VennDiagram().width(width).height(height);
-                d3.select("#chart-seguidores").datum(sets).call(chart);
-            }
-        });
+            generar_venn(sets, "#chart-seguidores", 'Usuarios', 'red');
+            $(window).on('resize', function() {
+                if ($("#chart-seguidores").length > 0) {
+                    var width = $("#chart-seguidores").innerWidth();
+                    var height = Math.max($(window).height() * 0.5, 500);
+                    var chart = venn.VennDiagram().width(width).height(height);
+                    d3.select("#chart-seguidores").datum(sets).call(chart);
+                }
+            });
+        }
     });
 }
 
@@ -306,16 +290,6 @@ function generar_response(initial_data, title, hue, random_hue) {
 
 
 function generar_grafico(id, data, type, options_extra) {
-    if (typeof(data_list[id]) != 'undefined') {
-        if (isEqual(data_list[id],data)) {
-            console.log('equal', data_list[id], data);
-        } else {
-            console.log('not equal', data_list[id], data);
-        }
-    }
-    data_list[id] = data;
-
-
     var progress = $(id).siblings('.progress-bar')[0];
     $(progress).show();
 
