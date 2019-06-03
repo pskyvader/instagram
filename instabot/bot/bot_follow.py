@@ -23,7 +23,7 @@ def follow(self, user_id,force=False,hashtag='',progress=None):
         if isinstance(response,bool) and response:
             self.total['follows'] += 1
             igtotal_model.set_total('follows',functions.current_time('%Y-%m-%d'),1)
-            self.followed_file.append(user_id)
+            self.followed_file.append(user_id,show_message=False)
             msg = '===> FOLLOWED <==== `user_id`: {}. Total: {}/{}'.format(user_id,self.total['follows'],self.max_per_day['follows'])
             self.console_print(msg, 'green')
             
