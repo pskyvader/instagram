@@ -34,17 +34,6 @@ function inicio_graficos() {
 function chart_total() {
     var url = create_url(modulo, 'get_total_followers');
     post_basic(url, {}, 'Adquiriendo Seguidores Totales', function(data) {
-        var id = '#chart-total-followers';
-        if (typeof(data_list[id]) != 'undefined') {
-            if (isEqual(data_list[id],data)) {
-                console.log('equal', data_list[id], data);
-            } else {
-                console.log('not equal', data_list[id], data);
-            }
-        }
-        data_list[id] = data;
-
-
         var data_follower = generar_response(data.follower, 'Seguidores', 'orange');
         var data_following = generar_response(data.following, 'Siguiendo', 'blue');
         data_follower.datasets = [
@@ -317,6 +306,16 @@ function generar_response(initial_data, title, hue, random_hue) {
 
 
 function generar_grafico(id, data, type, options_extra) {
+    if (typeof(data_list[id]) != 'undefined') {
+        if (isEqual(data_list[id],data)) {
+            console.log('equal', data_list[id], data);
+        } else {
+            console.log('not equal', data_list[id], data);
+        }
+    }
+    data_list[id] = data;
+
+
     var progress = $(id).siblings('.progress-bar')[0];
     $(progress).show();
 
