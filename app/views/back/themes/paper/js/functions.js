@@ -384,10 +384,12 @@ $.fn.serializeObject = function() {
 
 $.fn.equals = function(compareTo) {
     if (!compareTo || this.length != compareTo.length) {
+        console.log(compareTo,this.length,compareTo.length);
         return false;
     }
     for (var i = 0; i < this.length; ++i) {
         if (this[i] !== compareTo[i]) {
+            console.log(this[i],compareTo[i]);
             return false;
         }
     }
