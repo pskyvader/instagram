@@ -155,6 +155,7 @@ function chart_hashtag() {
 function chart_followers() {
     var url = create_url(modulo, 'get_followers');
     post_basic(url, {}, 'Adquiriendo usuarios', function(data) {
+        var id="#chart-seguidores";
         if (typeof(data_list[id]) == 'undefined' || !isEqual(data_list[id], data)) {
             data_list[id] = data;
             var sets = [
@@ -175,13 +176,13 @@ function chart_followers() {
                 // { sets: ['Totales', 'Favoritos', 'Seguidores', 'Siguiendo'], label: 'Favoritos', size: data['favoritos-follower-following'] },
             ];
 
-            generar_venn(sets, "#chart-seguidores", 'Usuarios', 'red');
+            generar_venn(sets, id, 'Usuarios', 'red');
             $(window).on('resize', function() {
-                if ($("#chart-seguidores").length > 0) {
-                    var width = $("#chart-seguidores").innerWidth();
+                if ($(id).length > 0) {
+                    var width = $(id).innerWidth();
                     var height = Math.max($(window).height() * 0.5, 500);
                     var chart = venn.VennDiagram().width(width).height(height);
-                    d3.select("#chart-seguidores").datum(sets).call(chart);
+                    d3.select(id).datum(sets).call(chart);
                 }
             });
         }
