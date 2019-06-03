@@ -9,8 +9,8 @@ var chartColors = {
 };
 
 var char_list = {};
-var data_list={};
-var timeout_graficos=null;
+var data_list = {};
+var timeout_graficos = null;
 
 function inicio_graficos() {
     if ($('div#graficos').length > 0) {
@@ -19,14 +19,14 @@ function inicio_graficos() {
         setTimeout(chart_total, 1000);
         setTimeout(chart_hashtag, 1500);
         setTimeout(chart_total_followers, 2000);
-        timeout_graficos=setTimeout(inicio_graficos, 30000);
-    }else{
-        if (timeout_graficos!=null){
+        timeout_graficos = setTimeout(inicio_graficos, 30000);
+    } else {
+        if (timeout_graficos != null) {
             clearTimeout(timeout_graficos);
-            timeout_graficos=null;
+            timeout_graficos = null;
         }
         char_list = {};
-        data_list={};
+        data_list = {};
     }
 }
 
@@ -34,6 +34,17 @@ function inicio_graficos() {
 function chart_total() {
     var url = create_url(modulo, 'get_total_followers');
     post_basic(url, {}, 'Adquiriendo Seguidores Totales', function(data) {
+        var id = '#chart-total-followers';
+        if (typeof(data_list[id]) != 'undefined') {
+            if ($(data_list[id]).equals($(data))) {
+                console.log('equal', data_list[id], data);
+            } else {
+                console.log('not equal', data_list[id], data);
+            }
+        }
+        data_list[id] = data;
+
+
         var data_follower = generar_response(data.follower, 'Seguidores', 'orange');
         var data_following = generar_response(data.following, 'Siguiendo', 'blue');
         data_follower.datasets = [
@@ -306,16 +317,6 @@ function generar_response(initial_data, title, hue, random_hue) {
 
 
 function generar_grafico(id, data, type, options_extra) {
-    if (typeof(data_list[id])!='undefined'){
-        if ($(data_list[id]).equals($(data))) {
-            console.log('equal' ,data_list[id],data);
-            return char_list[id];
-        }else{
-            console.log('not equal' ,data_list[id],data);
-        }
-    }
-    data_list[id]=data;
-    
     var progress = $(id).siblings('.progress-bar')[0];
     $(progress).show();
 
