@@ -16,10 +16,18 @@ function inicio_detail() {
     if ($('div.form-group.file').length > 0) {
         inicio_file();
     }
-    
+
     if ($('div#graficos').length > 0) {
         inicio_graficos();
+    } else {
+        if (timeout_graficos != null) {
+            clearTimeout(timeout_graficos);
+            timeout_graficos = null;
+        }
     }
+
+
+
     url_list = $('form#formulario').data('list');
     token = $('input.token-campo');
     $(token).tokenfield({

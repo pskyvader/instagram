@@ -9,19 +9,21 @@ var chartColors = {
 };
 
 var char_list = {};
+var timeout_graficos=null;
 
 function inicio_graficos() {
-    console.log('start');
     if ($('div#graficos').length > 0) {
-        console.log('yes');
         $('.progress-bar').css('width', "50%");
         setTimeout(chart_followers, 500);
         setTimeout(chart_total, 1000);
         setTimeout(chart_hashtag, 1500);
         setTimeout(chart_total_followers, 2000);
-        setTimeout(inicio_graficos, 30000);
-    } else {
-        console.log('no');
+        timeout_graficos=setTimeout(inicio_graficos, 30000);
+    }else{
+        if (timeout_graficos!=null){
+            clearTimeout(timeout_graficos);
+            timeout_graficos=null;
+        }
     }
 }
 
