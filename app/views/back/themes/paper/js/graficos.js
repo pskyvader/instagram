@@ -9,6 +9,7 @@ var chartColors = {
 };
 
 var char_list = {};
+var data_list={};
 var timeout_graficos=null;
 
 function inicio_graficos() {
@@ -25,6 +26,7 @@ function inicio_graficos() {
             timeout_graficos=null;
         }
         char_list = {};
+        data_list={};
     }
 }
 
