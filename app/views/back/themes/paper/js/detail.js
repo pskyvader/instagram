@@ -24,6 +24,7 @@ function inicio_detail() {
             clearTimeout(timeout_graficos);
             timeout_graficos = null;
         }
+        char_list = {};
     }
 
 
