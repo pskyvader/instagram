@@ -306,8 +306,16 @@ function generar_response(initial_data, title, hue, random_hue) {
 
 
 function generar_grafico(id, data, type, options_extra) {
+    if (typeof(data_list[id])!='undefined'){
+        if ($(data_list[id]).equals($(data))) {
+            console.log('equal' ,data_list[id],data);
+            return char_list[id];
+        }else{
+            console.log('not equal' ,data_list[id],data);
+        }
+    }
     data_list[id]=data;
-    console.log(data_list);
+    
     var progress = $(id).siblings('.progress-bar')[0];
     $(progress).show();
 
