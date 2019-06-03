@@ -25,6 +25,7 @@ function inicio_detail() {
             timeout_graficos = null;
         }
         char_list = {};
+        data_list={};
     }
 
 
