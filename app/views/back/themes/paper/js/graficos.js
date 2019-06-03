@@ -137,16 +137,7 @@ function chart_hashtag() {
                 data_removed.datasets[0],
             ];
             data_followers.datasets = datasets;
-            var options = {
-                scales: {
-                    xAxes: [{
-                        stacked: true
-                    }],
-                    yAxes: [{
-                        stacked: true
-                    }]
-                }
-            };
+            var options = { scales: { xAxes: [{ stacked: true }], yAxes: [{ stacked: true }] } };
             generar_grafico('#chart-hashtag', data_followers, 'bar', options);
         }
     });
@@ -215,10 +206,7 @@ function generar_venn(sets, id, title, color) {
     $(progress).css('width', '100%');
     $(progress).slideUp();
     $.each(div.selectAll("path")._groups[0], function(k, v) {
-        $(v).css('fill', randomColor({
-            luminosity: 'bright',
-            hue: color
-        }));
+        $(v).css('fill', randomColor({ luminosity: 'bright', hue: color }));
     });
     div.selectAll("g").on("mouseover", function(d, i) {
         venn.sortAreas(div, d);
@@ -253,37 +241,21 @@ function generar_response(initial_data, title, hue, random_hue) {
 
         if (typeof(hue) != 'undefined') {
             if (typeof(random_hue) != 'undefined') {
-                color_base = randomColor({
-                    luminosity: 'light',
-                    hue: hue,
-                    format: 'rgba',
-                    alpha: 0.2
-                });
+                color_base = randomColor({ luminosity: 'light', hue: hue, format: 'rgba', alpha: 0.2 });
             } else {
                 color_base = chartColors[hue];
             }
         } else {
-            color_base = randomColor({
-                luminosity: 'bright',
-                format: 'rgba',
-                alpha: 0.2
-            });
+            color_base = randomColor({ luminosity: 'bright', format: 'rgba', alpha: 0.2 });
         }
         color_border = color_base.replace("0.2", "1");
-
         color.push(color_base);
         border.push(color_border);
     });
 
     var data_response = {
         labels: label,
-        datasets: [{
-            label: title,
-            data: final_data,
-            backgroundColor: color,
-            borderColor: border,
-            borderWidth: 1
-        }]
+        datasets: [{ label: title, data: final_data, backgroundColor: color, borderColor: border, borderWidth: 1 }]
     }
     return data_response
 
@@ -295,13 +267,7 @@ function generar_grafico(id, data, type, options_extra) {
     $(progress).show();
 
     var options = {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
-        },
+        scales: { yAxes: [{ ticks: { beginAtZero: true } }] },
         animation: {
             onProgress: function(animation) {
                 $(progress).css('width', 50 + 50 * (animation.animationObject.currentStep / animation.animationObject.numSteps) + '%');
@@ -310,21 +276,12 @@ function generar_grafico(id, data, type, options_extra) {
                 $(progress).slideUp();
             }
         },
-        elements: {
-            point: {
-                radius: 4,
-                hoverRadius: 5,
-                hitRadius: 10,
-            }
-        }
+        elements: { point: { radius: 4, hoverRadius: 5, hitRadius: 10, } }
     };
 
     if (typeof(options_extra) != 'undefined') {
         var options = $.extend(true, options, options_extra);
     }
-
-
-
 
     if (typeof(char_list[id]) != 'undefined') {
         char_list[id].type = type;
@@ -339,8 +296,6 @@ function generar_grafico(id, data, type, options_extra) {
         });
     }
 
-
     $(progress).slideUp();
-
     return char_list[id];
 }
