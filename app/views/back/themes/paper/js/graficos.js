@@ -306,6 +306,8 @@ function generar_response(initial_data, title, hue, random_hue) {
 
 
 function generar_grafico(id, data, type, options_extra) {
+    data_list[id]=data;
+    console.log(data_list);
     var progress = $(id).siblings('.progress-bar')[0];
     $(progress).show();
 
