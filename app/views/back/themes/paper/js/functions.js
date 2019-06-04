@@ -382,8 +382,10 @@ $.fn.serializeObject = function() {
     }), a
 };
 
-const isEqual = (a, b) => {
-    var log=true;
+const isEqual = (a, b,log) => {
+    if (typeof(log)=='undefined'){
+        log=false;
+    }
     if (a === b) return true;
     if (a instanceof Date && b instanceof Date) {
         if (log) console.log(a.getTime(),b.getTime(),'time');
@@ -406,5 +408,5 @@ const isEqual = (a, b) => {
         if (log) console.log(a,b,'keys');
         return false;
     } 
-    return keys.every(k => isEqual(a[k], b[k]));
+    return keys.every(k => isEqual(a[k], b[k],log));
   };
