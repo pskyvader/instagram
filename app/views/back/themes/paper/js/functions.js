@@ -384,7 +384,7 @@ $.fn.serializeObject = function() {
 
 const isEqual = (a, b,log) => {
     if (typeof(log)=='undefined'){
-        log=false;
+        log=true;
     }
     if (a === b) return true;
     if (a instanceof Date && b instanceof Date) {
