@@ -97,7 +97,7 @@ function onMessage(evt) {
                     $('#log_instagram').prepend(p.append(message));
                     if ($('#log_instagram p').length > 1000) {
                         $('#log_instagram p').each(function(k, v) {
-                            if (k > 500) {
+                            if (k > 200) {
                                 $(v).remove();
                             }
                         });
