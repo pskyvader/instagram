@@ -38,6 +38,7 @@ function chart_total() {
         if (typeof(data_list[id]) != 'undefined' && !isEqual(data_list[id], data)) {
             return true;
         } else {
+            console.log(data_list[id], data);
             data_list[id] = data;
 
             var data_follower = generar_response(data.follower, 'Seguidores', 'orange');
