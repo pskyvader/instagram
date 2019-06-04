@@ -35,7 +35,8 @@ class file(object):
             bot_support.console_print(bot_support,msg,color='green',bold_text=True)
 
         if not allow_duplicates and str(item) in self.list:
-            msg = "'{}' already in `{}`.".format(item, self.fname)
+            if self.verbose and show_message:
+                msg = "'{}' already in `{}`.".format(item, self.fname)
             bot_support.console_print(bot_support,msg,color='orange',bold_text=True)
             return
 
