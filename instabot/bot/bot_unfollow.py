@@ -8,8 +8,8 @@ def unfollow(self, user_id,progress=None):
     user_id = self.convert_to_user_id(user_id)
     user_info = self.get_user_info(user_id)
     username = user_info["username"]
-    msg='===> Going to unfollow `user_id`: {} with username: {}'.format(user_id, username)
-    self.console_print(msg,progress=progress)
+    #msg='===> Going to unfollow `user_id`: {} with username: {}'.format(user_id, username)
+    #self.console_print(msg,progress=progress)
     if self.check_user(user_id, unfollowing=True):
         data={'id':user_info[0],'following':True}
         igaccounts_model.update(data,False)
@@ -18,7 +18,7 @@ def unfollow(self, user_id,progress=None):
         self.delay('unfollow')
         response=self.api.unfollow(user_id)
         if isinstance(response,bool) and response:
-            self.unfollowed_file.append(user_id)
+            self.unfollowed_file.append(user_id,show_message=False)
             self.total['unfollows'] += 1
             igtotal_model.set_total('unfollows',functions.current_time('%Y-%m-%d'),1)
             msg = '===> Unfollowed, `user_id`: {}, user_name: {}. Total: {}/{}'.format(user_id, username,self.total['unfollows'],self.max_per_day['unfollows'])
