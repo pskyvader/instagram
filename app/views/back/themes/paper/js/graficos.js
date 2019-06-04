@@ -35,12 +35,8 @@ function chart_total() {
     var url = create_url(modulo, 'get_total_followers');
     post_basic(url, {}, 'Adquiriendo Seguidores Totales', function(data) {
         var id = '#chart-total-followers';
-        if (typeof(data_list[id]) != 'undefined' && !isEqual(data_list[id], data,true)) {
-            return true;
-        } else {
-            console.log( data_list[id] , data);
+        if (typeof(data_list[id]) == 'undefined' || isEqual(data_list[id], data)) {
             data_list[id] = data;
-
             var data_follower = generar_response(data.follower, 'Seguidores', 'orange');
             var data_following = generar_response(data.following, 'Siguiendo', 'blue');
             data_follower.datasets = [
