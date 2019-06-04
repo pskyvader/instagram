@@ -94,8 +94,13 @@ function onMessage(evt) {
                     } else {
                         p.css('font-weight', 'regular');
                     }
-
                     $('#log_instagram').prepend(p.append(message));
+                    if($('#log_instagram p').length>1000){
+                        $('#log_instagram p').each(function(k,v){
+                            console.log(k,v,this);
+                        });
+                    }
+                    
                 }
             }
         } else {
