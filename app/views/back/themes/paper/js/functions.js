@@ -385,10 +385,22 @@ $.fn.serializeObject = function() {
 const isEqual = (a, b) => {
     if (a === b) return true;
     if (a instanceof Date && b instanceof Date) return a.getTime() === b.getTime();
-    if (!a || !b || (typeof a !== 'object' && typeof b !== 'object')) return a === b;
-    if (a === null || a === undefined || b === null || b === undefined) return false;
-    if (a.prototype !== b.prototype) return false;
+    if (!a || !b || (typeof a !== 'object' && typeof b !== 'object')){
+        console.log(a,b,a===b);
+        return a === b;
+    } 
+    if (a === null || a === undefined || b === null || b === undefined){
+        console.log(a,b,'null');
+        return false;
+    }
+    if (a.prototype !== b.prototype){
+        console.log(a.prototype,b.prototype,'prototype');
+        return false;
+    } 
     let keys = Object.keys(a);
-    if (keys.length !== Object.keys(b).length) return false;
+    if (keys.length !== Object.keys(b).length){
+        console.log(a,b,'keys');
+        return false;
+    } 
     return keys.every(k => isEqual(a[k], b[k]));
   };
