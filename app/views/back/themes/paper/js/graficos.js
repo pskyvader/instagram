@@ -183,6 +183,9 @@ function chart_followers() {
 
 
 function generar_venn(sets, id, title, color) {
+    if ($(id).length==0){
+        return false;
+    }
     if (typeof(char_list[id]) != 'undefined') {
         char_list[id].empty();
         $(id).empty();
@@ -260,6 +263,9 @@ function generar_response(initial_data, title, hue, random_hue) {
 
 
 function generar_grafico(id, data, type, options_extra) {
+    if ($(id).length==0){
+        return false;
+    }
     var progress = $(id).siblings('.progress-bar')[0];
     $(progress).show();
 
