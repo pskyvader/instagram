@@ -228,7 +228,9 @@ class API(object):
                 return False
         else:
             if response.status_code != 429:
-                self.logger.error("Request returns {} error!".format(response.status_code))
+                self.logger.error(
+                    "Request returns {} error!".format(response.status_code)
+                )
             bot_support.console_print(
                 bot_support,
                 "Request returns {} error!".format(response.status_code),
@@ -248,7 +250,7 @@ class API(object):
                     "ATTENTION!: `feedback_required`, your action could have been blocked",
                     "red",
                 )
-                bot_support.console_print(bot_support, repr(response_data), "red")
+                # bot_support.console_print(bot_support, repr(response_data), "red")
                 self.fatal_error = True
                 if delay != None:
                     self.parent_class.update_max(delay)
@@ -258,7 +260,7 @@ class API(object):
                     sleep_seconds = self.parent_class.sleep[delay]
                 else:
                     sleep_seconds = 5 * 60
-                #self.logger.warning( "That means 'too many requests'. I'll go to sleep " "for {} seconds.".format(sleep_seconds) )
+                # self.logger.warning( "That means 'too many requests'. I'll go to sleep " "for {} seconds.".format(sleep_seconds) )
                 bot_support.console_print(
                     bot_support,
                     "That means 'too many requests'. I'll go to sleep for {} seconds.".format(
