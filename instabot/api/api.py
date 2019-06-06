@@ -248,6 +248,7 @@ class API(object):
                     "ATTENTION!: `feedback_required`, your action could have been blocked",
                     "red",
                 )
+                bot_support.console_print(bot_support, repr(response_data), "red")
                 self.fatal_error = True
                 if delay != None:
                     self.parent_class.update_max(delay)
