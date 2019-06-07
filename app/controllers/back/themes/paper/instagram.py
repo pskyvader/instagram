@@ -210,46 +210,65 @@ class instagram(base):
 
     def complete_process(self, var=[]):
         from time import sleep
+
         ret = {
             "headers": [("Content-Type", "application/json; charset=utf-8")],
             "body": "",
         }
-        respuesta = {"exito": False, "mensaje": ""}
+        respuesta = {"exito": True, "mensaje": ""}
         ig = instagram_bot()
-        ig.bot.console_print("Actualizando usuarios")
-        respuesta = ig.update()
-        if not respuesta["exito"]:
-            ig.bot.console_print(
-                "Hubo un error al actualizar usuarios. Reiniciando bot para el siguiente paso"
-            )
-            ig.bot.api.logout()
-            sleep(5)
-            ig = instagram_bot()
 
-        ig.bot.console_print("Dejando de seguir no seguidores")
-        respuesta = ig.unfollow("nonfollower")
+        process_update = bool(
+            int(configuracion_model.getByVariable("process_update", "1"))
+        )
+        if process_update:
+            ig.bot.console_print("Actualizando usuarios")
+            respuesta = ig.update()
 
-        if not respuesta["exito"]:
-            ig.bot.console_print(
-                "Hubo un error al dejar de seguir. Reiniciando bot para el siguiente paso"
-            )
-            ig.bot.api.logout()
-            sleep(5)
-            ig = instagram_bot()
+            if not respuesta["exito"]:
+                ig.bot.console_print(
+                    "Hubo un error al actualizar usuarios. Reiniciando bot para el siguiente paso"
+                )
+                ig.bot.api.logout()
+                sleep(5)
+                ig = instagram_bot()
 
-        ig.bot.console_print("Siguiendo por hashtag")
-        respuesta = ig.follow("hashtag")
+        process_unfollow = bool(
+            int(configuracion_model.getByVariable("process_unfollow", "1"))
+        )
+        if process_unfollow:
+            ig.bot.console_print("Dejando de seguir no seguidores")
+            respuesta = ig.unfollow("nonfollower")
 
-        if not respuesta["exito"]:
-            ig.bot.console_print(
-                "Hubo un error al seguir por hashtag. Reiniciando bot para el siguiente paso"
-            )
-            ig.bot.api.logout()
-            sleep(5)
-            ig = instagram_bot()
+            if not respuesta["exito"]:
+                ig.bot.console_print(
+                    "Hubo un error al dejar de seguir. Reiniciando bot para el siguiente paso"
+                )
+                ig.bot.api.logout()
+                sleep(5)
+                ig = instagram_bot()
 
-        ig.bot.console_print("Dejando de seguir seguidores antiguos")
-        respuesta = ig.unfollow("old")
+        process_follow = bool(
+            int(configuracion_model.getByVariable("process_follow", "1"))
+        )
+        if process_follow:
+            ig.bot.console_print("Siguiendo por hashtag")
+            respuesta = ig.follow("hashtag")
+
+            if not respuesta["exito"]:
+                ig.bot.console_print(
+                    "Hubo un error al seguir por hashtag. Reiniciando bot para el siguiente paso"
+                )
+                ig.bot.api.logout()
+                sleep(5)
+                ig = instagram_bot()
+
+        process_unfollow = bool(
+            int(configuracion_model.getByVariable("process_unfollow", "1"))
+        )
+        if process_unfollow:
+            ig.bot.console_print("Dejando de seguir seguidores antiguos")
+            respuesta = ig.unfollow("old")
 
         ig.bot.console_print("Todos los pasos completados")
 
