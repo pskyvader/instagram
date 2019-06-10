@@ -281,6 +281,7 @@ class Bot(object):
         self.verbosity = verbosity
 
         self.logger = self.api.logger
+        self.reset=False
         self.console_print("Instabot Started")
 
     @property
