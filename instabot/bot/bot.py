@@ -212,6 +212,18 @@ class Bot(object):
             "message": message_delay,
             "get": get_delay,
         }
+        
+        self.reset = {
+            "like": False,
+            "unlike": False,
+            "follow": False,
+            "unfollow": False,
+            "comment": False,
+            "block": False,
+            "unblock": False,
+            "message": False,
+            "get": False,
+        }
 
         self.last = {key: 0 for key in self.delays.keys()}
 
@@ -281,7 +293,6 @@ class Bot(object):
         self.verbosity = verbosity
 
         self.logger = self.api.logger
-        self.reset=False
         self.console_print("Instabot Started")
 
     @property
@@ -465,6 +476,16 @@ class Bot(object):
                 print(key, "no existe en", self)
         else:
             print(key, "no existe en totales", self.total)
+
+    def update_turn(self,key):
+        turn=configuracion_model.getByVariable("turn_" + key ,0)
+        turn_remain=configuracion_model.getByVariable("turn_remain_" + key ,0)
+        #self.reset[key]=True
+        turn+=1
+        turn_remain=turn
+        configuracion_model.setByVariable("turn_" + key , turn,False)
+        configuracion_model.setByVariable("turn_remain_" + key , turn_remain,False)
+
 
     def error_delay(self):
         time.sleep(10)
