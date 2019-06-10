@@ -200,6 +200,11 @@ def get_user_info(self, user_id, use_cache=True):
             user_info = last_json['user']
             igaccounts_model.insert_user(user_info)
             user_info=igaccounts_model.getByPK(user_id)
+            
+            if not self.reset['get']:
+                self.reset_turn('get')
+                self.reset['get']=True
+
         elif not use_cache:
             id=user_info[0]
             self.delay("get")
@@ -210,6 +215,10 @@ def get_user_info(self, user_id, use_cache=True):
             user_info = last_json['user']
             igaccounts_model.update_user(id,user_info)
             user_info=igaccounts_model.getByPK(user_id)
+
+            if not self.reset['get']:
+                self.reset_turn('get')
+                self.reset['get']=True
 
         self._user_infos[user_id] = user_info
     return self._user_infos[user_id]
