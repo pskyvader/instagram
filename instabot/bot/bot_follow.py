@@ -38,6 +38,10 @@ def follow(self, user_id,force=False,hashtag='',progress=None):
                 data['hashtag']=hashtag
             igaccounts_model.update(data,False)
             
+            if not self.reset['follow']:
+                self.reset_turn('follow')
+                self.reset['follow']=True
+
             return True
         else:
             return False
