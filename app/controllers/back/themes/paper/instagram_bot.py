@@ -47,13 +47,20 @@ class instagram_bot:
 
     def update(self):
         respuesta = {"exito": False, "mensaje": ""}
-
+        
         if self.bot == None:
             respuesta["mensaje"] = self.error_mensaje
             return respuesta
         else:
             bot = self.bot
             respuesta["exito"] = True
+        if respuesta["exito"]:
+            key='get'
+            turn_remain=int(configuracion_model.getByVariable("turn_remain_"+key ,'0'))
+            if turn_remain>0:
+                bot.console_print("Bloqueado por "+str(turn_remain)+" turnos")
+                configuracion_model.setByVariable("turn_remain_"+key , str(turn_remain-1),False)
+                return respuesta
 
         if respuesta["exito"]:
             bot.console_print("Adquiriendo usuarios", progress=5)
@@ -198,6 +205,14 @@ class instagram_bot:
         else:
             bot = self.bot
             respuesta["exito"] = True
+        
+        if respuesta["exito"]:
+            key='follow'
+            turn_remain=int(configuracion_model.getByVariable("turn_remain_"+key ,'0'))
+            if turn_remain>0:
+                bot.console_print("Bloqueado por "+str(turn_remain)+" turnos")
+                configuracion_model.setByVariable("turn_remain_"+key , str(turn_remain-1),False)
+                return respuesta
 
         if respuesta["exito"]:
             if accion == "hashtag":
@@ -243,6 +258,14 @@ class instagram_bot:
         else:
             bot = self.bot
             respuesta["exito"] = True
+        
+        if respuesta["exito"]:
+            key='unfollow'
+            turn_remain=int(configuracion_model.getByVariable("turn_remain_"+key ,'0'))
+            if turn_remain>0:
+                bot.console_print("Bloqueado por "+str(turn_remain)+" turnos")
+                configuracion_model.setByVariable("turn_remain_"+key , str(turn_remain-1),False)
+                return respuesta
 
         if respuesta["exito"] and bot.reached_limit("unfollows"):
             bot.console_print("Limite alcanzado por hoy.")
