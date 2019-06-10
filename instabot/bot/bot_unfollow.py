@@ -28,6 +28,11 @@ def unfollow(self, user_id,progress=None):
                 self.following.remove(user_id)
             data={'id':user_info[0],'following':False}
             igaccounts_model.update(data,False)
+            
+            if not self.reset['unfollow']:
+                self.reset_turn('unfollow')
+                self.reset['unfollow']=True
+                
             return True
         else:
             return False
