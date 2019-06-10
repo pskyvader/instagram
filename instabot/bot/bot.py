@@ -481,7 +481,10 @@ class Bot(object):
         turn=int(configuracion_model.getByVariable("turn_" + key ,'0'))
         turn_remain=int(configuracion_model.getByVariable("turn_remain_" + key ,'0'))
         #self.reset[key]=True
-        turn+=1
+        if turn<1:
+            turn+=1
+        else:
+            turn*=2
         turn_remain=turn
         configuracion_model.setByVariable("turn_" + key , turn,False)
         configuracion_model.setByVariable("turn_remain_" + key , turn_remain,False)
