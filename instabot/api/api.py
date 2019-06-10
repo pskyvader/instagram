@@ -254,6 +254,8 @@ class API(object):
                 self.fatal_error = True
                 if delay != None:
                     self.parent_class.update_max(delay)
+                    self.parent_class.update_turn(delay)
+
                 return "feedback_required"
             if response.status_code == 429:
                 if delay != None:
