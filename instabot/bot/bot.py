@@ -478,8 +478,8 @@ class Bot(object):
             print(key, "no existe en totales", self.total)
 
     def update_turn(self,key):
-        turn=configuracion_model.getByVariable("turn_" + key ,0)
-        turn_remain=configuracion_model.getByVariable("turn_remain_" + key ,0)
+        turn=int(configuracion_model.getByVariable("turn_" + key ,'0'))
+        turn_remain=int(configuracion_model.getByVariable("turn_remain_" + key ,'0'))
         #self.reset[key]=True
         turn+=1
         turn_remain=turn
