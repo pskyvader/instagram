@@ -128,6 +128,8 @@ class home(base):
             if u["hashtag"] in hashtag2:
                 hashtag2[u["hashtag"]]["removed"] = u["total"]
 
+
+        totales=[]
         for k, h in hashtag2.items():
             nombre = k.capitalize()
             f = h["follower"]
@@ -135,16 +137,24 @@ class home(base):
             r = h["removed"]
             porcentaje = (f / (fl + r)) * 100 if (fl + r > 0) else 0
 
+            totales.append({'hashtag':nombre,'total':f+fl+r})
             porcentaje = round(porcentaje, 2)
             followers[nombre] = f
             following[nombre] = fl
             removed[nombre] = r
             eficiencia[nombre] = porcentaje
 
-        respuesta["followers"] = followers
-        respuesta["following"] = following
-        respuesta["removed"] = removed
-        respuesta["eficiencia"] = eficiencia
+
+        respuesta["followers"] = {}
+        respuesta["following"] = {}
+        respuesta["removed"] = {}
+        respuesta["eficiencia"] = {}
+        totales = sorted(totales, key=lambda i: i["total"],reverse=True)
+        for t in totales:
+            respuesta["followers"][t['hashtag']] = followers[t['hashtag']]
+            respuesta["following"][t['hashtag']] = following[t['hashtag']]
+            respuesta["removed"][t['hashtag']] = removed[t['hashtag']]
+            respuesta["eficiencia"][t['hashtag']] = eficiencia[t['hashtag']]
 
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         return ret
