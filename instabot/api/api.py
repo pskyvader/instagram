@@ -231,19 +231,19 @@ class API(object):
                 self.logger.error(
                     "Request returns {} error!".format(response.status_code)
                 )
-                self.logger.error("Error detail: {}".format(response.text))
             bot_support.console_print(
                 bot_support,
                 "Request returns {} error!".format(response.status_code),
                 "red",
             )
-            bot_support.console_print(
-                bot_support, "Error detail: {}".format(response.text), "red"
-            )
             try:
                 response_data = json.loads(response.text)
             except JSONDecodeError:
                 response_data = {"message": response.text}
+            
+            bot_support.console_print(
+                bot_support, "Error detail: {}".format(response_data), "red"
+            )
 
             if "feedback_required" in str(response_data.get("message")):
                 self.logger.error(
