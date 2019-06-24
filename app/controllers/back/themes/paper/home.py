@@ -160,17 +160,27 @@ class home(base):
         return ret
 
     def get_total(self):
+        from datetime import datetime, timedelta
         ret = {
             "headers": [("Content-Type", "application/json; charset=utf-8")],
             "body": "",
         }
+        
+        days_seguidores_estadistica = int(
+            configuracion_model.getByVariable("days_seguidores_estadistica", 30)
+        )
+        fecha_actual = datetime.now()
+        fecha = (fecha_actual - timedelta(days=days_seguidores_estadistica)).strftime(
+            "%Y-%m-%d"
+        )
         respuesta = {
             "follows": {},
             "unfollows": {},
             "start_follow": {},
             "stop_follow": {},
         }
-        totales = igtotal_model.getAll(condiciones={"order": "fecha ASC"})
+        
+        totales = igtotal_model.getAll(where= {"DATE(fecha) >": fecha},condiciones={"order": "fecha ASC"})
 
         for t in totales:
             fecha = functions.formato_fecha(t["fecha"], "%d-%m-%Y")
