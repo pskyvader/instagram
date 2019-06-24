@@ -231,14 +231,14 @@ class API(object):
                 self.logger.error(
                     "Request returns {} error!".format(response.status_code)
                 )
-                self.logger.error("Error detail: {}".format(repr(response)))
+                self.logger.error("Error detail: {}".format(response.text))
             bot_support.console_print(
                 bot_support,
                 "Request returns {} error!".format(response.status_code),
                 "red",
             )
             bot_support.console_print(
-                bot_support, "Error detail: {}".format(repr(response)), "red"
+                bot_support, "Error detail: {}".format(response.text), "red"
             )
             try:
                 response_data = json.loads(response.text)
