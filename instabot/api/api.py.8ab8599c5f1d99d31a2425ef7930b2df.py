@@ -242,14 +242,7 @@ class API(object):
                 response_data = {"message": response.text}
 
             bot_support.console_print(
-                bot_support,
-                "Error detail:"
-                + repr(response)
-                + ".\nEndpoint:"
-                + endpoint
-                + ".\npost:"
-                + repr(post_tmp),
-                "red",
+                bot_support, "Error detail:" + repr(response) + ".\nEndpoint:" + endpoint + ".\npost:" + repr(post_tmp), "red"
             )
 
             if "feedback_required" in str(response_data.get("message")):
