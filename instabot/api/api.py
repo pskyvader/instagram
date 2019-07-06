@@ -253,13 +253,8 @@ class API(object):
                 separators=(",", ": "),
             )
 
-            error_text = (
-                "Error detail:\n"
-                + response_error
-                + ".\nEndpoint:"
-                + endpoint
-                + ".\npost:"
-                + repr(post_tmp)
+            error_text = "Error detail:\n {}.\nEndpoint:{}.\npost:".format(
+                response_error, endpoint, repr(post_tmp)
             )
 
             bot_support.console_print(bot_support, error_text, "red")
