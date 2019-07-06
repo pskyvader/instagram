@@ -281,8 +281,8 @@ class instagram(base):
             int(configuracion_model.getByVariable("process_follow", "1"))
         )
         if process_follow:
-            ig.bot.total["follows"]=int(ig.bot.total["follows"]/daily_process)*(daily_process_hours.index(hora)+1)
-            ig.bot.console_print(("Siguiendo por hashtag. Hora: {}, maximo para seguir del periodo: {}").format(hora,ig.bot.total["follows"]))
+            ig.bot.max_per_day["follows"]=int(ig.bot.max_per_day["follows"]/daily_process)*(daily_process_hours.index(hora)+1)
+            ig.bot.console_print(("Siguiendo por hashtag. Hora: {}, maximo para seguir del periodo: {}").format(hora,ig.bot.max_per_day["follows"]))
             respuesta = ig.follow("hashtag")
 
             if not respuesta["exito"]:
