@@ -240,8 +240,15 @@ class API(object):
                 response_data = json.loads(response.text)
             except JSONDecodeError:
                 response_data = {"message": response.text}
-                
-            response_error=json.dumps({'text':response.text,'status_code':response.status_code,'headers':dict(response.headers),'url':response.url})
+
+            response_error = json.dumps(
+                {
+                    "text": response.text,
+                    "status_code": response.status_code,
+                    "headers": dict(response.headers),
+                    "url": response.url,
+                }
+            )
 
             bot_support.console_print(
                 bot_support,
