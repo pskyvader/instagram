@@ -211,6 +211,7 @@ class instagram(base):
     def complete_process(self, var=[]):
         from time import sleep
         import random
+        import datetime
 
         ret = {
             "headers": [("Content-Type", "application/json; charset=utf-8")],
@@ -221,7 +222,9 @@ class instagram(base):
         daily_process_hours = json.loads(
             configuracion_model.getByVariable("daily_process_hours", "[]")
         )
-        hora = functions.current_time("%H")
+        fecha = datetime.datetime.now()
+        hora=fecha.strftime("%H")
+
         if hora == "00":
             daily_process_hours = set()
             while len(daily_process_hours) < daily_process:
