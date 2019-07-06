@@ -231,9 +231,9 @@ class instagram(base):
             while len(daily_process_hours) < daily_process:
                 rand = random.randint(0, 23)
                 if rand < 10:
-                    daily_process_hours.add .append("0" + str(rand))
+                    daily_process_hours.add("0" + str(rand))
                 else:
-                    daily_process_hours.append(str(rand))
+                    daily_process_hours.add(str(rand))
             daily_process_hours = sorted(daily_process_hours)
             configuracion_model.getByVariable(
                 "daily_process_hours", json.dumps(daily_process_hours)
