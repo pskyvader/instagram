@@ -210,13 +210,39 @@ class instagram(base):
 
     def complete_process(self, var=[]):
         from time import sleep
+        import random
 
         ret = {
             "headers": [("Content-Type", "application/json; charset=utf-8")],
             "body": "",
         }
         respuesta = {"exito": True, "mensaje": ""}
+        daily_process = int(configuracion_model.getByVariable("daily_process", "4"))
+        daily_process_hours = json.loads(
+            configuracion_model.getByVariable("daily_process_hours", "[]")
+        )
+        hora = functions.current_time("%H")
+        if hora == "00":
+            daily_process_hours = set()
+            while len(daily_process_hours) < daily_process:
+                rand = random.randint(0, 23)
+                if rand < 10:
+                    daily_process_hours.append("0" + str(rand))
+                else:
+                    daily_process_hours.append(str(rand))
+            daily_process_hours = sorted(daily_process_hours)
+            configuracion_model.getByVariable(
+                "daily_process_hours", json.dumps(daily_process_hours)
+            )
+
         ig = instagram_bot()
+
+        if hora not in daily_process_hours:
+            respuesta["mensaje"] = "Fuera de horario activo: " + hora
+            ig.bot.console_print(respuesta["mensaje"])
+            if len(var) == 0:
+                ret["body"] = json.dumps(respuesta, ensure_ascii=False)
+            return ret
 
         process_update = bool(
             int(configuracion_model.getByVariable("process_update", "1"))
@@ -252,7 +278,8 @@ class instagram(base):
             int(configuracion_model.getByVariable("process_follow", "1"))
         )
         if process_follow:
-            ig.bot.console_print("Siguiendo por hashtag")
+            bot.total["follows"]=int(bot.total["follows"]/daily_process)*(daily_process_hours.index(hora)+1)
+            ig.bot.console_print(("Siguiendo por hashtag. Hora: {}, maximo para seguir del periodo: {}").format(hora,bot.total["follows"]))
             respuesta = ig.follow("hashtag")
 
             if not respuesta["exito"]:
