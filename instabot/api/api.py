@@ -245,6 +245,7 @@ class API(object):
                 bot_support,
                 "Error detail:"
                 + repr(response)
+                + repr(response_data)
                 + ".\nEndpoint:"
                 + endpoint
                 + ".\npost:"
