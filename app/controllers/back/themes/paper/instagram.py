@@ -235,7 +235,7 @@ class instagram(base):
                 else:
                     daily_process_hours.add(str(rand))
             daily_process_hours = sorted(daily_process_hours)
-            configuracion_model.getByVariable(
+            configuracion_model.setByVariable(
                 "daily_process_hours", json.dumps(daily_process_hours)
             )
 
