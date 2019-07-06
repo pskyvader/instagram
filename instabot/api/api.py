@@ -241,7 +241,7 @@ class API(object):
             except JSONDecodeError:
                 response_data = {"message": response.text}
             
-            print(response,type(response))
+            print(response,type(response),repr(response))
 
             bot_support.console_print(
                 bot_support,
