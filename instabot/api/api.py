@@ -253,16 +253,16 @@ class API(object):
                 separators=(",", ": "),
             )
 
-            bot_support.console_print(
-                bot_support,
-                "Error detail:<br/>"
+            error_text = (
+                "Error detail:\n"
                 + response_error
-                + ".<br/>Endpoint:"
+                + ".\nEndpoint:"
                 + endpoint
-                + ".<br/>post:"
-                + repr(post_tmp),
-                "red",
+                + ".\npost:"
+                + repr(post_tmp)
             )
+
+            bot_support.console_print(bot_support, error_text, "red")
 
             if "feedback_required" in str(response_data.get("message")):
                 self.logger.error(

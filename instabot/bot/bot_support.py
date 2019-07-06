@@ -45,7 +45,7 @@ def read_list_from_file(file_path, quiet=False):
 
 
 def console_print(self, text, color=None,progress=None,bold_text=False):
-
+    text = text.replace("\n", "<br />")
     log_file={'mensaje':text}
 
     if progress!=None:
