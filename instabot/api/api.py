@@ -246,7 +246,7 @@ class API(object):
             bot_support.console_print(
                 bot_support,
                 "Error detail:\n"
-                + (response)
+                + str(response)
                 + "--------\n"
                 + repr(response_data)
                 + ".\nEndpoint:"
