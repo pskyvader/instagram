@@ -247,7 +247,10 @@ class API(object):
                     "status_code": response.status_code,
                     "headers": dict(response.headers),
                     "url": response.url,
-                }
+                },
+                sort_keys=True,
+                indent=4,
+                separators=(",", ": "),
             )
 
             bot_support.console_print(
