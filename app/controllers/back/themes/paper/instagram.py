@@ -241,7 +241,7 @@ class instagram(base):
 
         ig = instagram_bot()
 
-        if hora not in daily_process_hours:
+        if True or hora not in daily_process_hours:
             respuesta["mensaje"] = "Fuera de horario activo: " + hora
             ig.bot.console_print(respuesta["mensaje"])
             if len(var) == 0:
