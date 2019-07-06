@@ -253,7 +253,7 @@ class API(object):
                 separators=(",", ": "),
             )
 
-            error_text = "Error detail:\n {}.\nEndpoint:{}.\npost:".format(
+            error_text = "Error detail:\n <pre>{}</pre>.\nEndpoint:{}.\npost:".format(
                 response_error, endpoint, repr(post_tmp)
             )
 
