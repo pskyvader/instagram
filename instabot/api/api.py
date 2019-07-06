@@ -240,18 +240,16 @@ class API(object):
                 response_data = json.loads(response.text)
             except JSONDecodeError:
                 response_data = {"message": response.text}
-            
-            print(response.json(),type(response),repr(response),str(response))
+                
+            response_error=json.dumps({'text':response.text,'status_code':response.status_code,'headers':dict(response.headers),'url':response.url})
 
             bot_support.console_print(
                 bot_support,
-                "Error detail:\n"
-                + str(response)
-                + "--------\n"
-                + repr(response_data)
-                + ".\nEndpoint:"
+                "Error detail:<br/>"
+                + response_error
+                + ".<br/>Endpoint:"
                 + endpoint
-                + ".\npost:"
+                + ".<br/>post:"
                 + repr(post_tmp),
                 "red",
             )
