@@ -224,6 +224,7 @@ class instagram(base):
         )
         fecha = datetime.datetime.now()
         hora=fecha.strftime("%H")
+        hora='00'
 
         if hora == "00":
             daily_process_hours = set()
