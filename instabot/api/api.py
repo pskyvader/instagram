@@ -243,9 +243,9 @@ class API(object):
 
             bot_support.console_print(
                 bot_support,
-                "Error detail:"
-                + repr(response)
-                + "--------"
+                "Error detail:\n"
+                + json.dumps(response)
+                + "--------\n"
                 + repr(response_data)
                 + ".\nEndpoint:"
                 + endpoint
