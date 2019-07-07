@@ -245,6 +245,7 @@ class Bot(object):
             "unblocks": max_unblocks_per_day,
             "messages": max_messages_per_day,
         }
+        self.max_per_turn= {key: -1 for key in self.max_per_day.keys()}
 
         self.blocked_actions_protection = blocked_actions_protection
 
