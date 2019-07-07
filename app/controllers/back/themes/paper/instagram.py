@@ -238,14 +238,13 @@ class instagram(base):
                 "daily_process_hours", json.dumps(daily_process_hours)
             )
 
-        ig = instagram_bot()
-
         if hora not in daily_process_hours:
             respuesta["mensaje"] = "Fuera de horario activo: " + hora
-            ig.bot.console_print(respuesta["mensaje"])
             if len(var) == 0:
                 ret["body"] = json.dumps(respuesta, ensure_ascii=False)
             return ret
+
+        ig = instagram_bot()
 
         process_update = bool(
             int(configuracion_model.getByVariable("process_update", "1"))
