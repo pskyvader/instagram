@@ -185,8 +185,6 @@ class Bot(object):
             ),
         }
 
-
-
         self.start_time = datetime.datetime.now()
         self.sleep = {
             "like": like_sleep,
@@ -212,7 +210,7 @@ class Bot(object):
             "message": message_delay,
             "get": get_delay,
         }
-        
+
         self.reset = {
             "like": False,
             "unlike": False,
@@ -245,7 +243,7 @@ class Bot(object):
             "unblocks": max_unblocks_per_day,
             "messages": max_messages_per_day,
         }
-        self.max_per_turn= {key: value for key,value in self.max_per_day.items()}
+        self.max_per_turn = {key: value for key, value in self.max_per_day.items()}
 
         self.blocked_actions_protection = blocked_actions_protection
 
@@ -382,8 +380,8 @@ class Bot(object):
             args["proxy"] = self.proxy
         if self.api.login(**args) is False:
             return False
-        
-        #self.prepare()
+
+        # self.prepare()
         signal.signal(signal.SIGTERM, self.logout)
         atexit.register(self.logout)
         return True
@@ -431,7 +429,7 @@ class Bot(object):
             if not repeat:
                 delay += delta
                 self.delays[key] = delay
-                configuracion_model.setByVariable(key + "_delay", str(delay),False)
+                configuracion_model.setByVariable(key + "_delay", str(delay), False)
                 self.console_print(
                     "Nuevo valor para delay " + key + ": " + str(self.delays[key])
                 )
@@ -453,7 +451,9 @@ class Bot(object):
             if repeat or sleep_delay < delay * 5 or (last_sleep < sleep_delay * 4):
                 sleep_delay += sleep
                 self.sleep[key] = sleep_delay
-                configuracion_model.setByVariable(key + "_sleep", str(sleep_delay),False)
+                configuracion_model.setByVariable(
+                    key + "_sleep", str(sleep_delay), False
+                )
                 self.console_print(
                     "Nuevo valor para sleep " + key + ": " + str(self.sleep[key])
                 )
@@ -461,8 +461,10 @@ class Bot(object):
             self.last_sleep[key] = time.time()
 
     def update_max(self, key):
-        delay_adjust=int(configuracion_model.getByVariable('delay_adjust',50))
-        max_delay_adjust=int(configuracion_model.getByVariable('max_delay_adjust',100))
+        delay_adjust = int(configuracion_model.getByVariable("delay_adjust", 50))
+        max_delay_adjust = int(
+            configuracion_model.getByVariable("max_delay_adjust", 100)
+        )
         key = key + "s"
         if key in self.total and key in self.max_per_day:
             total = self.total[key]
@@ -472,28 +474,29 @@ class Bot(object):
                     new_max = max - delay_adjust
                 else:
                     new_max = max - 1
-                configuracion_model.setByVariable("max_" + key + "_per_day", new_max,False)
+                configuracion_model.setByVariable(
+                    "max_" + key + "_per_day", new_max, False
+                )
             else:
                 print(key, "no existe en", self)
         else:
             print(key, "no existe en totales", self.total)
 
-    def update_turn(self,key):
-        turn=int(configuracion_model.getByVariable("turn_" + key ,'0'))
-        turn_remain=int(configuracion_model.getByVariable("turn_remain_" + key ,'0'))
-        #self.reset[key]=True
-        if turn<1:
-            turn+=1
+    def update_turn(self, key):
+        turn = int(configuracion_model.getByVariable("turn_" + key, "0"))
+        turn_remain = int(configuracion_model.getByVariable("turn_remain_" + key, "0"))
+        # self.reset[key]=True
+        if turn < 1:
+            turn += 1
         else:
-            turn*=2
-        turn_remain=turn
-        configuracion_model.setByVariable("turn_" + key , turn,False)
-        configuracion_model.setByVariable("turn_remain_" + key , turn_remain,False)
+            turn *= 2
+        turn_remain = turn
+        configuracion_model.setByVariable("turn_" + key, turn, False)
+        configuracion_model.setByVariable("turn_remain_" + key, turn_remain, False)
 
-    def reset_turn(self,key):
-        configuracion_model.setByVariable("turn_" + key , '0',False)
-        configuracion_model.setByVariable("turn_remain_" + key , '0',False)
-
+    def reset_turn(self, key):
+        configuracion_model.setByVariable("turn_" + key, "0", False)
+        configuracion_model.setByVariable("turn_remain_" + key, "0", False)
 
     def error_delay(self):
         time.sleep(10)
@@ -522,7 +525,19 @@ class Bot(object):
             )
             return True
         else:
-            return False
+            if self.total[key] >= self.max_per_turn[key]:
+                self.console_print(
+                    "Maximo del turno alcanzado: "
+                    + key
+                    + " "
+                    + str(self.total[key])
+                    + " > "
+                    + str(self.max_per_turn[key]),
+                    color="red",
+                )
+                return True
+            else:
+                return False
 
     def reset_counters(self):
         for k in self.total:
@@ -721,8 +736,8 @@ class Bot(object):
 
     # follow
 
-    def follow(self, user_id, force=False, hashtag="",progress=None):
-        return follow(self, user_id, force, hashtag,progress)
+    def follow(self, user_id, force=False, hashtag="", progress=None):
+        return follow(self, user_id, force, hashtag, progress)
 
     def follow_users(self, user_ids, base=0, proporcion=1, hashtag=""):
         return follow_users(self, user_ids, base, proporcion, hashtag)
