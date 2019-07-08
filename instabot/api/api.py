@@ -171,7 +171,9 @@ class API(object):
     def logout(self, *args, **kwargs):
         if not self.is_logged_in:
             return True
-        self.is_logged_in = not self.send_request("accounts/logout/")
+        
+        # self.is_logged_in = not self.send_request("accounts/logout/")
+        self.is_logged_in = False
         return not self.is_logged_in
 
     def set_proxy(self):
