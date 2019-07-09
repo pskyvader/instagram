@@ -544,7 +544,7 @@ class backup(base):
                     + str(archivo_backup)
                 )
         
-        respuesta['bdd']=''
+        respuesta['sql']=''
         if log:
             ret["body"] = json.dumps(respuesta, ensure_ascii=False)
             return ret
