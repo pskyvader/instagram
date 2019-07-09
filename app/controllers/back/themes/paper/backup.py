@@ -543,6 +543,8 @@ class backup(base):
                     "Ocurrio un error al intentar guardar la base de datos en archivo zip "
                     + str(archivo_backup)
                 )
+        
+        respuesta['bdd']=''
         if log:
             ret["body"] = json.dumps(respuesta, ensure_ascii=False)
             return ret
