@@ -62,6 +62,13 @@ def console_print(self, text, color=None,progress=None,bold_text=False):
         file_write = open(archivo_log, "w+")
         file_write.write(log_file)
         file_write.close()
+
+        archivo_log = app.get_dir(True) + "/log_dump.json"
+        file_write = open(archivo_log, "a+")
+        file_write.write(text)
+        file_write.close()
+
+
         if text!='' and self.verbosity:
             if bold_text:
                 text=bold(text)

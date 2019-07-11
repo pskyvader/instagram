@@ -514,27 +514,11 @@ class Bot(object):
             self.reset_counters()
 
         if self.total[key] >= self.max_per_day[key]:
-            self.console_print(
-                "Maximo diario alcanzado: "
-                + key
-                + " "
-                + str(self.total[key])
-                + " > "
-                + str(self.max_per_day[key]),
-                color="red",
-            )
+            self.console_print( "Máximo diario alcanzado: {} {} > {}".format(key,self.total[key],self.max_per_day[key]), color="red", )
             return True
         else:
             if self.total[key] >= self.max_per_turn[key]:
-                self.console_print(
-                    "Maximo del turno alcanzado: "
-                    + key
-                    + " "
-                    + str(self.total[key])
-                    + " > "
-                    + str(self.max_per_turn[key]),
-                    color="red",
-                )
+                self.console_print( "Máximo del turno alcanzado: {} {} > {}".format(key,self.total[key],self.max_per_turn[key]), color="red", )
                 return True
             else:
                 return False
