@@ -36,7 +36,7 @@ class socket:
                 socket.host=json.loads(down)['final_url']
                 socket.sock = create_connection(socket.host)
         except:
-            pass
+            socket.sock=None
 
     @staticmethod
     def close():
