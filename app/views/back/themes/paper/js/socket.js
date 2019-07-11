@@ -26,7 +26,7 @@ function websocket_start(callback) {
                         onMessage(evt)
                     };
                     websocket.onerror = function(evt) {
-                        onError(evt)
+                        onError(evt,callback)
                     };
                 },
                 error: function() {
@@ -116,7 +116,7 @@ function onMessage(evt) {
     }
 }
 
-function onError(evt) {
+function onError(evt,callback) {
     websocket = null;
     console.log("Error al conectar log");
     notificacion_footer("Error al conectar log");
@@ -129,6 +129,10 @@ function onError(evt) {
                 websocket_start();
             }
         });
+    }else{
+        if (typeof(callback) != 'undefined') {
+            callback();
+        }
     }
 }
 
