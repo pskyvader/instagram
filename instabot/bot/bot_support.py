@@ -57,7 +57,6 @@ def console_print(self, text, color=None,progress=None,bold_text=False):
 
     log_file=json.dumps(log_file)
     socket.send(log_file)
-    print(socket.sock,socket.sock.connected)
     if socket.sock==None:
         archivo_log = app.get_dir(True) + "/log.json"
         file_write = open(archivo_log, "w+")
