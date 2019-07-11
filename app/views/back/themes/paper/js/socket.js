@@ -15,6 +15,7 @@ function websocket_start(callback) {
                 success: function(data) {
                     wsUri = data.final_url;
                     websocket = new WebSocket(wsUri);
+                    console.log(websocket);
                     websocket.onopen = function(evt) {
                         onOpen(evt)
                     };
