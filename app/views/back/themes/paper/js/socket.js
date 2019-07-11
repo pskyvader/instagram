@@ -118,6 +118,7 @@ function onMessage(evt) {
 
 function onError(evt) {
     websocket = null;
+    console.log("Error al conectar log");
     notificacion_footer("Error al conectar log");
     if (intento < 1) {
         intento++;
