@@ -222,8 +222,9 @@ class instagram(base):
         daily_process_hours = json.loads(
             configuracion_model.getByVariable("daily_process_hours", "[]")
         )
-        fecha = datetime.datetime.now()
-        hora=fecha.strftime("%H")
+        hora=functions.current_time("%H")
+        # fecha = datetime.datetime.now()
+        # hora=fecha.strftime("%H")
 
         if hora == "00":
             daily_process_hours = set()
