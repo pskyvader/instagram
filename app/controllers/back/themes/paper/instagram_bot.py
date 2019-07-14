@@ -45,8 +45,7 @@ class instagram_bot:
             bot = None
             self.error_mensaje = respuesta["mensaje"]
 
-
-    def user(self,id):
+    def user(self, id):
         respuesta = {"exito": False, "mensaje": ""}
         if self.bot == None:
             respuesta["mensaje"] = self.error_mensaje
@@ -72,7 +71,7 @@ class instagram_bot:
 
     def update(self):
         respuesta = {"exito": False, "mensaje": ""}
-        
+
         if self.bot == None:
             respuesta["mensaje"] = self.error_mensaje
             return respuesta
@@ -80,11 +79,15 @@ class instagram_bot:
             bot = self.bot
             respuesta["exito"] = True
         if respuesta["exito"]:
-            key='get'
-            turn_remain=int(configuracion_model.getByVariable("turn_remain_"+key ,'0'))
-            if turn_remain>0:
-                bot.console_print("Bloqueado por "+str(turn_remain)+" turnos")
-                configuracion_model.setByVariable("turn_remain_"+key , str(turn_remain-1),False)
+            key = "get"
+            turn_remain = int(
+                configuracion_model.getByVariable("turn_remain_" + key, "0")
+            )
+            if turn_remain > 0:
+                bot.console_print("Bloqueado por " + str(turn_remain) + " turnos")
+                configuracion_model.setByVariable(
+                    "turn_remain_" + key, str(turn_remain - 1), False
+                )
                 return respuesta
 
         if respuesta["exito"]:
@@ -230,13 +233,17 @@ class instagram_bot:
         else:
             bot = self.bot
             respuesta["exito"] = True
-        
+
         if respuesta["exito"]:
-            key='follow'
-            turn_remain=int(configuracion_model.getByVariable("turn_remain_"+key ,'0'))
-            if turn_remain>0:
-                bot.console_print("Bloqueado por "+str(turn_remain)+" turnos")
-                configuracion_model.setByVariable("turn_remain_"+key , str(turn_remain-1),False)
+            key = "follow"
+            turn_remain = int(
+                configuracion_model.getByVariable("turn_remain_" + key, "0")
+            )
+            if turn_remain > 0:
+                bot.console_print("Bloqueado por " + str(turn_remain) + " turnos")
+                configuracion_model.setByVariable(
+                    "turn_remain_" + key, str(turn_remain - 1), False
+                )
                 return respuesta
 
         if respuesta["exito"]:
@@ -283,13 +290,17 @@ class instagram_bot:
         else:
             bot = self.bot
             respuesta["exito"] = True
-        
+
         if respuesta["exito"]:
-            key='unfollow'
-            turn_remain=int(configuracion_model.getByVariable("turn_remain_"+key ,'0'))
-            if turn_remain>0:
-                bot.console_print("Bloqueado por "+str(turn_remain)+" turnos")
-                configuracion_model.setByVariable("turn_remain_"+key , str(turn_remain-1),False)
+            key = "unfollow"
+            turn_remain = int(
+                configuracion_model.getByVariable("turn_remain_" + key, "0")
+            )
+            if turn_remain > 0:
+                bot.console_print("Bloqueado por " + str(turn_remain) + " turnos")
+                configuracion_model.setByVariable(
+                    "turn_remain_" + key, str(turn_remain - 1), False
+                )
                 return respuesta
 
         if respuesta["exito"] and bot.reached_limit("unfollows"):
@@ -349,7 +360,6 @@ class instagram_bot:
             bot.console_print("Completado", progress=100)
         return respuesta
 
-
     def delete(self):
         respuesta = {"exito": False, "mensaje": ""}
         if self.bot == None:
@@ -358,8 +368,8 @@ class instagram_bot:
         else:
             bot = self.bot
             respuesta["exito"] = True
-        
-        if respuesta['exito']:
+
+        if respuesta["exito"]:
             hashtag = ighashtag_model.getAll({"estado": True})
             hashtag = [h["hashtag"] for h in hashtag]
             f = igaccounts_model.getAll(
@@ -377,7 +387,12 @@ class instagram_bot:
                     igaccounts_model.update({"id": u[0], "hashtag": ""}, False)
 
             users = igaccounts_model.getAll(
-                {"follower": False, "following": False, "favorito": False, "hashtag": ""}
+                {
+                    "follower": False,
+                    "following": False,
+                    "favorito": False,
+                    "hashtag": "",
+                }
             )
 
             for k, u in enumerate(users):
@@ -390,11 +405,25 @@ class instagram_bot:
         return respuesta
 
     def update_hashtag(self):
-        hashtags = ighashtag_model.getAll({"estado": True})
+        respuesta = {"exito": False, "mensaje": ""}
+        if self.bot == None:
+            respuesta["mensaje"] = self.error_mensaje
+            return respuesta
+        else:
+            bot = self.bot
+            respuesta["exito"] = True
+
+        if respuesta["exito"]:
+            hashtags = ighashtag_model.getAll({"estado": True},{'limit':10})
+            if len(hashtags)>=10:
+                #eliminar el peor hashtag
+                pass
+            else:
+                #buscar nuevos hashtag
+                pass
 
 
-
-
+        return respuesta
 
     def get_bot(self):
         get_var = configuracion_model.getByVariable
