@@ -45,6 +45,32 @@ class instagram_bot:
             bot = None
             self.error_mensaje = respuesta["mensaje"]
 
+
+
+
+    def user(self):
+        respuesta = {"exito": False, "mensaje": ""}
+        if "campos" in app.post and "id" in app.post["campos"]:
+            campos = app.post["campos"]
+            id = campos["id"]
+            ig = instagram_bot()
+            bot = ig.bot
+            if id.isdigit():
+                user = bot.get_user_info(id)
+            else:
+                user_id = bot.get_user_id_from_username(id)
+                user = bot.get_user_info(user_id)
+
+            if "pk" not in user:
+                respuesta["mensaje"] = "No se encontro un usuario valido"
+            else:
+                respuesta["exito"] = True
+                respuesta["mensaje"] = "Usuario: " + user["full_name"]
+        else:
+            respuesta["mensaje"] = "No se encontraron datos validos"
+            
+        return respuesta
+
     def update(self):
         respuesta = {"exito": False, "mensaje": ""}
         
