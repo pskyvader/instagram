@@ -121,7 +121,7 @@ class instagram(base):
         respuesta = {"exito": False, "mensaje": ""}
         if "campos" in app.post and "id" in app.post["campos"]:
             ig = instagram_bot()
-            respuesta=ig.user(app.post["campos"]['id'])
+            respuesta = ig.user(app.post["campos"]["id"])
         else:
             respuesta["mensaje"] = "No se encontraron datos validos"
 
@@ -179,7 +179,7 @@ class instagram(base):
         daily_process_hours = json.loads(
             configuracion_model.getByVariable("daily_process_hours", "[]")
         )
-        hora=functions.current_time("%H")
+        hora = functions.current_time("%H")
         # fecha = datetime.datetime.now()
         # hora=fecha.strftime("%H")
 
@@ -238,8 +238,14 @@ class instagram(base):
             int(configuracion_model.getByVariable("process_follow", "1"))
         )
         if process_follow:
-            ig.bot.max_per_turn["follows"]=int(ig.bot.max_per_day["follows"]/daily_process)*(daily_process_hours.index(hora)+1)
-            ig.bot.console_print(("Siguiendo por hashtag. Hora: {}, maximo para seguir del periodo: {}").format(hora,ig.bot.max_per_turn["follows"]))
+            ig.bot.max_per_turn["follows"] = int(
+                ig.bot.max_per_day["follows"] / daily_process
+            ) * (daily_process_hours.index(hora) + 1)
+            ig.bot.console_print(
+                (
+                    "Siguiendo por hashtag. Hora: {}, maximo para seguir del periodo: {}"
+                ).format(hora, ig.bot.max_per_turn["follows"])
+            )
             respuesta = ig.follow("hashtag")
 
             if not respuesta["exito"]:
@@ -265,3 +271,14 @@ class instagram(base):
 
         return ret
 
+    def check_hashtag(self, var=[]):
+        ret = {
+            "headers": [("Content-Type", "application/json; charset=utf-8")],
+            "body": "",
+        }
+        respuesta = {"exito": True, "mensaje": ""}
+
+        if len(var) == 0:
+            ret["body"] = json.dumps(respuesta, ensure_ascii=False)
+        socket.close()
+        return ret
