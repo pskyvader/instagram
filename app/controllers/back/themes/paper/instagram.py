@@ -271,12 +271,14 @@ class instagram(base):
 
         return ret
 
-    def check_hashtag(self, var=[]):
+    def hashtag(self, var=[]):
         ret = {
             "headers": [("Content-Type", "application/json; charset=utf-8")],
             "body": "",
         }
         respuesta = {"exito": True, "mensaje": ""}
+        ig = instagram_bot()
+        respuesta=ig.update_hashtag()
 
         if len(var) == 0:
             ret["body"] = json.dumps(respuesta, ensure_ascii=False)
