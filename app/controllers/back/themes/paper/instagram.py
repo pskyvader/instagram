@@ -107,38 +107,8 @@ class instagram(base):
             "headers": [("Content-Type", "application/json; charset=utf-8")],
             "body": "",
         }
-        respuesta = {"exito": False, "mensaje": ""}
-
-        hashtag = ighashtag_model.getAll({"estado": True})
-        hashtag = [h["hashtag"] for h in hashtag]
-        f = igaccounts_model.getAll(
-            {"hashtag!": ""}, {"group": "hashtag"}, "count(pk) as total,hashtag"
-        )
-
-        delete_hashtag = []
-        for u in f:
-            if u["hashtag"] not in hashtag and u["total"] > 0:
-                delete_hashtag.append(u["hashtag"])
-
-        for d in delete_hashtag:
-            user = igaccounts_model.getAll({"hashtag": d})
-            for u in user:
-                igaccounts_model.update({"id": u[0], "hashtag": ""}, False)
-
-        users = igaccounts_model.getAll(
-            {"follower": False, "following": False, "favorito": False, "hashtag": ""}
-        )
-
         ig = instagram_bot()
-        bot = ig.bot
-        for k, u in enumerate(users):
-            show_message = True if (k % 100) == 0 else False
-            bot.unfollowed_file.append(u["pk"], show_message=show_message)
-            igaccounts_model.delete(u[0], False)
-
-        respuesta["exito"] = True
-        respuesta["mensaje"] = "Limpieza completada"
-
+        respuesta = ig.delete()
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         socket.close()
         return ret
