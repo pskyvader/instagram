@@ -158,6 +158,8 @@ class home(base):
             respuesta["following"][t['hashtag']] = following[t['hashtag']]
             respuesta["removed"][t['hashtag']] = removed[t['hashtag']]
             respuesta["eficiencia"][t['hashtag']] = eficiencia[t['hashtag']]
+            if return_array:
+                respuesta["totales"][t['hashtag']] = t['total']
 
         if return_array:
             return respuesta
