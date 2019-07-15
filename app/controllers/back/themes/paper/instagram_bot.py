@@ -406,6 +406,7 @@ class instagram_bot:
 
     def update_hashtag(self):
         from app.controllers.back.themes.paper.home import home
+        import random
 
         respuesta = {"exito": False, "mensaje": ""}
 
@@ -447,8 +448,22 @@ class instagram_bot:
                 respuesta["exito"] = True
             
             if respuesta['exito']:
-                tag='dog'
-                tag_list=bot.get_tags(tag)
+                tags = ighashtag_model.getAll()
+                if len(tags)>0 and 'hashtag' in tags[0]:
+                    tags=set(x for x['hashtag'] in tags)
+                    tag_list=set()
+                    while len(tag_list)>0:
+                        tag=random.choice(tags)
+                        tag_list=set(bot.get_tags(tag))
+                        tag_list=tag_list-tag
+                    
+                    final_tag=random.choice(tag_list)
+                    insert_query={'hashtag':final_tag,'estado':True}
+                    ighashtag_model.insert()
+                else:
+                    respuesta["exito"] = False
+                    respuesta["mensaje"] = 'Debe haber al menos un hashtag creado'
+
 
         return respuesta
 
