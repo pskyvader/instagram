@@ -125,3 +125,4 @@ tmp
 *.txt
 !icon.txt
 cross-platform-app-identifiers
+*.checkpoint
