@@ -160,6 +160,8 @@ class home(base):
             respuesta["eficiencia"][t['hashtag']] = eficiencia[t['hashtag']]
             if return_array:
                 respuesta["totales"][t['hashtag']] = t['total']
+            else:
+                
 
         if return_array:
             return respuesta
