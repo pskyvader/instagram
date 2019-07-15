@@ -271,7 +271,7 @@ class instagram(base):
 
         return ret
 
-    def hashtag(self, var=[]):
+    def update_hashtag(self, var=[]):
         ret = {
             "headers": [("Content-Type", "application/json; charset=utf-8")],
             "body": "",
