@@ -416,7 +416,7 @@ class instagram_bot:
         # y el menor numero para comparar
         # ordenados de mayor a menor cantidad de usuarios con dicho hashtag
         if len(hashtag_list["total"]) >= 10:
-            # eliminar el peor hashtag. en realidad desactivarlo
+            # desactivar el peor hashtag. conservar para evitar agregarlo nuevamente
             if hashtag_list["menor"] > 1000:
                 hashtag_menor = min(
                     hashtag_list["eficiencia"],
@@ -435,10 +435,11 @@ class instagram_bot:
                 ighashtag_model.update(update_query, False)
                 respuesta["mensaje"] = "Hashtag " + hashtag_menor + " quitado"
             else:
-                respuesta[
-                    "mensaje"
-                ] = "Aun no hay suficientes cuentas seguidas para evaluar"
-        else:
+                respuesta["mensaje"] = "Aun no hay suficientes cuentas siguiendo para evaluar"
+
+
+        hashtag_list = h.get_hashtag_users(True)
+        if len(hashtag_list["total"]) < 10:
             # buscar nuevos hashtag e ingresarlos
             if self.bot == None:
                 respuesta["mensaje"] = self.error_mensaje
@@ -459,7 +460,8 @@ class instagram_bot:
                     
                     final_tag=random.choice(tag_list)
                     insert_query={'hashtag':final_tag,'estado':True}
-                    ighashtag_model.insert()
+                    ighashtag_model.insert(insert_query,False)
+                    respuesta["mensaje"] += ". Nuevo Hashtag " + final_tag + " agregado"
                 else:
                     respuesta["exito"] = False
                     respuesta["mensaje"] = 'Debe haber al menos un hashtag creado'
