@@ -419,8 +419,7 @@ class instagram_bot:
             # desactivar el peor hashtag. conservar para evitar agregarlo nuevamente
             if hashtag_list["menor"] > 1000:
                 hashtag_menor = min(
-                    hashtag_list["eficiencia"],
-                    key=dict(hashtag_list["eficiencia"]).get,
+                    hashtag_list["eficiencia"], key=dict(hashtag_list["eficiencia"]).get
                 )
                 update_query = ighashtag_model.getByHashtag(hashtag_menor)
                 update_query["id"] = update_query[0]
@@ -428,44 +427,47 @@ class instagram_bot:
                 update_query["following"] = hashtag_list["following"][hashtag_menor]
                 update_query["follower"] = hashtag_list["followers"][hashtag_menor]
                 update_query["removed"] = hashtag_list["removed"][hashtag_menor]
-                update_query["eficiencia"] = hashtag_list["eficiencia"][
-                    hashtag_menor
-                ]
+                update_query["eficiencia"] = hashtag_list["eficiencia"][hashtag_menor]
                 update_query["total"] = hashtag_list["total"][hashtag_menor]
                 ighashtag_model.update(update_query, False)
                 respuesta["mensaje"] = "Hashtag " + hashtag_menor + " quitado"
             else:
-                respuesta["mensaje"] = "Aun no hay suficientes cuentas siguiendo para evaluar"
+                respuesta[
+                    "mensaje"
+                ] = "Aun no hay suficientes cuentas siguiendo para evaluar"
 
+            respuesta["exito"] = True
 
-        hashtag_list = h.get_hashtag_users(True)
+        if respuesta["exito"]:
+            hashtag_list = h.get_hashtag_users(True)
+
         if len(hashtag_list["total"]) < 10:
             # buscar nuevos hashtag e ingresarlos
             if self.bot == None:
-                respuesta["mensaje"] = self.error_mensaje
+                respuesta["mensaje"] += self.error_mensaje
+                respuesta["exito"] = False
                 return respuesta
             else:
                 bot = self.bot
                 respuesta["exito"] = True
-            
-            if respuesta['exito']:
+
+            if respuesta["exito"]:
                 tags = ighashtag_model.getAll()
-                if len(tags)>0 and 'hashtag' in tags[0]:
-                    tags=set(x for x['hashtag'] in tags)
-                    tag_list=set()
-                    while len(tag_list)>0:
-                        tag=random.choice(tags)
-                        tag_list=set(bot.get_tags(tag))
-                        tag_list=tag_list-tag
-                    
-                    final_tag=random.choice(tag_list)
-                    insert_query={'hashtag':final_tag,'estado':True}
-                    ighashtag_model.insert(insert_query,False)
+                if len(tags) > 0 and "hashtag" in tags[0]:
+                    tags = set(x for x["hashtag"] in tags)
+                    tag_list = set()
+                    while len(tag_list) > 0:
+                        tag = random.choice(tags)
+                        tag_list = set(bot.get_tags(tag))
+                        tag_list = tag_list - tag
+
+                    final_tag = random.choice(tag_list)
+                    insert_query = {"hashtag": final_tag, "estado": True}
+                    ighashtag_model.insert(insert_query, False)
                     respuesta["mensaje"] += ". Nuevo Hashtag " + final_tag + " agregado"
                 else:
                     respuesta["exito"] = False
-                    respuesta["mensaje"] = 'Debe haber al menos un hashtag creado'
-
+                    respuesta["mensaje"] = "Debe haber al menos un hashtag creado"
 
         return respuesta
 
