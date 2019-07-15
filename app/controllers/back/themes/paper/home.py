@@ -150,6 +150,7 @@ class home(base):
         respuesta["following"] = {}
         respuesta["removed"] = {}
         respuesta["eficiencia"] = {}
+        respuesta["total"] = {}
         totales = sorted(totales, key=lambda i: i["total"], reverse=True)
         for k, t in enumerate(totales):
             respuesta["followers"][t["hashtag"]] = followers[t["hashtag"]]
