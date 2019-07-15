@@ -439,7 +439,7 @@ class instagram_bot:
                     "mensaje"
                 ] = "Aun no hay suficientes cuentas seguidas para evaluar"
         else:
-            # buscar nuevos hashtag
+            # buscar nuevos hashtag e ingresarlos
             if self.bot == None:
                 respuesta["mensaje"] = self.error_mensaje
                 return respuesta
