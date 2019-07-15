@@ -157,7 +157,7 @@ class home(base):
             respuesta["removed"][t["hashtag"]] = removed[t["hashtag"]]
             respuesta["eficiencia"][t["hashtag"]] = eficiencia[t["hashtag"]]
             if return_array:
-                respuesta["totales"][t["hashtag"]] = t["total"]
+                respuesta["total"][t["hashtag"]] = t["total"]
                 if k >= 9:
                     respuesta['menor']=t['total']
                     break

@@ -405,6 +405,8 @@ class instagram_bot:
         return respuesta
 
     def update_hashtag(self):
+        from app.controllers.back.themes.paper.home import home
+
         respuesta = {"exito": False, "mensaje": ""}
         if self.bot == None:
             respuesta["mensaje"] = self.error_mensaje
@@ -414,14 +416,22 @@ class instagram_bot:
             respuesta["exito"] = True
 
         if respuesta["exito"]:
-            hashtags = ighashtag_model.getAll({"estado": True},{'limit':10})
-            if len(hashtags)>=10:
-                #eliminar el peor hashtag
-                pass
+            h = home()
+            hashtag_list = h.get_hashtag_users(True)
+            # hashtag_list: lista de hashtags agrupados por atributo (siguiendo,seguidos,quitados,eficiencia,totales)
+            # y el menor numero para comparar
+            # ordenados de mayor a menor cantidad de usuarios con dicho hashtag
+            if len(hashtag_list["total"]) >= 10:
+                # eliminar el peor hashtag. en realidad desactivarlo
+                if hashtag_list["menor"] > 1000:
+                    hashtag_menor = min( hashtag_list["eficiencia"], key=dict(hashtag_list["eficiencia"]).get, )
+                    ighashtag_model.update({""})
+                    pass
+                else:
+                    respuesta['mensaje'] = "Aun no hay suficientes cuentas seguidas para evaluar"
             else:
-                #buscar nuevos hashtag
+                # buscar nuevos hashtag
                 pass
-
 
         return respuesta
 
