@@ -117,3 +117,29 @@ class ighashtag(base_model):
                 return row[0]["total"]
         else:
             return row
+
+
+    @classmethod
+    def getByHashtag(cls, hashtag: str):
+        from .table import table
+        where = {'hashtag': hashtag}
+        condiciones={'limit':1}
+        connection = database.instance()
+        row = connection.get(cls.table, cls.idname, where,condiciones)
+        if len(row) == 1:
+            if 'idpadre' in row[0]:
+                if row[0]['idpadre'] != '':
+                    row[0]['idpadre'] = json.loads(row[0]['idpadre'])
+                else:
+                    row[0]['idpadre'] = []
+            if 'foto' in row[0]:
+                if row[0]['foto'] != '':
+                    row[0]['foto'] = json.loads(row[0]['foto'])
+                else:
+                    row[0]['foto'] = []
+            if 'archivo' in row[0]:
+                if row[0]['archivo'] != '':
+                    row[0]['archivo'] = json.loads(row[0]['archivo'])
+                else:
+                    row[0]['archivo'] = []
+        return row[0] if len(row) == 1 else row
