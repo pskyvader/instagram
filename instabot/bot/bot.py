@@ -533,6 +533,14 @@ class Bot(object):
 
     # getters
 
+    def get_tags(self, query):
+        """
+        Returns tag list.
+        :type query: str
+        """
+        return get_tags(self, query)
+    # getters
+
     def get_your_medias(self, as_dict=False):
         """
         Returns your media ids. With parameter as_dict=True returns media as dict.
