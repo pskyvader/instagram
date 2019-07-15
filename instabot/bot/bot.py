@@ -64,6 +64,7 @@ from .bot_get import (
     get_user_medias,
     get_user_tags_medias,
     get_username_from_user_id,
+    get_tags,
     get_your_medias,
     search_users,
 )
