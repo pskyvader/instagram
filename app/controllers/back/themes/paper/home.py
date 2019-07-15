@@ -128,8 +128,7 @@ class home(base):
             if u["hashtag"] in hashtag2:
                 hashtag2[u["hashtag"]]["removed"] = u["total"]
 
-
-        totales=[]
+        totales = []
         for k, h in hashtag2.items():
             if return_array:
                 nombre = k
@@ -140,28 +139,25 @@ class home(base):
             r = h["removed"]
             porcentaje = (f / (fl + r)) * 100 if (fl + r > 0) else 0
 
-            totales.append({'hashtag':nombre,'total':f+fl+r})
+            totales.append({"hashtag": nombre, "total": f + fl + r})
             porcentaje = round(porcentaje, 2)
             followers[nombre] = f
             following[nombre] = fl
             removed[nombre] = r
             eficiencia[nombre] = porcentaje
 
-
         respuesta["followers"] = {}
         respuesta["following"] = {}
         respuesta["removed"] = {}
         respuesta["eficiencia"] = {}
-        totales = sorted(totales, key=lambda i: i["total"],reverse=True)
+        totales = sorted(totales, key=lambda i: i["total"], reverse=True)
         for t in totales:
-            respuesta["followers"][t['hashtag']] = followers[t['hashtag']]
-            respuesta["following"][t['hashtag']] = following[t['hashtag']]
-            respuesta["removed"][t['hashtag']] = removed[t['hashtag']]
-            respuesta["eficiencia"][t['hashtag']] = eficiencia[t['hashtag']]
+            respuesta["followers"][t["hashtag"]] = followers[t["hashtag"]]
+            respuesta["following"][t["hashtag"]] = following[t["hashtag"]]
+            respuesta["removed"][t["hashtag"]] = removed[t["hashtag"]]
+            respuesta["eficiencia"][t["hashtag"]] = eficiencia[t["hashtag"]]
             if return_array:
-                respuesta["totales"][t['hashtag']] = t['total']
-            else:
-                
+                respuesta["totales"][t["hashtag"]] = t["total"]
 
         if return_array:
             return respuesta
@@ -171,11 +167,12 @@ class home(base):
 
     def get_total(self):
         from datetime import datetime, timedelta
+
         ret = {
             "headers": [("Content-Type", "application/json; charset=utf-8")],
             "body": "",
         }
-        
+
         days_seguidores_estadistica = int(
             configuracion_model.getByVariable("days_seguidores_estadistica", 30)
         )
@@ -189,8 +186,10 @@ class home(base):
             "start_follow": {},
             "stop_follow": {},
         }
-        
-        totales = igtotal_model.getAll(where= {"DATE(fecha) >": fecha},condiciones={"order": "fecha ASC"})
+
+        totales = igtotal_model.getAll(
+            where={"DATE(fecha) >": fecha}, condiciones={"order": "fecha ASC"}
+        )
 
         for t in totales:
             fecha = functions.formato_fecha(t["fecha"], "%d-%m-%Y")
