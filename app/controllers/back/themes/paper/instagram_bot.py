@@ -418,15 +418,23 @@ class instagram_bot:
         if respuesta["exito"]:
             h = home()
             hashtag_list = h.get_hashtag_users(True)
-            # hashtag_list: lista de hashtags agrupados por atributo (siguiendo,seguidos,quitados,eficiencia,totales)
+            # hashtag_list: lista de hashtags agrupados por atributo (siguiendo,seguidos,quitados,eficiencia,total)
             # y el menor numero para comparar
             # ordenados de mayor a menor cantidad de usuarios con dicho hashtag
             if len(hashtag_list["total"]) >= 10:
                 # eliminar el peor hashtag. en realidad desactivarlo
                 if hashtag_list["menor"] > 1000:
                     hashtag_menor = min( hashtag_list["eficiencia"], key=dict(hashtag_list["eficiencia"]).get, )
-                    ighashtag_model.update({""})
-                    pass
+                    update_query=ighashtag_model.getByHashtag(hashtag_menor)
+                    update_query['id']=update_query[0]
+                    update_query['estado']=False
+                    update_query['following']=hashtag_list['following'][hashtag_menor]
+                    update_query['follower']=hashtag_list['followers'][hashtag_menor]
+                    update_query['removed']=hashtag_list['removed'][hashtag_menor]
+                    update_query['eficiencia']=hashtag_list['eficiencia'][hashtag_menor]
+                    update_query['total']=hashtag_list['total'][hashtag_menor]
+                    ighashtag_model.update(update_query,False)
+                    respuesta['mensaje'] = "Hashtag "+hashtag_menor+" quitado"
                 else:
                     respuesta['mensaje'] = "Aun no hay suficientes cuentas seguidas para evaluar"
             else:
