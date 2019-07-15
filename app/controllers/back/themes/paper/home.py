@@ -87,7 +87,7 @@ class home(base):
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         return ret
 
-    def get_hashtag_users(self):
+    def get_hashtag_users(self, return_array=False):
         ret = {
             "headers": [("Content-Type", "application/json; charset=utf-8")],
             "body": "",
@@ -131,7 +131,10 @@ class home(base):
 
         totales=[]
         for k, h in hashtag2.items():
-            nombre = k.capitalize()
+            if return_array:
+                nombre = k
+            else:
+                nombre = k.capitalize()
             f = h["follower"]
             fl = h["following"]
             r = h["removed"]
@@ -156,8 +159,11 @@ class home(base):
             respuesta["removed"][t['hashtag']] = removed[t['hashtag']]
             respuesta["eficiencia"][t['hashtag']] = eficiencia[t['hashtag']]
 
-        ret["body"] = json.dumps(respuesta, ensure_ascii=False)
-        return ret
+        if return_array:
+            return respuesta
+        else:
+            ret["body"] = json.dumps(respuesta, ensure_ascii=False)
+            return ret
 
     def get_total(self):
         from datetime import datetime, timedelta
