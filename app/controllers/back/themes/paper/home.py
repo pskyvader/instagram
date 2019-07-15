@@ -151,13 +151,15 @@ class home(base):
         respuesta["removed"] = {}
         respuesta["eficiencia"] = {}
         totales = sorted(totales, key=lambda i: i["total"], reverse=True)
-        for t in totales:
+        for k,t in enumerate(totales):
             respuesta["followers"][t["hashtag"]] = followers[t["hashtag"]]
             respuesta["following"][t["hashtag"]] = following[t["hashtag"]]
             respuesta["removed"][t["hashtag"]] = removed[t["hashtag"]]
             respuesta["eficiencia"][t["hashtag"]] = eficiencia[t["hashtag"]]
             if return_array:
                 respuesta["totales"][t["hashtag"]] = t["total"]
+                if k>9:
+                    break
 
         if return_array:
             return respuesta
