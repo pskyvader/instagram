@@ -421,8 +421,9 @@ class instagram_bot:
                 hashtag_menor = min(
                     hashtag_list["eficiencia"], key=dict(hashtag_list["eficiencia"]).get
                 )
-                update_query = ighashtag_model.getByHashtag(hashtag_menor)
-                update_query["id"] = update_query[0]
+                query = ighashtag_model.getByHashtag(hashtag_menor)
+                update_query={}
+                update_query["id"] = query[0]
                 update_query["estado"] = False
                 update_query["following"] = hashtag_list["following"][hashtag_menor]
                 update_query["follower"] = hashtag_list["followers"][hashtag_menor]
