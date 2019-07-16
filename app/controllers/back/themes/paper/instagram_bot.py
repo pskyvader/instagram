@@ -457,10 +457,10 @@ class instagram_bot:
             if respuesta["exito"]:
                 tags = ighashtag_model.getAll()
                 if len(tags) > 0 and "hashtag" in tags[0]:
-                    tags = set(x["hashtag"] for x in tags)
+                    tags = [set(x["hashtag"] for x in tags)]
                     tag_list = set()
                     while len(tag_list) <= 0:
-                        tag = random.choice([tags])
+                        tag = random.choice(tags)
                         tag_list = set(bot.get_tags(tag))
                         tag_list = tag_list - tag
                     
