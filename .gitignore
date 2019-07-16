@@ -119,10 +119,8 @@ backup/*
 cache/*
 update/*
 .autogit
-**/cache/*
 */cache/*
-*/cache2/*
-**/custom_resources/*
+*/custom_resources/*
 tmp
 *.txt
 !icon.txt
