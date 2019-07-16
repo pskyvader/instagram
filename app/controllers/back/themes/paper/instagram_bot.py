@@ -468,7 +468,6 @@ class instagram_bot:
                     
                     if len(tag_list)>0:
                         final_tag = random.choice(list(tag_list))
-                        print(final_tag)
                         #insert_query = {"hashtag": final_tag, "estado": True}
                         #ighashtag_model.insert(insert_query, False)
                         respuesta["mensaje"] += ". Nuevo Hashtag " + final_tag + " agregado"
