@@ -459,11 +459,11 @@ class instagram_bot:
                 if len(tags) > 0 and "hashtag" in tags[0]:
                     tags = set(x["hashtag"] for x in tags)
                     tag_list = set()
-                    while len(tag_list) > 0:
+                    while len(tag_list) <= 0:
                         tag = random.choice(tags)
                         tag_list = set(bot.get_tags(tag))
                         tag_list = tag_list - tag
-                    print('tag list',tag_list)
+                    
                     final_tag = random.choice(tag_list)
                     insert_query = {"hashtag": final_tag, "estado": True}
                     ighashtag_model.insert(insert_query, False)
