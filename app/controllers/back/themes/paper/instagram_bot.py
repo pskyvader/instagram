@@ -429,6 +429,7 @@ class instagram_bot:
                 update_query["follower"] = hashtag_list["followers"][hashtag_menor]
                 update_query["removed"] = hashtag_list["removed"][hashtag_menor]
                 update_query["eficiencia"] = hashtag_list["eficiencia"][hashtag_menor]
+                update_query["eficiencia2"] = hashtag_list["eficiencia2"][hashtag_menor]
                 update_query["total"] = hashtag_list["total"][hashtag_menor]
                 ighashtag_model.update(update_query, False)
                 respuesta["mensaje"] = "Hashtag " + hashtag_menor + " quitado"
