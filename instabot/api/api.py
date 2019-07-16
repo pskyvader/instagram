@@ -194,7 +194,7 @@ class API(object):
     ):
         from instabot.bot import bot_support
         
-        print('url',url)
+        print('url',config.API_URL + endpoint)
 
         if isinstance(post, dict) or isinstance(post, list):
             post_tmp = post.copy()
