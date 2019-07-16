@@ -126,3 +126,4 @@ tmp
 !icon.txt
 *.checkpoint
 */__pycache__/
+*/__pycache__2/
