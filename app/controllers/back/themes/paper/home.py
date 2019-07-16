@@ -162,9 +162,6 @@ class home(base):
             respuesta["eficiencia2"][t["hashtag"]] = t["eficiencia2"]
             if return_array:
                 respuesta["total"][t["hashtag"]] = t["total"]
-                if k >= 9:
-                    respuesta["menor"] = t["total"]
-                    break
 
         if return_array:
             return respuesta
