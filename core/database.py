@@ -394,7 +394,11 @@ class database():
                 if value['tipo'] == 'tinyint(1)':
                     m[key] = 'true'
                 else:
-                    m[key] = ''
+                    if value['tipo'] == 'int(11)':
+                        m[key] = 0
+                    else:
+                        m[key] = ''
+
         if 'image' in data:
             m['image'] = data['image']
 
