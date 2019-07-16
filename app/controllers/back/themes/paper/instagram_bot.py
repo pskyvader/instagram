@@ -463,7 +463,8 @@ class instagram_bot:
                     while len(tag_list) <= 0 and intento<3:
                         intento+=1
                         tag = random.choice(list(tags))
-                        tag_list = set(bot.get_tags(tag))
+                        print(tag)
+                        # tag_list = set(bot.get_tags(tag))
                         tag_list = tag_list - tags
                     
                     if len(tag_list)>0:
