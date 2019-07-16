@@ -1,0 +1,5 @@
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+PassengerAppRoot "/home/mysitioc/public_html/instagram"
+PassengerBaseURI "/"
+PassengerPython "/home/mysitioc/virtualenv/public__html_instagram/3.7/bin/python3.7"
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END
