@@ -418,10 +418,9 @@ class instagram_bot:
         if len(hashtag_list["total"]) >= 15:
             # desactivar el peor hashtag. conservar para evitar agregarlo nuevamente
             # si hay 15 elementos, se comparan los primeros 10
-            hashtag_totales= {k: hashtag_list["total"][k] for k in list(hashtag_list["total"])[:10]}
-            menor_list=hashtag_menor = min(hashtag_totales, key=dict(hashtag_totales).get)
-            hashtag_eficiencia= {k: hashtag_list["eficiencia2"][k] for k in list(hashtag_list["eficiencia2"])[:10]}
+            menor_list = [hashtag_list["total"].values()][9]
             if menor_list > 1000:
+                hashtag_eficiencia= {k: hashtag_list["eficiencia2"][k] for k in list(hashtag_list["eficiencia2"])[:10]}
                 hashtag_menor = min( hashtag_eficiencia, key=dict(hashtag_eficiencia).get )
                 query = ighashtag_model.getByHashtag(hashtag_menor)
                 update_query={}
