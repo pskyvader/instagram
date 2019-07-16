@@ -134,16 +134,16 @@ class home(base):
             fl = h["following"]
             r = h["removed"]
             porcentaje = (f / (fl + r)) * 100 if (fl + r > 0) else 0
-            porcentaje2 = (f / (fl+f)) * 100 if (fl+f > 0) else 0
+            porcentaje2 = (f / (fl + f)) * 100 if (fl + f > 0) else 0
 
-            final={"hashtag": nombre, "total": f + fl + r}
+            final = {"hashtag": nombre, "total": f + fl + r}
             porcentaje = round(porcentaje, 2)
             porcentaje2 = round(porcentaje2, 2)
-            final['followers']=f
-            final['following']=fl
-            final['removed']=r
-            final['eficiencia']=porcentaje
-            final['eficiencia2']=porcentaje2
+            final["followers"] = f
+            final["following"] = fl
+            final["removed"] = r
+            final["eficiencia"] = porcentaje
+            final["eficiencia2"] = porcentaje2
             totales.append(final)
 
         respuesta["followers"] = {}
@@ -161,7 +161,7 @@ class home(base):
             if return_array:
                 respuesta["total"][t["hashtag"]] = t["total"]
                 if k >= 9:
-                    respuesta['menor']=t['total']
+                    respuesta["menor"] = t["total"]
                     break
 
         if return_array:
