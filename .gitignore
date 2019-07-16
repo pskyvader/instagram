@@ -120,6 +120,7 @@ cache/*
 update/*
 .autogit
 **/cache/*
+*/cache/*
 */cache2/*
 **/custom_resources/*
 tmp
