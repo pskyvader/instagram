@@ -113,9 +113,16 @@ function chart_hashtag() {
         }
 
         var id = '#chart-hashtag-eficiencia';
-        if (typeof(data_list[id]) == 'undefined' || !isEqual(data_list[id], data.eficiencia)) {
-            data_list[id] = data.eficiencia;
+        var datae = [data.eficiencia, data.eficiencia2];
+        if (typeof(data_list[id]) == 'undefined' || !isEqual(data_list[id], datae)) {
+            data_list[id] = datae;
             var data_eficiencia = generar_response(data.eficiencia, 'Eficiencia', 'yellow');
+            var data_eficiencia2 = generar_response(data.eficiencia2, 'Eficiencia 2', 'green');
+            var datasets = [
+                data_eficiencia.datasets[0],
+                data_eficiencia2.datasets[0]
+            ];
+            data_eficiencia.datasets = datasets;
             generar_grafico(id, data_eficiencia, 'bar');
         }
 
@@ -135,7 +142,7 @@ function chart_hashtag() {
             ];
             data_followers.datasets = datasets;
             var options = { scales: { xAxes: [{ stacked: true }], yAxes: [{ stacked: true }] } };
-            generar_grafico('#chart-hashtag', data_followers, 'bar', options);
+            generar_grafico(id, data_followers, 'bar', options);
         }
     });
 }
