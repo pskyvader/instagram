@@ -28,7 +28,7 @@ def get_popular_medias(self):
 
 
 def get_tags(self, query):
-    self.api.search_tags(self, query)
+    self.api.search_tags(query)
     return [str(media["name"]) for media in self.api.last_json["results"]]
 
 
