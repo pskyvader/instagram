@@ -415,12 +415,14 @@ class instagram_bot:
         # hashtag_list: lista de hashtags agrupados por atributo (siguiendo,seguidos,quitados,eficiencia,total)
         # y el menor numero para comparar
         # ordenados de mayor a menor cantidad de usuarios con dicho hashtag
-        if len(hashtag_list["total"]) >= 10:
+        if len(hashtag_list["total"]) >= 15:
             # desactivar el peor hashtag. conservar para evitar agregarlo nuevamente
-            if hashtag_list["menor"] > 1000:
-                hashtag_menor = min(
-                    hashtag_list["eficiencia2"], key=dict(hashtag_list["eficiencia2"]).get
-                )
+            # si hay 15 elementos, se comparan los primeros 10
+            hashtag_totales= {k: hashtag_list["total"][k] for k in list(hashtag_list["total"])[:10]}
+            menor_list=hashtag_menor = min(hashtag_totales, key=dict(hashtag_totales).get)
+            hashtag_eficiencia= {k: hashtag_list["eficiencia2"][k] for k in list(hashtag_list["eficiencia2"])[:10]}
+            if menor_list > 1000:
+                hashtag_menor = min( hashtag_eficiencia, key=dict(hashtag_eficiencia).get )
                 query = ighashtag_model.getByHashtag(hashtag_menor)
                 update_query={}
                 update_query["id"] = query[0]
@@ -443,7 +445,7 @@ class instagram_bot:
         if respuesta["exito"]:
             hashtag_list = h.get_hashtag_users(True)
 
-        if len(hashtag_list["total"]) < 10:
+        if len(hashtag_list["total"]) < 15:
             # buscar nuevos hashtag e ingresarlos
             if self.bot == None:
                 respuesta["mensaje"] += self.error_mensaje
