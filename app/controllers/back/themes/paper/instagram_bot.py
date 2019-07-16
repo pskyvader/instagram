@@ -409,21 +409,27 @@ class instagram_bot:
         import random
 
         respuesta = {"exito": False, "mensaje": ""}
+        limit_hashtag = 10
 
         h = home()
         hashtag_list = h.get_hashtag_users(True)
         # hashtag_list: lista de hashtags agrupados por atributo (siguiendo,seguidos,quitados,eficiencia,total)
         # y el menor numero para comparar
         # ordenados de mayor a menor cantidad de usuarios con dicho hashtag
-        if len(hashtag_list["total"]) >= 15:
+        if len(hashtag_list["total"]) >= int(limit_hashtag * 1.5):
             # desactivar el peor hashtag. conservar para evitar agregarlo nuevamente
             # si hay 15 elementos, se comparan los primeros 10
-            menor_list = list(hashtag_list["total"].values())[9]
+            menor_list = list(hashtag_list["total"].values())[limit_hashtag - 1]
             if menor_list > 1000:
-                hashtag_eficiencia= {k: hashtag_list["eficiencia2"][k] for k in list(hashtag_list["eficiencia2"])[:10]}
-                hashtag_menor = min( hashtag_eficiencia, key=dict(hashtag_eficiencia).get )
+                hashtag_eficiencia = {
+                    k: hashtag_list["eficiencia2"][k]
+                    for k in list(hashtag_list["eficiencia2"])[:limit_hashtag]
+                }
+                hashtag_menor = min(
+                    hashtag_eficiencia, key=dict(hashtag_eficiencia).get
+                )
                 query = ighashtag_model.getByHashtag(hashtag_menor)
-                update_query={}
+                update_query = {}
                 update_query["id"] = query[0]
                 update_query["estado"] = False
                 update_query["following"] = hashtag_list["following"][hashtag_menor]
@@ -444,7 +450,7 @@ class instagram_bot:
         if respuesta["exito"]:
             hashtag_list = h.get_hashtag_users(True)
 
-        if len(hashtag_list["total"]) < 15:
+        if len(hashtag_list["total"]) < int(limit_hashtag * 1.5):
             # buscar nuevos hashtag e ingresarlos
             if self.bot == None:
                 respuesta["mensaje"] += self.error_mensaje
@@ -459,21 +465,25 @@ class instagram_bot:
                 if len(tags) > 0 and "hashtag" in tags[0]:
                     tags = set(x["hashtag"] for x in tags)
                     tag_list = set()
-                    intento=0
-                    while len(tag_list) <= 0 and intento<3:
-                        intento+=1
+                    intento = 0
+                    while len(tag_list) <= 0 and intento < 3:
+                        intento += 1
                         tag = random.choice(list(tags))
                         tag_list = set(bot.get_tags(tag))
                         tag_list = tag_list - tags
-                    
-                    if len(tag_list)>0:
+
+                    if len(tag_list) > 0:
                         final_tag = random.choice(list(tag_list))
                         insert_query = {"hashtag": final_tag, "estado": True}
                         ighashtag_model.insert(insert_query, False)
-                        respuesta["mensaje"] += ". Nuevo Hashtag " + final_tag + " agregado"
+                        respuesta["mensaje"] += (
+                            ". Nuevo Hashtag " + final_tag + " agregado"
+                        )
                     else:
                         respuesta["exito"] = False
-                        respuesta["mensaje"] = "No se encontraron nuevos hashtag. agrega manualmente"
+                        respuesta[
+                            "mensaje"
+                        ] = "No se encontraron nuevos hashtag. agrega manualmente"
 
                 else:
                     respuesta["exito"] = False
