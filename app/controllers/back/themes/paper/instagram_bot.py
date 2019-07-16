@@ -459,16 +459,23 @@ class instagram_bot:
                 if len(tags) > 0 and "hashtag" in tags[0]:
                     tags = set(x["hashtag"] for x in tags)
                     tag_list = set()
-                    while len(tag_list) <= 0:
+                    intento=0
+                    while len(tag_list) <= 0 and intento<3:
+                        intento+=1
                         tag = random.choice(list(tags))
                         tag_list = set(bot.get_tags(tag))
                         tag_list = tag_list - tags
                     
-                    final_tag = random.choice(list(tag_list))
-                    print(final_tag)
-                    #insert_query = {"hashtag": final_tag, "estado": True}
-                    #ighashtag_model.insert(insert_query, False)
-                    respuesta["mensaje"] += ". Nuevo Hashtag " + final_tag + " agregado"
+                    if len(tag_list)>0:
+                        final_tag = random.choice(list(tag_list))
+                        print(final_tag)
+                        #insert_query = {"hashtag": final_tag, "estado": True}
+                        #ighashtag_model.insert(insert_query, False)
+                        respuesta["mensaje"] += ". Nuevo Hashtag " + final_tag + " agregado"
+                    else:
+                        respuesta["exito"] = False
+                        respuesta["mensaje"] = "No se encontraron nuevos hashtag. agrega manualmente"
+
                 else:
                     respuesta["exito"] = False
                     respuesta["mensaje"] = "Debe haber al menos un hashtag creado"
