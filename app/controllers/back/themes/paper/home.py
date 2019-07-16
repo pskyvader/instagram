@@ -133,10 +133,11 @@ class home(base):
             f = h["follower"]
             fl = h["following"]
             r = h["removed"]
-            porcentaje = (f / (fl + r)) * 100 if (fl + r > 0) else 0
+            total=f + fl + r
+            porcentaje = (f / total) * 100 if (total > 0) else 0
             porcentaje2 = (f / (fl + f)) * 100 if (fl + f > 0) else 0
 
-            final = {"hashtag": nombre, "total": f + fl + r}
+            final = {"hashtag": nombre, "total": total}
             porcentaje = round(porcentaje, 2)
             porcentaje2 = round(porcentaje2, 2)
             final["followers"] = f
