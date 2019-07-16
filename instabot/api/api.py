@@ -910,7 +910,6 @@ class API(object):
     def search_tags(self, query):
         url = "tags/search/?is_typeahead=true&q={query}&rank_token={rank_token}"
         url = url.format(query=query, rank_token=self.rank_token)
-        print('url',url)
         return self.send_request(url)
 
     def search_location(self, query="", lat=None, lng=None):
