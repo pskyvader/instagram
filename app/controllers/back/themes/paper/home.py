@@ -93,10 +93,6 @@ class home(base):
             "body": "",
         }
         respuesta = {}
-        followers = {}
-        following = {}
-        removed = {}
-        eficiencia = {}
         hashtag = ighashtag_model.getAll({"estado": True})
         hashtag2 = {
             h["hashtag"]: {"follower": 0, "following": 0, "removed": 0} for h in hashtag
@@ -138,13 +134,17 @@ class home(base):
             fl = h["following"]
             r = h["removed"]
             porcentaje = (f / (fl + r)) * 100 if (fl + r > 0) else 0
+            porcentaje2 = (f / (fl+f)) * 100 if (fl+f > 0) else 0
 
-            totales.append({"hashtag": nombre, "total": f + fl + r})
+            final={"hashtag": nombre, "total": f + fl + r}
             porcentaje = round(porcentaje, 2)
-            followers[nombre] = f
-            following[nombre] = fl
-            removed[nombre] = r
-            eficiencia[nombre] = porcentaje
+            porcentaje2 = round(porcentaje2, 2)
+            final['followers']=f
+            final['following']=fl
+            final['removed']=r
+            final['eficiencia']=porcentaje
+            final['eficiencia2']=porcentaje2
+            totales.append(final)
 
         respuesta["followers"] = {}
         respuesta["following"] = {}
@@ -153,10 +153,11 @@ class home(base):
         respuesta["total"] = {}
         totales = sorted(totales, key=lambda i: i["total"], reverse=True)
         for k, t in enumerate(totales):
-            respuesta["followers"][t["hashtag"]] = followers[t["hashtag"]]
-            respuesta["following"][t["hashtag"]] = following[t["hashtag"]]
-            respuesta["removed"][t["hashtag"]] = removed[t["hashtag"]]
-            respuesta["eficiencia"][t["hashtag"]] = eficiencia[t["hashtag"]]
+            respuesta["followers"][t["hashtag"]] = t["followers"]
+            respuesta["following"][t["hashtag"]] = t["following"]
+            respuesta["removed"][t["hashtag"]] = t["removed"]
+            respuesta["eficiencia"][t["hashtag"]] = t["eficiencia"]
+            respuesta["eficiencia2"][t["hashtag"]] = t["eficiencia2"]
             if return_array:
                 respuesta["total"][t["hashtag"]] = t["total"]
                 if k >= 9:
