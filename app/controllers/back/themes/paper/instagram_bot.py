@@ -410,6 +410,7 @@ class instagram_bot:
 
         respuesta = {"exito": False, "mensaje": ""}
         limit_hashtag = 10
+        minimum_hashtag = 1000
 
         h = home()
         hashtag_list = h.get_hashtag_users(True)
@@ -420,7 +421,7 @@ class instagram_bot:
             # desactivar el peor hashtag. conservar para evitar agregarlo nuevamente
             # si hay 15 elementos, se comparan los primeros 10
             menor_list = list(hashtag_list["total"].values())[limit_hashtag - 1]
-            if menor_list > 1000:
+            if menor_list > minimum_hashtag:
                 hashtag_eficiencia = {
                     k: hashtag_list["eficiencia2"][k]
                     for k in list(hashtag_list["eficiencia2"])[:limit_hashtag]
@@ -466,7 +467,7 @@ class instagram_bot:
                     tags = set(x["hashtag"] for x in tags)
                     tag_list = set()
                     intento = 0
-                    while len(tag_list) <= 0 and intento < 3:
+                    while len(tag_list) <= 0 and intento < len(tags):
                         intento += 1
                         tag = random.choice(list(tags))
                         tag_list = set(bot.get_tags(tag))
