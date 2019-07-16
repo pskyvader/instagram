@@ -419,7 +419,7 @@ class instagram_bot:
             # desactivar el peor hashtag. conservar para evitar agregarlo nuevamente
             if hashtag_list["menor"] > 1000:
                 hashtag_menor = min(
-                    hashtag_list["eficiencia"], key=dict(hashtag_list["eficiencia"]).get
+                    hashtag_list["eficiencia2"], key=dict(hashtag_list["eficiencia2"]).get
                 )
                 query = ighashtag_model.getByHashtag(hashtag_menor)
                 update_query={}
