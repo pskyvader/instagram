@@ -119,7 +119,7 @@ backup/*
 cache/*
 update/*
 .autogit
-**/cache/*
+*/cache/*
 **/custom_resources/*
 tmp
 *.txt
