@@ -28,7 +28,7 @@ def get_popular_medias(self):
 
 
 def get_tags(self, query):
-    print('before')
+    print('before', query)
     self.api.search_tags(query)
     print('after')
     print(self.api.last_json)
