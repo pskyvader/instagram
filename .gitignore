@@ -121,8 +121,8 @@ update/*
 .autogit
 **/cache/*
 */cache/*
-*/custom_resources/
-**/custom_resources/
+*/custom_resources/*
+**/custom_resources/*
 tmp
 *.txt
 !icon.txt
