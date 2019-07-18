@@ -410,7 +410,9 @@ class instagram_bot:
 
         respuesta = {"exito": False, "mensaje": ""}
         limit_hashtag = int(configuracion_model.getByVariable("limit_hashtag", "10"))
-        minimum_hashtag = int(configuracion_model.getByVariable("minimum_hashtag", "1500"))
+        minimum_hashtag = int(
+            configuracion_model.getByVariable("minimum_hashtag", "1500")
+        )
 
         h = home()
         hashtag_list = h.get_hashtag_users(True)
@@ -445,7 +447,6 @@ class instagram_bot:
                 respuesta[
                     "mensaje"
                 ] = "Aun no hay suficientes cuentas por hashtag para evaluar"
-
             respuesta["exito"] = True
 
         if respuesta["exito"]:
