@@ -409,8 +409,8 @@ class instagram_bot:
         import random
 
         respuesta = {"exito": False, "mensaje": ""}
-        limit_hashtag = 10
-        minimum_hashtag = 1000
+        limit_hashtag = int(configuracion_model.getByVariable("limit_hashtag", "10"))
+        minimum_hashtag = int(configuracion_model.getByVariable("minimum_hashtag", "1500"))
 
         h = home()
         hashtag_list = h.get_hashtag_users(True)
