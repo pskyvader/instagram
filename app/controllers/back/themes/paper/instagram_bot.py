@@ -444,7 +444,7 @@ class instagram_bot:
             else:
                 respuesta[
                     "mensaje"
-                ] = "Aun no hay suficientes cuentas siguiendo para evaluar"
+                ] = "Aun no hay suficientes cuentas por hashtag para evaluar"
 
             respuesta["exito"] = True
 
