@@ -265,10 +265,10 @@ class instagram_bot:
                         if not bot.reached_limit("follows"):
                             bot.console_print("Siguiendo usuarios con hashtag: " + h)
                             users = bot.get_hashtag_users(h)
-                            # Calculo para emparejar la cantidad de usuarios por hashtag, minimo 5
-                            # curva logaritmica inversa (k+1=1,x=50) (k+1=20,x=10.421) (k+1=50,x=5.936)
-                            this_hashtag = (70 / (log10(k + 1) + 1)) - 20
-                            this_hashtag = 5 if this_hashtag < 5 else int(this_hashtag)
+                            # Calculo para emparejar la cantidad de usuarios por hashtag, minimo 1
+                            # curva logaritmica inversa (k+1=1,x=20) (k+1=20,x=3.038) (k+1=50,x=1.115)
+                            this_hashtag = (30 / (log10(k + 1) + 1)) - 10
+                            this_hashtag = 1 if this_hashtag < 1 else int(this_hashtag)
                             users = users[:this_hashtag]
                             bot.follow_users(users, base, proporcion, h)
                             if bot.api.fatal_error:
