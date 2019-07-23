@@ -80,9 +80,7 @@ class instagram_bot:
             respuesta["exito"] = True
         if respuesta["exito"]:
             key = "get"
-            turn_remain = int(
-                configuracion_model.getByVariable("turn_remain_" + key, "0")
-            )
+            turn_remain = configuracion_model.getByVariable("turn_remain_" + key, 0)
             if turn_remain > 0:
                 bot.console_print("Bloqueado por " + str(turn_remain) + " turnos")
                 configuracion_model.setByVariable(
@@ -236,9 +234,7 @@ class instagram_bot:
 
         if respuesta["exito"]:
             key = "follow"
-            turn_remain = int(
-                configuracion_model.getByVariable("turn_remain_" + key, "0")
-            )
+            turn_remain = configuracion_model.getByVariable("turn_remain_" + key, 0)
             if turn_remain > 0:
                 bot.console_print("Bloqueado por " + str(turn_remain) + " turnos")
                 configuracion_model.setByVariable(
@@ -293,9 +289,8 @@ class instagram_bot:
 
         if respuesta["exito"]:
             key = "unfollow"
-            turn_remain = int(
-                configuracion_model.getByVariable("turn_remain_" + key, "0")
-            )
+            turn_remain = configuracion_model.getByVariable("turn_remain_" + key, 0)
+
             if turn_remain > 0:
                 bot.console_print("Bloqueado por " + str(turn_remain) + " turnos")
                 configuracion_model.setByVariable(
@@ -310,9 +305,8 @@ class instagram_bot:
 
         if respuesta["exito"]:
             if accion == "nonfollower":
-                days_unfollow = int(
-                    configuracion_model.getByVariable("days_unfollow", 5)
-                )
+                days_unfollow = configuracion_model.getByVariable("days_unfollow", 5)
+
                 fecha_limite = (
                     datetime.datetime.now() - datetime.timedelta(days=days_unfollow)
                 ).strftime("%Y-%m-%d")
@@ -326,9 +320,10 @@ class instagram_bot:
                     select="pk",
                 )
             elif accion == "old":
-                days_unfollow = int(
-                    configuracion_model.getByVariable("days_unfollow_old", 20)
+                days_unfollow = configuracion_model.getByVariable(
+                    "days_unfollow_old", 20
                 )
+
                 fecha_limite = (
                     datetime.datetime.now() - datetime.timedelta(days=days_unfollow)
                 ).strftime("%Y-%m-%d")
@@ -409,10 +404,8 @@ class instagram_bot:
         import random
 
         respuesta = {"exito": False, "mensaje": ""}
-        limit_hashtag = int(configuracion_model.getByVariable("limit_hashtag", "10"))
-        minimum_hashtag = int(
-            configuracion_model.getByVariable("minimum_hashtag", "1500")
-        )
+        limit_hashtag = configuracion_model.getByVariable("limit_hashtag", 10)
+        minimum_hashtag = configuracion_model.getByVariable("minimum_hashtag", 1500)
 
         h = home()
         hashtag_list = h.get_hashtag_users(True)
@@ -526,31 +519,25 @@ class instagram_bot:
                 unfollow_sleep=float(get_var("unfollow_sleep", 10)),
                 comment_sleep=float(get_var("comment_sleep", 10)),
                 get_sleep=float(get_var("get_sleep", 10)),
-                stop_words=json.loads(
-                    get_var(
-                        "stop_words",
-                        json.dumps(
-                            [
-                                "order",
-                                "shop",
-                                "store",
-                                "free",
-                                "doodleartindonesia",
-                                "doodle art indonesia",
-                                "fullofdoodleart",
-                                "commission",
-                                "vector",
-                                "karikatur",
-                                "jasa",
-                                "open",
-                            ]
-                        ),
-                    )
+                stop_words=get_var(
+                    "stop_words",
+                    [
+                        "order",
+                        "shop",
+                        "store",
+                        "free",
+                        "doodleartindonesia",
+                        "doodle art indonesia",
+                        "fullofdoodleart",
+                        "commission",
+                        "vector",
+                        "karikatur",
+                        "jasa",
+                        "open",
+                    ],
                 ),
-                blacklist_hashtags=json.loads(
-                    get_var(
-                        "blacklist_hashtags", json.dumps(["#shop", "#store", "#free"])
-                    )
+                blacklist_hashtags=get_var(
+                    "blacklist_hashtags", ["#shop", "#store", "#free"]
                 ),
             )
         return self.bot
