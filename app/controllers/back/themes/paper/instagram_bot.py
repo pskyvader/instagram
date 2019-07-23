@@ -405,7 +405,7 @@ class instagram_bot:
 
         respuesta = {"exito": False, "mensaje": ""}
         limit_hashtag = configuracion_model.getByVariable("limit_hashtag", 10)
-        minimum_hashtag = configuracion_model.getByVariable("minimum_hashtag", 1500)
+        minimum_hashtag = configuracion_model.getByVariable("minimum_hashtag", 1000)
 
         h = home()
         hashtag_list = h.get_hashtag_users(True)
@@ -415,7 +415,8 @@ class instagram_bot:
         if len(hashtag_list["total"]) >= int(limit_hashtag * 1.5):
             # desactivar el peor hashtag. conservar para evitar agregarlo nuevamente
             # si hay 15 elementos, se comparan los primeros 10
-            menor_list = list(hashtag_list["total"].values())[limit_hashtag - 1]
+            menor_list = list(hashtag_list["removed"].values())[limit_hashtag - 1]
+            # deben haber al menos 10 hashtag con un minimo de 1000 cuentas dejadas de seguir
             if menor_list > minimum_hashtag:
                 hashtag_eficiencia = {
                     k: hashtag_list["eficiencia2"][k]
