@@ -271,9 +271,7 @@ class configuracion_administrador(base):
         campos = json.loads(file_read.read())
         file_read.close()
         for configuracion in campos:
-            row = configuracion_model.getByVariable(configuracion['variable'])
-            configuracion_model.setByVariable(
-                configuracion['variable'], configuracion['valor'])
+            configuracion_model.setByVariable(configuracion['variable'], configuracion['valor'])
 
         cache.delete_cache()
         if responder:
