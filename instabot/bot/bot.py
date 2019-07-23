@@ -462,10 +462,9 @@ class Bot(object):
             self.last_sleep[key] = time.time()
 
     def update_max(self, key):
-        delay_adjust = int(configuracion_model.getByVariable("delay_adjust", 50))
-        max_delay_adjust = int(
-            configuracion_model.getByVariable("max_delay_adjust", 100)
-        )
+        delay_adjust = configuracion_model.getByVariable("delay_adjust", 50)
+        max_delay_adjust = configuracion_model.getByVariable("max_delay_adjust", 100)
+        
         key = key + "s"
         if key in self.total and key in self.max_per_day:
             total = self.total[key]
@@ -484,9 +483,8 @@ class Bot(object):
             print(key, "no existe en totales", self.total)
 
     def update_turn(self, key):
-        turn = int(configuracion_model.getByVariable("turn_" + key, "0"))
-        turn_remain = int(configuracion_model.getByVariable("turn_remain_" + key, "0"))
-        # self.reset[key]=True
+        turn = configuracion_model.getByVariable("turn_" + key, 0)
+        turn_remain = configuracion_model.getByVariable("turn_remain_" + key, 0)
         if turn < 1:
             turn += 1
         else:
