@@ -19,7 +19,7 @@ class product_list(base):
     count = 0
 
     def __init__(self):
-        super().__init__(app.idseo,False)
+        super().__init__(app.idseo, False)
 
         self.view = (
             "list" if "view" in app.get and app.get["view"] == "list" else "grid"
@@ -90,32 +90,17 @@ class product_list(base):
             return ""
 
     def orden_producto(self):
-        orden_producto = configuracion_model.getByVariable("orden_producto")
-        if not isinstance(orden_producto, bool):
-            orden_producto = orden_producto.split(",")
-            for key,op in enumerate(orden_producto):
-                op = op.split(":")
-                for k,o in enumerate(op):
-                    op[k] = o.strip()
-                orden_producto[key]=op
-
-        if not isinstance(orden_producto, list) or len(orden_producto) == 0:
-            orden_producto = [
+        orden_producto = configuracion_model.getByVariable(
+            "orden_producto",
+            [
                 ["orden", "Recomendados"],
                 ["ventas", "Más vendidos"],
                 ["precio ASC", "Precio de menor a mayor"],
                 ["precio DESC", "Precio de mayor a menor"],
                 ["titulo ASC", "A-Z"],
                 ["titulo DESC", "Z-A"],
-            ]
-            orden_producto_guardar = {}
-
-            for op in orden_producto:
-                orden_producto_guardar.append(":".join(op))
-
-            orden_producto_guardar = ",".join(orden_producto_guardar)
-            configuracion_model.setByVariable("orden_producto", orden_producto_guardar)
-
+            ],
+        )
         orden_producto_mostrar = []
         for op in orden_producto:
             orden_producto_mostrar.append(
@@ -165,7 +150,9 @@ class product_list(base):
             lista_productos = self.lista_productos(productos, "detail", "foto2")
             data = {}
             data["lista_productos"] = lista_productos
-            if ( self.view == "grid" ):  # Comprobar si existe o no sidebar, para agrandar o achicar el tamaño del producto
+            if (
+                self.view == "grid"
+            ):  # Comprobar si existe o no sidebar, para agrandar o achicar el tamaño del producto
                 variables = {}
                 if self.seo["tipo_modulo"] != 0:
                     variables["tipo"] = self.seo["tipo_modulo"]
@@ -237,7 +224,9 @@ class product_list(base):
         pagination.append(
             {
                 "class_page": "next " + ("" if page < total else "disabled"),
-                "url_page": functions.generar_url(self.url) if page < total else functions.generar_url(self.url, False),
+                "url_page": functions.generar_url(self.url)
+                if page < total
+                else functions.generar_url(self.url, False),
                 "text_page": '<i class="fa fa-angle-right"> </i> ',
             }
         )
