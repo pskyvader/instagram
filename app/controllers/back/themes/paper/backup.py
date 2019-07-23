@@ -21,7 +21,6 @@ import os
 import json
 
 
-
 class backup(base):
     url = ["backup"]
     metadata = {"title": "backup", "modulo": "backup"}
@@ -79,23 +78,17 @@ class backup(base):
             mensaje_error = "Debes dar permisos de escritura en " + cls.base_dir
 
         mensaje = "Tiempo promedio de respaldo: "
-        tiempo_lento = configuracion_model.getByVariable("tiempo_backup_lento")
-        if isinstance(tiempo_lento, bool):
-            tiempo_lento = 0
-        else:
-            tiempo_lento = float(tiempo_lento.replace(",", "."))
+        tiempo_lento = configuracion_model.getByVariable("tiempo_backup_lento", 0)
+        if tiempo_lento > 0:
             mensaje += "%.2f" % (tiempo_lento) + " segundos (servidor lento)"
 
-        tiempo_rapido = configuracion_model.getByVariable("tiempo_backup_rapido")
-        if isinstance(tiempo_rapido, bool):
-            tiempo_rapido = 0
+        tiempo_rapido = configuracion_model.getByVariable("tiempo_backup_rapido", 0)
+        if tiempo_rapido == 0:
             if tiempo_lento == 0:
                 mensaje = ""
         else:
-            tiempo_rapido = float(tiempo_rapido.replace(",", "."))
             if tiempo_lento > 0:
                 mensaje += ", "
-
             mensaje += "%.2f" % (tiempo_rapido) + " segundos (servidor rápido)"
 
         row = []
@@ -173,7 +166,10 @@ class backup(base):
                             respuesta["errores"].append(nombre)
                     respuesta["errores"].append(nombre)
 
-                    if i % 500 == 0 or functions.current_time(as_string=False) - tiempo2 > 1:
+                    if (
+                        i % 500 == 0
+                        or functions.current_time(as_string=False) - tiempo2 > 1
+                    ):
                         tiempo2 = functions.current_time(as_string=False)
                         log_file = {
                             "mensaje": "Restaurando ..."
@@ -295,20 +291,11 @@ class backup(base):
         campos = app.post
         if "tiempo" in campos and "tipo_backup" in campos:
             cantidad = configuracion_model.getByVariable(
-                "cantidad_backup_" + campos["tipo_backup"]
+                "cantidad_backup_" + campos["tipo_backup"], 0
             )
-            if isinstance(cantidad, bool):
-                cantidad = 0
-            else:
-                cantidad = float(cantidad.replace(",", "."))
-
             tiempo = configuracion_model.getByVariable(
-                "tiempo_backup_" + campos["tipo_backup"]
+                "tiempo_backup_" + campos["tipo_backup"], 0
             )
-            if isinstance(tiempo, bool):
-                tiempo = 0
-            else:
-                tiempo = float(tiempo.replace(",", "."))
 
             tiempo = (tiempo * cantidad) + float(campos["tiempo"])
             cantidad += 1
@@ -543,8 +530,8 @@ class backup(base):
                     "Ocurrio un error al intentar guardar la base de datos en archivo zip "
                     + str(archivo_backup)
                 )
-        
-        respuesta['sql']=''
+
+        respuesta["sql"] = ""
         if log:
             ret["body"] = json.dumps(respuesta, ensure_ascii=False)
             return ret
@@ -596,7 +583,10 @@ class backup(base):
 
             lista.remove(file)
 
-            if log and ( functions.current_time(as_string=False) - tiempo > 1 or count % 1000 == 0 ):
+            if log and (
+                functions.current_time(as_string=False) - tiempo > 1
+                or count % 1000 == 0
+            ):
                 log_file = {
                     "mensaje": "..."
                     + final_file[-30:]
