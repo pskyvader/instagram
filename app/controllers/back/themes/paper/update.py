@@ -115,7 +115,7 @@ class update(base):
                 del f['archivo']
                 version_mayor = f
 
-        version = configuracion_model.getByVariable('version')
+        version = configuracion_model.getByVariable('version','0.0.1')
         if isinstance(version, bool) or LooseVersion(version_mayor['version']) > LooseVersion(version):
             respuesta['version'] = version_mayor
             respuesta['exito'] = True
