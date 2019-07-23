@@ -175,9 +175,9 @@ class instagram(base):
             "body": "",
         }
         respuesta = {"exito": True, "mensaje": ""}
-        daily_process = int(configuracion_model.getByVariable("daily_process", "4"))
-        daily_process_hours = json.loads(
-            configuracion_model.getByVariable("daily_process_hours", "[]")
+        daily_process = configuracion_model.getByVariable("daily_process", 4)
+        daily_process_hours = configuracion_model.getByVariable(
+            "daily_process_hours", []
         )
         hora = functions.current_time("%H")
         # fecha = datetime.datetime.now()
@@ -204,9 +204,7 @@ class instagram(base):
 
         ig = instagram_bot()
 
-        process_update = bool(
-            int(configuracion_model.getByVariable("process_update", "1"))
-        )
+        process_update = bool(configuracion_model.getByVariable("process_update", 1))
         if process_update:
             ig.bot.console_print("Actualizando usuarios")
             respuesta = ig.update()
@@ -220,7 +218,7 @@ class instagram(base):
                 ig = instagram_bot()
 
         process_unfollow = bool(
-            int(configuracion_model.getByVariable("process_unfollow", "1"))
+            configuracion_model.getByVariable("process_unfollow", 1)
         )
         if process_unfollow:
             ig.bot.console_print("Dejando de seguir no seguidores")
@@ -234,9 +232,7 @@ class instagram(base):
                 sleep(5)
                 ig = instagram_bot()
 
-        process_follow = bool(
-            int(configuracion_model.getByVariable("process_follow", "1"))
-        )
+        process_follow = bool(configuracion_model.getByVariable("process_follow", 1))
         if process_follow:
             ig.bot.max_per_turn["follows"] = int(
                 ig.bot.max_per_day["follows"] / daily_process
@@ -257,7 +253,7 @@ class instagram(base):
                 ig = instagram_bot()
 
         process_unfollow = bool(
-            int(configuracion_model.getByVariable("process_unfollow", "1"))
+            configuracion_model.getByVariable("process_unfollow", 1)
         )
         if process_unfollow:
             ig.bot.console_print("Dejando de seguir seguidores antiguos")
@@ -278,7 +274,7 @@ class instagram(base):
         }
         respuesta = {"exito": True, "mensaje": ""}
         ig = instagram_bot()
-        respuesta=ig.update_hashtag()
+        respuesta = ig.update_hashtag()
 
         if len(var) == 0:
             ret["body"] = json.dumps(respuesta, ensure_ascii=False)
