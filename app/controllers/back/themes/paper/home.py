@@ -104,12 +104,12 @@ class home(base):
             "count(pk) as total,hashtag",
         )
         fl = igaccounts_model.getAll(
-            {"following": True, "hashtag!": ""},
+            {"following": True,'follower':False, "hashtag!": ""},
             {"group": "hashtag"},
             "count(pk) as total,hashtag",
         )
         r = igaccounts_model.getAll(
-            {"following": False, "hashtag!": ""},
+            {"following": False,'follower':False, "hashtag!": ""},
             {"group": "hashtag"},
             "count(pk) as total,hashtag",
         )
