@@ -1,6 +1,6 @@
 from core.database import database
 from .base_model import base_model
-
+import ast
 
 class configuracion(base_model):
     idname = "idconfiguracion"
@@ -13,7 +13,7 @@ class configuracion(base_model):
         connection = database.instance()
         row = connection.get(cls.table, cls.idname, where, condicion)
         if len(row) == 1:
-            return row[0]["valor"]
+            return ast.literal_eval(row[0]["valor"])
         else:
             if default == None:
                 return False
