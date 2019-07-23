@@ -177,9 +177,7 @@ class home(base):
             "body": "",
         }
 
-        days_seguidores_estadistica = int(
-            configuracion_model.getByVariable("days_seguidores_estadistica", 30)
-        )
+        days_seguidores_estadistica = configuracion_model.getByVariable("days_seguidores_estadistica", 30)
         fecha_actual = datetime.now()
         fecha = (fecha_actual - timedelta(days=days_seguidores_estadistica)).strftime(
             "%Y-%m-%d"
@@ -231,9 +229,7 @@ class home(base):
             "body": "",
         }
 
-        days_seguidores_estadistica = int(
-            configuracion_model.getByVariable("days_seguidores_estadistica", 30)
-        )
+        days_seguidores_estadistica = configuracion_model.getByVariable("days_seguidores_estadistica", 30)
         respuesta = {"follower": {}, "following": {}}
 
         fecha_actual = datetime.now()
