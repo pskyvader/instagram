@@ -65,7 +65,7 @@ def console_print(self, text, color=None,progress=None,bold_text=False):
 
         archivo_log = app.get_dir(True) + "/log_dump.json"
         file_write = open(archivo_log, "a+")
-        file_write.write(text)
+        file_write.write(text+'\n')
         file_write.close()
 
 
