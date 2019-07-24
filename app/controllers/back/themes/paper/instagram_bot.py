@@ -241,7 +241,7 @@ class instagram_bot:
                     "turn_remain_" + key, str(turn_remain - 1), False
                 )
                 respuesta["mensaje"] = "Bloqueado por " + str(turn_remain) + " turnos"
-                respuesta["exito"]=False
+                respuesta["exito"] = False
                 return respuesta
 
         if respuesta["exito"]:
