@@ -237,11 +237,11 @@ class instagram_bot:
             turn_remain = configuracion_model.getByVariable("turn_remain_" + key, 0)
             if turn_remain > 0:
                 bot.console_print("Bloqueado por " + str(turn_remain) + " turnos")
-                respuesta["mensaje"] = "Bloqueado por " + str(turn_remain) + " turnos"
-                respuesta["exito"]=False
                 configuracion_model.setByVariable(
                     "turn_remain_" + key, str(turn_remain - 1), False
                 )
+                respuesta["mensaje"] = "Bloqueado por " + str(turn_remain) + " turnos"
+                respuesta["exito"]=False
                 return respuesta
 
         if respuesta["exito"]:
