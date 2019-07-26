@@ -43,6 +43,7 @@ class instagram(base):
     @classmethod
     def index(cls):
         """Controlador de lista_class de elementos base, puede ser sobreescrito en el controlador de cada modulo"""
+        from core.socket import socket
         ret = {"body": []}
         # Clase para enviar a controlador de lista_class
         class_name = cls.class_name
@@ -69,6 +70,8 @@ class instagram(base):
         asi = aside()
         ret["body"] += asi.normal()["body"]
 
+        message=socket.receive()
+        print(message)
         log = []
         total = 0
         mensaje_error = ""
