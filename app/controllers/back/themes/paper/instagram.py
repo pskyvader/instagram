@@ -72,7 +72,7 @@ class instagram(base):
 
         log = []
         message='start'
-        while message!='':
+        while message!='END':
             message=socket.receive()
             log.append(message)
         
