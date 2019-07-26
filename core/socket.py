@@ -14,21 +14,15 @@ class socket:
         if socket.sock != None:
             socket.sock.send(msg)
 
-    # @staticmethod
-    # def send(msg):
-    #     try:
-    #         if socket.sock==None and not socket.intento:
-    #             down=socket.download(socket.url+"port.txt")
-    #             socket.host=json.loads(down)['final_url']
-    #             socket.sock = create_connection(socket.host)
-    #         if socket.sock!=None:
-    #             socket.sock.send(msg)
-    #     except Exception as e:
-    #         print("error:",e)
-    #         socket.sock=None
-    #         if not socket.intento:
-    #             socket.intento=True
-    #             socket.create()
+    @staticmethod
+    def receive():
+        socket.create()
+        msg=''
+        if socket.sock != None:
+            msg=socket.sock.recv()
+        return msg
+
+
 
     @staticmethod
     def create():
