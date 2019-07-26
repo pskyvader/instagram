@@ -27,7 +27,6 @@ class socket:
     @staticmethod
     def create():
         import urllib.request
-
         if socket.sock != None:
             return
 
