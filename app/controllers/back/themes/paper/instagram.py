@@ -70,9 +70,12 @@ class instagram(base):
         asi = aside()
         ret["body"] += asi.normal()["body"]
 
-        message=socket.receive()
-        print(message)
         log = []
+        message='start'
+        while message!='':
+            message=socket.receive()
+            log.append(message)
+        
         total = 0
         mensaje_error = ""
         data = {}
