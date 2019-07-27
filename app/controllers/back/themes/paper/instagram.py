@@ -78,6 +78,8 @@ class instagram(base):
                     message=message[message.index('{'):]
                     message=json.loads(message)
                     log.insert(0,message)
+                except:
+                    pass
             message=socket.receive()
         
         total = 0
