@@ -77,6 +77,7 @@ class instagram(base):
             print(message)
             log.append(message)
             message=socket.receive()
+        print(log)
         
         total = 0
         mensaje_error = ""
