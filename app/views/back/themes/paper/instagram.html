@@ -80,13 +80,13 @@
                     <div class="panel-heading">
                         <h2>Log de procesos</h2>
                         <div class="panel-ctrls" data-actions-container="" data-action-collapse='{"target": ".panel-body"}'>
-                            {% for l in log %}
-                            <p>{{l}}</p>
-                            {% endfor %}
                         </div>
                     </div>
                     <div class="panel-body scroll-pane" style="height: 500px;">
                         <div class="scroll-content" id="log_instagram">
+                            {% for l in log %}
+                            <p>{{l}}</p>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
