@@ -74,8 +74,9 @@ class instagram(base):
         #message='start'
         message=socket.receive()
         while message!='' or len(log)>40:
-            log.append(message)
+            log.append({'message':message})
             message=socket.receive()
+        print(log)
         
         total = 0
         mensaje_error = ""
@@ -92,7 +93,6 @@ class instagram(base):
         data["log"] = log
         data["progreso"] = total
         data["mensaje_error"] = mensaje_error
-        print (data["log"],type(data["log"]))
         ret["body"].append(("instagram", data))
 
         f = footer()
