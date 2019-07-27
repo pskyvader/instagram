@@ -71,12 +71,10 @@ class instagram(base):
         ret["body"] += asi.normal()["body"]
 
         log = []
-        #message='start'
         message=socket.receive()
-        while message!='' or len(log)>40:
+        while message!='':
             log.append({'message':message})
             message=socket.receive()
-        print(log)
         
         total = 0
         mensaje_error = ""
