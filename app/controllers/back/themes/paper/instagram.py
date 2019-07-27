@@ -74,9 +74,10 @@ class instagram(base):
         message=socket.receive()
         while message!='' and message!='END':
             if '{' in message:
-                message=message[message.index('{'):]
-                message=json.loads(message)
-                log.insert(0,message)
+                try:
+                    message=message[message.index('{'):]
+                    message=json.loads(message)
+                    log.insert(0,message)
             message=socket.receive()
         
         total = 0
