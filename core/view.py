@@ -91,6 +91,7 @@ class view:
                     d = view.render_unit(env, "", d)
                 data2.append(d)
             data = data2
+            #si todos los elementos de la lista son string, la lista se convierte en string
             if all(isinstance(x, str) for x in data):
                 data = "".join(data)
         elif isinstance(data, tuple):
