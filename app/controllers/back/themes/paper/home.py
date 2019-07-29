@@ -98,16 +98,19 @@ class home(base):
             h["hashtag"]: {"follower": 0, "following": 0, "removed": 0} for h in hashtag
         }
 
+
         f = igaccounts_model.getAll(
             {"follower": True, "hashtag!": ""},
             {"group": "hashtag"},
             "count(pk) as total,hashtag",
         )
+
         fl = igaccounts_model.getAll(
-            {"following": True,'follower':False, "hashtag!": ""},
+            {"following": True, "hashtag!": ""},
             {"group": "hashtag"},
             "count(pk) as total,hashtag",
         )
+
         r = igaccounts_model.getAll(
             {"following": False,'follower':False, "hashtag!": ""},
             {"group": "hashtag"},
