@@ -168,8 +168,6 @@ class home(base):
             if return_array:
                 respuesta["total"][t["hashtag"]] = t["total"]
 
-        socket.close()
-
         if return_array:
             return respuesta
         else:
