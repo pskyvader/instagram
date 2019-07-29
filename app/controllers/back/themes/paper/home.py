@@ -1,10 +1,13 @@
 from core.app import app
 from core.functions import functions
+from core.socket import socket
+
 from .base import base
 from .head import head
 from .header import header
 from .aside import aside
 from .footer import footer
+
 from app.models.administrador import administrador as administrador_model
 from app.models.igaccounts import igaccounts as igaccounts_model
 from app.models.ighashtag import ighashtag as ighashtag_model
@@ -98,7 +101,6 @@ class home(base):
             h["hashtag"]: {"follower": 0, "following": 0, "removed": 0} for h in hashtag
         }
 
-
         f = igaccounts_model.getAll(
             {"follower": True, "hashtag!": ""},
             {"group": "hashtag"},
@@ -112,7 +114,7 @@ class home(base):
         )
 
         r = igaccounts_model.getAll(
-            {"following": False,'follower':False, "hashtag!": ""},
+            {"following": False, "follower": False, "hashtag!": ""},
             {"group": "hashtag"},
             "count(pk) as total,hashtag",
         )
@@ -136,7 +138,7 @@ class home(base):
             f = h["follower"]
             fl = h["following"]
             r = h["removed"]
-            total=f + fl + r
+            total = f + fl + r
             porcentaje = (f / total) * 100 if (total > 0) else 0
             porcentaje2 = (f / (fl + f)) * 100 if (fl + f > 0) else 0
 
@@ -166,6 +168,8 @@ class home(base):
             if return_array:
                 respuesta["total"][t["hashtag"]] = t["total"]
 
+        socket.close()
+
         if return_array:
             return respuesta
         else:
@@ -180,7 +184,9 @@ class home(base):
             "body": "",
         }
 
-        days_seguidores_estadistica = configuracion_model.getByVariable("days_seguidores_estadistica", 30)
+        days_seguidores_estadistica = configuracion_model.getByVariable(
+            "days_seguidores_estadistica", 30
+        )
         fecha_actual = datetime.now()
         fecha = (fecha_actual - timedelta(days=days_seguidores_estadistica)).strftime(
             "%Y-%m-%d"
@@ -232,7 +238,9 @@ class home(base):
             "body": "",
         }
 
-        days_seguidores_estadistica = configuracion_model.getByVariable("days_seguidores_estadistica", 30)
+        days_seguidores_estadistica = configuracion_model.getByVariable(
+            "days_seguidores_estadistica", 30
+        )
         respuesta = {"follower": {}, "following": {}}
 
         fecha_actual = datetime.now()
