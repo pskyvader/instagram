@@ -85,7 +85,6 @@ class instagram(base):
                         
                     log.insert(0, message)
                     log.insert(0, rest)
-
                 except:
                     pass
             message = socket.receive()
