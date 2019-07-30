@@ -77,7 +77,12 @@ class instagram(base):
         while message != "" and message != "END":
             if "{" in message:
                 try:
-                    rest={'mensaje': message[:message.index("{")]}
+                    rest=message[:message.index("{")]
+                    rest=rest[rest.index(":"):]
+                    rest=rest[:rest.index("-")]
+                    rest={'mensaje': rest}
+
+
                     message = message[message.index("{") :]
                     message = json.loads(message)
                     if 'porcentaje' in message:
