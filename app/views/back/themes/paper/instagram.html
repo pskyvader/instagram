@@ -86,7 +86,7 @@
                         <div class="scroll-content" id="log_instagram">
                             {% for l in log %}
                             <p style="{% if l.color %}color:{{l.color}};{% endif %}{% if l.bold %}font-weight:bold;{% endif %}">
-                                {{l.mensaje}}
+                                {{l}}
                             </p>
                             {% endfor %}
                         </div>
