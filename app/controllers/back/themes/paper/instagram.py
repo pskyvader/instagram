@@ -80,7 +80,7 @@ class instagram(base):
                     rest=message[:message.index("{")]
                     rest=rest[rest.index(":")+1:]
                     rest=rest[:rest.index("-")]
-                    rest={'mensaje': rest}
+                    rest={'mensaje': rest.strip()}
 
 
                     message = message[message.index("{") :]
