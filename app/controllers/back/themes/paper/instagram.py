@@ -83,7 +83,7 @@ class instagram(base):
 
                     message = message[message.index("{"):]
                     message = json.loads(message)
-                    message['mensaje']=rest.strip()+': '+message['mensaje']
+                    message['mensaje']=rest.strip()+' - '+message['mensaje']
                     if 'porcentaje' in message:
                         total=float(message['porcentaje'])
                         
