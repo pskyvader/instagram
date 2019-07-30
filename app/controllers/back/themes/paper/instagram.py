@@ -73,17 +73,20 @@ class instagram(base):
 
         log = []
         message = socket.receive()
+        total = 0
         while message != "" and message != "END":
             if "{" in message:
                 try:
                     message = message[message.index("{") :]
                     message = json.loads(message)
+                    if 'porcentaje' in message:
+                        total=float(message['porcentaje'])
+                        
                     log.insert(0, message)
                 except:
                     pass
             message = socket.receive()
-
-        total = 0
+        
         mensaje_error = ""
         data = {}
         data["title"] = cls.metadata["title"]
