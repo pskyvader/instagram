@@ -79,14 +79,16 @@ class instagram(base):
                 try:
                     rest=message[:message.index("{")]
                     rest=rest[rest.index(":")+1:rest.index("-")]
-                    rest={'mensaje': rest.strip()}
+                    #rest={'mensaje': rest.strip()}
+
                     message = message[message.index("{"):]
                     message = json.loads(message)
+                    message['mensaje']=rest.strip()+message['mensaje']
                     if 'porcentaje' in message:
                         total=float(message['porcentaje'])
                         
                     log.insert(0, message)
-                    log.insert(0, rest)
+                    #log.insert(0, rest)
                 except:
                     pass
             message = socket.receive()
