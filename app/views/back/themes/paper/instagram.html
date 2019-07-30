@@ -85,7 +85,9 @@
                     <div class="panel-body scroll-pane" style="height: 500px;">
                         <div class="scroll-content" id="log_instagram">
                             {% for l in log %}
-                            <p {% if l.color %} style="color:'{{l.color}}'" {% endif %}>{{l.mensaje}}</p>
+                            <p {% if l.color %} style="color:{{l.color}}" {% endif %}>
+                                {{l.mensaje}}
+                            </p>
                             {% endfor %}
                         </div>
                     </div>
