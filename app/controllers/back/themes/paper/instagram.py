@@ -78,7 +78,7 @@ class instagram(base):
             if "{" in message:
                 try:
                     rest=message[:message.index("{")]
-                    rest=rest[rest.index(":")+1:rest.index("-")]
+                    rest=rest[rest.index(":")+1:rest.index(".")]
                     #rest={'mensaje': rest.strip()}
 
                     message = message[message.index("{"):]
