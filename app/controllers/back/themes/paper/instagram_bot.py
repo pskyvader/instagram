@@ -554,7 +554,9 @@ class instagram_bot:
         else:
             user = user[0]
             if bot.login(
-                username=user["usuario"], password=user["password"], use_cookie=configuracion_model.getByVariable('login_cookie',True)
+                username=user["usuario"],
+                password=user["password"],
+                use_cookie=configuracion_model.getByVariable("login_cookie", True),
             ):
                 respuesta["exito"] = True
             else:
