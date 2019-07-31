@@ -427,18 +427,27 @@ class instagram_bot:
                 hashtag_menor = min(
                     hashtag_eficiencia, key=dict(hashtag_eficiencia).get
                 )
-                query = ighashtag_model.getByHashtag(hashtag_menor)
-                update_query = {}
-                update_query["id"] = query[0]
-                update_query["estado"] = False
-                update_query["following"] = hashtag_list["following"][hashtag_menor]
-                update_query["follower"] = hashtag_list["followers"][hashtag_menor]
-                update_query["removed"] = hashtag_list["removed"][hashtag_menor]
-                update_query["eficiencia"] = hashtag_list["eficiencia"][hashtag_menor]
-                update_query["eficiencia2"] = hashtag_list["eficiencia2"][hashtag_menor]
-                update_query["total"] = hashtag_list["total"][hashtag_menor]
-                ighashtag_model.update(update_query, False)
-                respuesta["mensaje"] = "Hashtag " + hashtag_menor + " quitado"
+                if hashtag_list["removed"][hashtag_menor] > minimum_hashtag:
+                    query = ighashtag_model.getByHashtag(hashtag_menor)
+                    update_query = {}
+                    update_query["id"] = query[0]
+                    update_query["estado"] = False
+                    update_query["following"] = hashtag_list["following"][hashtag_menor]
+                    update_query["follower"] = hashtag_list["followers"][hashtag_menor]
+                    update_query["removed"] = hashtag_list["removed"][hashtag_menor]
+                    update_query["eficiencia"] = hashtag_list["eficiencia"][
+                        hashtag_menor
+                    ]
+                    update_query["eficiencia2"] = hashtag_list["eficiencia2"][
+                        hashtag_menor
+                    ]
+                    update_query["total"] = hashtag_list["total"][hashtag_menor]
+                    ighashtag_model.update(update_query, False)
+                    respuesta["mensaje"] = "Hashtag " + hashtag_menor + " quitado"
+                else:
+                    respuesta[
+                        "mensaje"
+                    ] = "Aun no hay suficientes cuentas por hashtag para evaluar"
             else:
                 respuesta[
                     "mensaje"
