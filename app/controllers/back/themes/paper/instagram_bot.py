@@ -427,7 +427,10 @@ class instagram_bot:
                 hashtag_menor = min(
                     hashtag_eficiencia, key=dict(hashtag_eficiencia).get
                 )
-                if hashtag_list["removed"][hashtag_menor] > minimum_hashtag:
+                if (
+                    hashtag_list["removed"][hashtag_menor] > minimum_hashtag
+                    and hashtag_list["eficiencia"][hashtag_menor] < 10
+                ):
                     query = ighashtag_model.getByHashtag(hashtag_menor)
                     update_query = {}
                     update_query["id"] = query[0]
@@ -447,7 +450,10 @@ class instagram_bot:
                 else:
                     respuesta[
                         "mensaje"
-                    ] = "Aun no hay suficientes cuentas por hashtag para evaluar"
+                    ] = "Aun no hay suficientes cuentas por hashtag para evaluar. {} cuentas, {} eficiencia".format(
+                        hashtag_list["removed"][hashtag_menor],
+                        hashtag_list["eficiencia"][hashtag_menor],
+                    )
             else:
                 respuesta[
                     "mensaje"
