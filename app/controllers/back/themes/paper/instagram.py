@@ -77,22 +77,22 @@ class instagram(base):
         while message != "" and message != "END":
             if "{" in message:
                 try:
-                    rest=message[:message.index("{")]
-                    rest=rest[rest.index(":")+1:rest.index(".")]
-                    #rest={'mensaje': rest.strip()}
+                    rest = message[: message.index("{")]
+                    rest = rest[rest.index(":") + 1 : rest.index(".")]
+                    # rest={'mensaje': rest.strip()}
 
-                    message = message[message.index("{"):]
+                    message = message[message.index("{") :]
                     message = json.loads(message)
-                    message['mensaje']=rest.strip()+' - '+message['mensaje']
-                    if 'porcentaje' in message:
-                        total=float(message['porcentaje'])
-                        
+                    message["mensaje"] = rest.strip() + " - " + message["mensaje"]
+                    if "porcentaje" in message:
+                        total = float(message["porcentaje"])
+
                     log.insert(0, message)
-                    #log.insert(0, rest)
+                    # log.insert(0, rest)
                 except:
                     pass
             message = socket.receive()
-        
+
         mensaje_error = ""
         data = {}
         data["title"] = cls.metadata["title"]
