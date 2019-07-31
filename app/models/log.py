@@ -9,6 +9,43 @@ class log(base_model):
     idname = 'idlog'
     table = 'log'
     delete_cache = False
+
+    @classmethod
+    def getAll(cls, where={}, condiciones={}, select=""):
+        from .table import table as table_model
+        condiciones = condiciones.copy()
+        where = where.copy()
+        return_total = None
+        connection = database.instance()
+        fields = table_model.getByname(cls.table)
+        
+        if 'order' not in condiciones and 'orden' in fields:
+            condiciones['order'] = 'orden DESC'
+
+        if 'palabra' in condiciones:
+            condiciones['buscar'] = {}
+            if 'tabla' in fields:
+                condiciones['buscar']['tabla'] = condiciones['palabra']
+            if 'accion' in fields:
+                condiciones['buscar']['accion'] = condiciones['palabra']
+            if 'administrador' in fields:
+                condiciones['buscar']['administrador'] = condiciones['palabra']
+
+            if len(condiciones['buscar']) == 0:
+                del condiciones['buscar']
+
+        if select == 'total':
+            return_total = True
+
+        row = connection.get(cls.table, cls.idname, where, condiciones, select)
+        
+        if return_total != None:
+            return row[0]['total']
+        else:
+            return row
+
+
+
     @classmethod
     def insert(cls, set_query: dict,  loggging=True):
         fields     = table.getByname(cls.table)
@@ -19,7 +56,6 @@ class log(base_model):
             last_id = row
             if loggging:
                 log.insert_log(cls.table, cls.idname, cls, insert)
-                pass
             return last_id
         else:
             return row
