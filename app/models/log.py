@@ -20,8 +20,8 @@ class log(base_model):
         connection = database.instance()
         fields = table_model.getByname(cls.table)
 
-        if "order" not in condiciones and "orden" in fields:
-            condiciones["order"] = "orden DESC"
+        if "order" not in condiciones and "fecha" in fields:
+            condiciones["order"] = "fecha DESC"
 
         if "palabra" in condiciones:
             condiciones["buscar"] = {}
