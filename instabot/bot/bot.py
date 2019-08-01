@@ -494,8 +494,8 @@ class Bot(object):
         configuracion_model.setByVariable("turn_remain_" + key, turn_remain, False)
 
     def reset_turn(self, key):
-        configuracion_model.setByVariable("turn_" + key, "0", False)
-        configuracion_model.setByVariable("turn_remain_" + key, "0", False)
+        configuracion_model.setByVariable("turn_" + key, 0, False)
+        configuracion_model.setByVariable("turn_remain_" + key, 0, False)
 
     def error_delay(self):
         time.sleep(10)
