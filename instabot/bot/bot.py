@@ -485,7 +485,7 @@ class Bot(object):
     def update_turn(self, key):
         turn = configuracion_model.getByVariable("turn_" + key, 0)
         turn_remain = configuracion_model.getByVariable("turn_remain_" + key, 0)
-        turn_per_hour = configuracion_model.getByVariable("turn_per_hour" + key, 1)
+        turn_per_hour = configuracion_model.getByVariable("turn_per_hour", 1)
         if turn < turn_per_hour:
             turn = turn_per_hour
         else:
