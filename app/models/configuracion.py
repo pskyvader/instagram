@@ -15,19 +15,18 @@ class configuracion(base_model):
         connection = database.instance()
         row = connection.get(cls.table, cls.idname, where, condicion)
         if len(row) == 1:
-            ret=None
+            ret = None
             try:
-                ret=ast.literal_eval(row[0]["valor"])
+                ret = ast.literal_eval(row[0]["valor"])
             except Exception as e:
-                if default!=None and isinstance(row[0]["valor"],type(default)):
-                    ret=row[0]["valor"]
+                if default != None and isinstance(row[0]["valor"], type(default)):
+                    ret = row[0]["valor"]
                 else:
-                    print('error al convertir variable', e,row[0]["valor"])
-                    if default!=None:
-                        print('restaurando valor por defecto',default)
+                    print("error al convertir variable", e, row[0]["valor"])
+                    if default != None:
+                        print("restaurando valor por defecto", default)
                         configuracion.setByVariable(variable, default)
-                        ret=default
-
+                        ret = default
             return ret
         else:
             if default == None:
