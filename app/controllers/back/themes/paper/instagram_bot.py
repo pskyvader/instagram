@@ -572,6 +572,7 @@ class instagram_bot:
                 username=user["usuario"],
                 password=user["password"],
                 use_cookie=configuracion_model.getByVariable("login_cookie", True),
+                cookie_fname=configuracion_model.getByVariable("cookie_name", 'cookie_usuario')
             ):
                 respuesta["exito"] = True
             else:

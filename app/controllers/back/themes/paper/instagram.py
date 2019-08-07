@@ -194,6 +194,7 @@ class instagram(base):
         from time import sleep
         import random
         import datetime
+        import os
 
         ret = {
             "headers": [("Content-Type", "application/json; charset=utf-8")],
@@ -220,6 +221,8 @@ class instagram(base):
             configuracion_model.setByVariable(
                 "daily_process_hours", json.dumps(daily_process_hours)
             )
+            if os.path.exists(configuracion_model.getByVariable("cookie_name", 'cookie_usuario')):
+                os.remove(configuracion_model.getByVariable("cookie_name", 'cookie_usuario'))
 
         if hora not in daily_process_hours:
             respuesta["mensaje"] = "Fuera de horario activo: " + hora
