@@ -15,7 +15,14 @@ class configuracion(base_model):
         connection = database.instance()
         row = connection.get(cls.table, cls.idname, where, condicion)
         if len(row) == 1:
-            return ast.literal_eval(row[0]["valor"])
+            ret=None
+            try:
+                ret=ast.literal_eval(row[0]["valor"])
+            except Exception as e:
+                print('error al convertir variable', e,row[0]["valor"])
+                ret=row[0]["valor"]
+
+            return ret
         else:
             if default == None:
                 return False
