@@ -223,7 +223,6 @@ class instagram(base):
             )
             if os.path.exists(configuracion_model.getByVariable("cookie_name", 'cookie_usuario')):
                 os.remove(configuracion_model.getByVariable("cookie_name", 'cookie_usuario'))
-
         if hora not in daily_process_hours:
             respuesta["mensaje"] = "Fuera de horario activo: " + hora
             if len(var) == 0:
