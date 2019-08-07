@@ -23,7 +23,10 @@ class configuracion(base_model):
                     ret=row[0]["valor"]
                 else:
                     print('error al convertir variable', e,row[0]["valor"])
-                    ret=default
+                    if default!=None:
+                        print('restaurando valor por defecto',default)
+                        configuracion.setByVariable(variable, default)
+                        ret=default
 
             return ret
         else:
