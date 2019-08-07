@@ -71,7 +71,7 @@ class instagram_bot:
 
     def update(self):
         respuesta = {"exito": False, "mensaje": ""}
-        c_time=None
+        c_time = None
 
         if self.bot == None:
             respuesta["mensaje"] = self.error_mensaje
@@ -217,7 +217,7 @@ class instagram_bot:
         else:
             bot.console_print("Completado con errores", progress=100)
 
-        if c_time!=None:
+        if c_time != None:
             igtotal_model.set_total("start_follow", c_time, start_follow)
             igtotal_model.set_total("stop_follow", c_time, stop_follow)
         return respuesta
@@ -574,7 +574,9 @@ class instagram_bot:
                 username=user["usuario"],
                 password=user["password"],
                 use_cookie=configuracion_model.getByVariable("login_cookie", True),
-                cookie_fname=configuracion_model.getByVariable("cookie_name", 'cookie_usuario')
+                cookie_fname=configuracion_model.getByVariable(
+                    "cookie_name", "cookie_usuario"
+                ),
             ):
                 respuesta["exito"] = True
             else:
