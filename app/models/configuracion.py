@@ -19,8 +19,11 @@ class configuracion(base_model):
             try:
                 ret=ast.literal_eval(row[0]["valor"])
             except Exception as e:
-                print('error al convertir variable', e,row[0]["valor"])
-                ret=row[0]["valor"]
+                if default!=None and isinstance(row[0]["valor"],type(default)):
+                    ret=row[0]["valor"]
+                else:
+                    print('error al convertir variable', e,row[0]["valor"])
+                    ret=default
 
             return ret
         else:
