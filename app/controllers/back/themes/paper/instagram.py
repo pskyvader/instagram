@@ -261,9 +261,9 @@ class instagram(base):
 
         process_follow = bool(configuracion_model.getByVariable("process_follow", 1))
         if process_follow:
-            ig.bot.max_per_turn["follows"] = int(
-                ig.bot.max_per_day["follows"] / daily_process
-            ) * (daily_process_hours.index(hora) + 1)
+            ig.bot.max_per_turn["follows"] = int( ig.bot.max_per_day["follows"] / daily_process  * (daily_process_hours.index(hora) + 1) )
+
+
             ig.bot.console_print(
                 (
                     "Siguiendo por hashtag. Hora: {}, maximo para seguir del periodo: {}"
