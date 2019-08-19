@@ -221,8 +221,12 @@ class instagram(base):
             configuracion_model.setByVariable(
                 "daily_process_hours", json.dumps(daily_process_hours)
             )
-            if os.path.exists(configuracion_model.getByVariable("cookie_name", 'cookie_usuario')):
-                os.remove(configuracion_model.getByVariable("cookie_name", 'cookie_usuario'))
+            if os.path.exists(
+                configuracion_model.getByVariable("cookie_name", "cookie_usuario")
+            ):
+                os.remove(
+                    configuracion_model.getByVariable("cookie_name", "cookie_usuario")
+                )
         if hora not in daily_process_hours:
             respuesta["mensaje"] = "Fuera de horario activo: " + hora
             if len(var) == 0:
@@ -261,8 +265,11 @@ class instagram(base):
 
         process_follow = bool(configuracion_model.getByVariable("process_follow", 1))
         if process_follow:
-            ig.bot.max_per_turn["follows"] = int( ig.bot.max_per_day["follows"] / daily_process  * (daily_process_hours.index(hora) + 1) )
-
+            ig.bot.max_per_turn["follows"] = int(
+                ig.bot.max_per_day["follows"]
+                / daily_process
+                * (daily_process_hours.index(hora) + 1)
+            )
 
             ig.bot.console_print(
                 (
