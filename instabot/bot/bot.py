@@ -464,7 +464,7 @@ class Bot(object):
     def update_max(self, key):
         delay_adjust = configuracion_model.getByVariable("delay_adjust", 50)
         max_delay_adjust = configuracion_model.getByVariable("max_delay_adjust", 100)
-        
+
         key = key + "s"
         if key in self.total and key in self.max_per_day:
             total = self.total[key]
@@ -474,6 +474,8 @@ class Bot(object):
                     new_max = max - delay_adjust
                 else:
                     new_max = max - 1
+                if new_max < 1:
+                    new_max = 1
                 configuracion_model.setByVariable(
                     "max_" + key + "_per_day", new_max, False
                 )
@@ -514,11 +516,21 @@ class Bot(object):
             self.reset_counters()
 
         if self.total[key] >= self.max_per_day[key]:
-            self.console_print( "Máximo diario alcanzado: {} {} > {}".format(key,self.total[key],self.max_per_day[key]), color="red", )
+            self.console_print(
+                "Máximo diario alcanzado: {} {} > {}".format(
+                    key, self.total[key], self.max_per_day[key]
+                ),
+                color="red",
+            )
             return True
         else:
             if self.total[key] >= self.max_per_turn[key]:
-                self.console_print( "Máximo del turno alcanzado: {} {} > {}".format(key,self.total[key],self.max_per_turn[key]), color="red", )
+                self.console_print(
+                    "Máximo del turno alcanzado: {} {} > {}".format(
+                        key, self.total[key], self.max_per_turn[key]
+                    ),
+                    color="red",
+                )
                 return True
             else:
                 return False
@@ -538,6 +550,7 @@ class Bot(object):
         :type query: str
         """
         return get_tags(self, query)
+
     # getters
 
     def get_your_medias(self, as_dict=False):
