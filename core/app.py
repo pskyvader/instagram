@@ -25,8 +25,10 @@ class app:
 
     def __init__(self, root):
         import locale
-
-        locale.setlocale(locale.LC_ALL, "es_CL.UTF-8")
+        try:
+            locale.setlocale(locale.LC_ALL, "es_CL.UTF-8")
+        except:
+            pass
         app.root = root + "/"
 
     def init(self, environ):
