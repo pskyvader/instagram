@@ -252,8 +252,16 @@ class instagram(base):
             configuracion_model.getByVariable("process_unfollow", 1)
         )
         if process_unfollow:
-            ig.bot.max_per_turn["unfollows"] = int( ig.bot.max_per_day["unfollows"] / daily_process * (daily_process_hours.index(hora) + 1) )
-            ig.bot.console_print( ( "Dejando de seguir no seguidores. Hora: {}, maximo para seguir del periodo: {}" ).format(hora, ig.bot.max_per_turn["unfollows"]) )
+            ig.bot.max_per_turn["unfollows"] = int(
+                ig.bot.max_per_day["unfollows"]
+                / daily_process
+                * (daily_process_hours.index(hora) + 1)
+            )
+            ig.bot.console_print(
+                (
+                    "Dejando de seguir no seguidores. Hora: {}, maximo para seguir del periodo: {}"
+                ).format(hora, ig.bot.max_per_turn["unfollows"])
+            )
             respuesta = ig.unfollow("nonfollower")
 
             if not respuesta["exito"]:
@@ -265,10 +273,18 @@ class instagram(base):
                 ig = instagram_bot()
 
         process_follow = bool(configuracion_model.getByVariable("process_follow", 1))
-        if process_follow: 
-            ig.bot.max_per_turn["follows"] = int( ig.bot.max_per_day["follows"] / daily_process * (daily_process_hours.index(hora) + 1) )
+        if process_follow:
+            ig.bot.max_per_turn["follows"] = int(
+                ig.bot.max_per_day["follows"]
+                / daily_process
+                * (daily_process_hours.index(hora) + 1)
+            )
 
-            ig.bot.console_print( ( "Siguiendo por hashtag. Hora: {}, maximo para seguir del periodo: {}" ).format(hora, ig.bot.max_per_turn["follows"]) )
+            ig.bot.console_print(
+                (
+                    "Siguiendo por hashtag. Hora: {}, maximo para seguir del periodo: {}"
+                ).format(hora, ig.bot.max_per_turn["follows"])
+            )
             respuesta = ig.follow("hashtag")
 
             if not respuesta["exito"]:
@@ -283,7 +299,11 @@ class instagram(base):
             configuracion_model.getByVariable("process_unfollow", 1)
         )
         if process_unfollow:
-            ig.bot.console_print( ( "Dejando de seguir seguidores antiguos. Hora: {}, maximo para seguir del periodo: {}" ).format(hora, ig.bot.max_per_turn["unfollows"]) )
+            ig.bot.console_print(
+                (
+                    "Dejando de seguir seguidores antiguos. Hora: {}, maximo para seguir del periodo: {}"
+                ).format(hora, ig.bot.max_per_turn["unfollows"])
+            )
             respuesta = ig.unfollow("old")
 
         ig.bot.console_print("Todos los pasos completados")
