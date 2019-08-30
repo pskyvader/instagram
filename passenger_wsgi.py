@@ -12,8 +12,8 @@ def application2(environ, start_response):
     # init_time = datetime.now()
 
     
-    env['wsgi.multithread']  = True
-    env['wsgi.multiprocess'] = True
+    environ['wsgi.multithread']  = True
+    environ['wsgi.multiprocess'] = True
 
     app_web = app(os.path.dirname(__file__))
     main_data = app_web.init(environ)
