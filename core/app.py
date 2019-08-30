@@ -55,9 +55,9 @@ class app:
         subdirectorio = config["dir"]
         https = "https://" if config["https"] else "http://"
         www = "www." if config["www"] else ""
-        # port = environ["SERVER_PORT"]
-        # if port != 80:
-        #     app.root_url += ":" + str(port)
+        port = environ["SERVER_PORT"]
+        if port != 80 and str(port) not in app.root_url:
+            app.root_url += ":" + str(port)
 
         app.path = https + www + app.root_url + "/"
         if subdirectorio != "":
