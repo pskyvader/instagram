@@ -49,11 +49,13 @@ class app:
         app.prefix_site = functions.url_amigable(app.title)
 
         app.root_url = environ["SERVER_NAME"].replace("www.", "")
-        print(environ)
         # app.root_url = environ["HTTP_HOST"].replace("www.", "")
         subdirectorio = config["dir"]
         https = "https://" if config["https"] else "http://"
         www = "www." if config["www"] else ""
+        port = environ["SERVER_NAME"]
+        if port != 80:
+            app.root_url += ":" + str(port)
 
         app.path = https + www + app.root_url + "/"
         if subdirectorio != "":
