@@ -26,9 +26,13 @@ class view:
             FileSystemBytecodeCache,
             DebugUndefined,
         )
+        from os import path, makedirs
 
         if theme == "":
             theme = view.get_theme()
+
+
+        makedirs(app.get_dir(True) + "tmp/",exist_ok=True)
 
         env = Environment(
             loader=FileSystemLoader(theme),
