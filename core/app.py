@@ -50,8 +50,8 @@ class app:
         app.title = config["title"]
         app.prefix_site = functions.url_amigable(app.title)
 
-        app.root_url = environ["SERVER_NAME"].replace("www.", "")
-        # app.root_url = environ["HTTP_HOST"].replace("www.", "")
+        #app.root_url = environ["SERVER_NAME"].replace("www.", "")
+        app.root_url = environ["HTTP_HOST"].replace("www.", "")
         subdirectorio = config["dir"]
         https = "https://" if config["https"] else "http://"
         www = "www." if config["www"] else ""
