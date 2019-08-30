@@ -299,6 +299,11 @@ class instagram(base):
             configuracion_model.getByVariable("process_unfollow", 1)
         )
         if process_unfollow:
+            ig.bot.max_per_turn["unfollows"] = int(
+                ig.bot.max_per_day["unfollows"]
+                / daily_process
+                * (daily_process_hours.index(hora) + 1)
+            )
             ig.bot.console_print(
                 (
                     "Dejando de seguir seguidores antiguos. Hora: {}, maximo para seguir del periodo: {}"
