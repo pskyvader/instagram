@@ -11,6 +11,10 @@ def application2(environ, start_response):
     # from datetime import datetime
     # init_time = datetime.now()
 
+    
+    env['wsgi.multithread']  = True
+    env['wsgi.multiprocess'] = True
+
     app_web = app(os.path.dirname(__file__))
     main_data = app_web.init(environ)
     ret = main_data["response_body"]
