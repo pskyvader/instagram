@@ -11,7 +11,7 @@
     "dir": "",
     "title": "Instagram JaimitoBot",
     "short_title": "JaimitoBot",
-    "debug": true,
+    "debug": false,
     "domain": "instagram.mysitio.cl",
     "color_primario": "#ff8382",
     "color_secundario": "#ffffff",
