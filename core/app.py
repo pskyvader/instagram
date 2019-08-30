@@ -53,7 +53,7 @@ class app:
         subdirectorio = config["dir"]
         https = "https://" if config["https"] else "http://"
         www = "www." if config["www"] else ""
-        port = environ["SERVER_NAME"]
+        port = environ["SERVER_PORT"]
         if port != 80:
             app.root_url += ":" + str(port)
 
