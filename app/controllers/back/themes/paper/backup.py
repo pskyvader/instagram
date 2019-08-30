@@ -94,6 +94,9 @@ class backup(base):
         row = []
         files = []
         for root, dirs, file in os.walk(cls.dir_backup):
+            print('root',root)
+            print('dirs',dirs)
+            print('file',file)
             for fichero in file:
                 name, extension = os.path.splitext(fichero)
                 if extension == ".zip":
