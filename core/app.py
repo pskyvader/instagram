@@ -56,9 +56,8 @@ class app:
         https = "https://" if config["https"] else "http://"
         www = "www." if config["www"] else ""
         port = environ["SERVER_PORT"]
-        print(port,type(port))
-        if port != 80 and str(port) not in app.root_url:
-            app.root_url += ":" + str(port)
+        if port != '80' and port not in app.root_url:
+            app.root_url += ":" + port
 
         app.path = https + www + app.root_url + "/"
         if subdirectorio != "":
