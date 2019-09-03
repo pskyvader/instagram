@@ -316,7 +316,6 @@ class Bot(object):
         self.comments_file = utils.file(comments_file)
         self.blacklist_file = utils.file(blacklist_file)
         self.whitelist_file = utils.file(whitelist_file)
-        
 
         self.proxy = proxy
         self.verbosity = verbosity
@@ -324,7 +323,6 @@ class Bot(object):
         self.logger = self.api.logger
         self.console_print("Instabot Started")
 
-    
     @property
     def user_id(self):
         # For compatibility
@@ -404,7 +402,6 @@ class Bot(object):
             "Worked: {}".format(str(datetime.datetime.now() - self.start_time))
         )
         self.print_counters()
-    
 
     def login(self, **args):
         """if login function is run threaded, for example in scheduled job,
@@ -415,7 +412,7 @@ class Bot(object):
             args["proxy"] = self.proxy
         if self.api.login(**args) is False:
             return False
-        #self.prepare()
+        # self.prepare()
         atexit.register(self.print_counters)
         if "is_threaded" in args:
             if args["is_threaded"]:
@@ -437,7 +434,15 @@ class Bot(object):
         save_checkpoint(self)
         for key, val in self.total.items():
             if val > 0:
-                self.console_print( "Total {}: {}{}".format( key, val, "/" + str(self.max_per_day[key]) if self.max_per_day.get(key) else "", ) )
+                self.console_print(
+                    "Total {}: {}{}".format(
+                        key,
+                        val,
+                        "/" + str(self.max_per_day[key])
+                        if self.max_per_day.get(key)
+                        else "",
+                    )
+                )
         for key, val in self.blocked_actions.items():
             if val:
                 self.console_print("Blocked {}".format(key))
@@ -451,7 +456,6 @@ class Bot(object):
             t_remaining = target_delay - elapsed_time
             time.sleep(t_remaining * random.uniform(0.25, 1.25))
         self.last[key] = time.time()
-
 
     def update_delay(self, key, repeat=False):
         sleep = 1
@@ -584,8 +588,7 @@ class Bot(object):
         """
         return get_tags(self, query)
 
-
-     def get_user_stories(self, user_id):
+    def get_user_stories(self, user_id):
         """
         Returns array of stories links
         """
@@ -719,7 +722,7 @@ class Bot(object):
     def get_pending_thread_requests(self):
         return get_pending_thread_requests(self)
 
-     # like
+    # like
 
     def like(
         self,
@@ -1013,7 +1016,6 @@ class Bot(object):
 
     def check_not_bot(self, user):
         return check_not_bot(self, user)
-
 
     # support
 
