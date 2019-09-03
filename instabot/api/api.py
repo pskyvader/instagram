@@ -1,66 +1,172 @@
+import base64
+import datetime
 import hashlib
 import hmac
 import json
 import logging
 import os
+import random
 import sys
 import time
 import uuid
-from random import uniform
+
+import pytz
+import requests
+import requests.utils
+import six.moves.urllib as urllib
+from requests_toolbelt import MultipartEncoder
+from tqdm import tqdm
+
+from . import config, devices
+from .api_login import (
+    change_device_simulation,
+    generate_all_uuids,
+    load_uuid_and_cookie,
+    login_flow,
+    pre_login_flow,
+    reinstall_app_simulation,
+    save_uuid_and_cookie,
+    set_device,
+    sync_device_features,
+    sync_launcher,
+    sync_user_features,
+)
+from .api_photo import configure_photo, download_photo, upload_photo
+from .api_story import configure_story, download_story, upload_story_photo
+from .api_video import configure_video, download_video, upload_video
+from .prepare import delete_credentials, get_credentials
 
 try:
     from json.decoder import JSONDecodeError
 except ImportError:
     JSONDecodeError = ValueError
 
-import requests
-import requests.utils
-import six.moves.urllib as urllib
-from tqdm import tqdm
-
-from . import config, devices
-from .api_photo import configure_photo, download_photo, upload_photo
-from .api_video import configure_video, download_video, upload_video
-from .prepare import delete_credentials, get_credentials
-
-
 PY2 = sys.version_info[0] == 2
 
 
 class API(object):
-    def __init__(self, device=None, parent_class=None):
+    def __init__(
+        self,
+        device=None,
+        base_path="",
+        save_logfile=True,
+        log_filename=None,
+        parent_class=None,
+    ):
         self.fatal_error = False
         # Setup device and user_agent
-        self.parent_class = parent_class
-        device = device or devices.DEFAULT_DEVICE
-        self.device_settings = devices.DEVICES[device]
-        self.user_agent = config.USER_AGENT_BASE.format(**self.device_settings)
+        self.device = device or devices.DEFAULT_DEVICE
+
+        self.cookie_fname = None
+        self.base_path = base_path
 
         self.is_logged_in = False
+        self.last_login = None
+
         self.last_response = None
         self.total_requests = 0
 
         # Setup logging
         self.logger = logging.getLogger("[instabot_{}]".format(id(self)))
 
-        fh = logging.FileHandler(filename="instabot.log")
-        fh.setLevel(logging.INFO)
-        fh.setFormatter(logging.Formatter("%(asctime)s %(message)s"))
+        if not os.path.exists("./config/"):
+            os.makedirs("./config/")  # create base_path if not exists
+
+        if save_logfile is True:
+            if log_filename is None:
+                log_filename = os.path.join(
+                    base_path, "instabot_{}.log".format(id(self))
+                )
+
+            fh = logging.FileHandler(filename=log_filename)
+            fh.setLevel(logging.INFO)
+            fh.setFormatter(logging.Formatter("%(asctime)s %(message)s"))
+
+            self.logger.addHandler(fh)
 
         ch = logging.StreamHandler()
         ch.setLevel(logging.DEBUG)
         ch.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
 
-        self.logger.addHandler(fh)
         self.logger.addHandler(ch)
         self.logger.setLevel(logging.DEBUG)
 
         self.last_json = None
 
-    def set_user(self, username, password):
+    def set_user(self, username, password, generate_all_uuids=True, set_device=True):
         self.username = username
         self.password = password
-        self.uuid = self.generate_UUID(uuid_type=True)
+
+        self.logger = logging.getLogger("[instabot_{}]".format(self.username))
+
+        if set_device is True:
+            self.set_device()
+
+        if generate_all_uuids is True:
+            self.generate_all_uuids()
+
+    def set_contact_point_prefill(self, usage="prefill"):
+        data = json.dumps(
+            {
+                "id": self.uuid,
+                "phone_id": self.phone_id,
+                "_csrftoken": self.token,
+                "usage": usage,
+            }
+        )
+        return self.send_request("accounts/contact_point_prefill/", data, login=True)
+
+    def get_suggested_searches(self, _type="users"):
+        return self.send_request(
+            "fbsearch/suggested_searches/", self.json_data({"type": _type})
+        )
+
+    def read_msisdn_header(self, usage="default"):
+        data = json.dumps({"device_id": self.uuid, "mobile_subno_usage": usage})
+        return self.send_request(
+            "accounts/read_msisdn_header/",
+            data,
+            login=True,
+            headers={"X-DEVICE-ID": self.uuid},
+        )
+
+    def log_attribution(self, usage="default"):
+        data = json.dumps({"adid": self.advertising_id})
+        return self.send_request("attribution/log_attribution/", data, login=True)
+
+    # ====== ALL METHODS IMPORT FROM api_login ====== #
+    def sync_device_features(self, login=False):
+        return sync_device_features(self, login)
+
+    def sync_launcher(self, login=False):
+        return sync_launcher(self, login)
+
+    def sync_user_features(self):
+        return sync_user_features(self)
+
+    def pre_login_flow(self):
+        return pre_login_flow(self)
+
+    def login_flow(self, just_logged_in=False, app_refresh_interval=1800):
+        return login_flow(self, just_logged_in, app_refresh_interval)
+
+    def set_device(self):
+        return set_device(self)
+
+    def generate_all_uuids(self):
+        return generate_all_uuids(self)
+
+    def reinstall_app_simulation(self):
+        return reinstall_app_simulation(self)
+
+    def change_device_simulation(self):
+        return change_device_simulation(self)
+
+    def load_uuid_and_cookie(self, load_uuid=True, load_cookie=True):
+        return load_uuid_and_cookie(self, load_uuid=load_uuid, load_cookie=load_cookie)
+
+    def save_uuid_and_cookie(self):
+        return save_uuid_and_cookie(self)
 
     def login(
         self,
@@ -68,112 +174,201 @@ class API(object):
         password=None,
         force=False,
         proxy=None,
-        use_cookie=False,
+        use_cookie=True,
+        use_uuid=True,
         cookie_fname=None,
+        ask_for_code=False,
+        set_device=True,
+        generate_all_uuids=True,
+        is_threaded=False,
     ):
-
         from instabot.bot import bot_support
 
         if password is None:
             username, password = get_credentials(username=username)
 
-        self.device_id = self.generate_device_id(self.get_seed(username, password))
-        self.proxy = proxy
+        set_device = generate_all_uuids = True
         self.set_user(username, password)
+        self.session = requests.Session()
 
-        if not cookie_fname:
-            cookie_fname = "{username}_cookie.txt".format(username=username)
+        self.proxy = proxy
+        self.set_proxy()  # Only happens if `self.proxy`
+
+        self.cookie_fname = cookie_fname
+        if self.cookie_fname is None:
+            cookie_fname = "{username}_uuid_and_cookie.json".format(username=username)
+            self.cookie_fname = os.path.join(self.base_path, cookie_fname)
 
         cookie_is_loaded = False
-        if use_cookie:
-            try:
-                self.load_cookie(cookie_fname)
-                cookie_is_loaded = True
-                self.is_logged_in = True
-                self.set_proxy()  # Only happens if `self.proxy`
-                bot_support.console_print(
-                    bot_support,
-                    "Logged-in successfully as '{}' using the cookie!".format(
-                        self.username
-                    ),
-                )
-                return True
-            except Exception:
-                bot_support.console_print(
-                    bot_support,
-                    "The cookie is not found, but don't worry `instabot`"
-                    " will create it for you using your login details.",
-                )
+
+        if use_cookie is True:
+            # try:
+            if (
+                self.load_uuid_and_cookie(load_cookie=use_cookie, load_uuid=use_uuid)
+                is True
+            ):
+                if (
+                    self.login_flow(False) is True
+                ):  # Check if the token loaded is valid.
+                    cookie_is_loaded = True
+                    self.save_successful_login()
+                else:
+                    bot_support.console_print(
+                        bot_support,
+                        "Login flow failed, the cookie is broken. Relogin again.",
+                    )
+                    set_device = generate_all_uuids = False
+                    force = True
+            # except Exception:
+            #     print("The cookie is not found, but don't worry `instabot` will create it for you using your login details.")
 
         if not cookie_is_loaded and (not self.is_logged_in or force):
             self.session = requests.Session()
-            self.set_proxy()  # Only happens if `self.proxy`
-            url = "si/fetch_headers/?challenge_type=signup&guid={uuid}"
-            url = url.format(uuid=self.generate_UUID(False))
-            if self.send_request(url, login=True):
-                data = json.dumps(
-                    {
-                        "phone_id": self.generate_UUID(True),
-                        "_csrftoken": self.token,
-                        "username": self.username,
-                        "guid": self.uuid,
-                        "device_id": self.device_id,
-                        "password": self.password,
-                        "login_attempt_count": "0",
-                    }
-                )
-
-                if self.send_request("accounts/login/", data, True):
-                    self.is_logged_in = True
-                    bot_support.console_print(
-                        bot_support,
-                        "Logged-in successfully as '{}'!".format(self.username),
+            if use_uuid is True:
+                if (
+                    self.load_uuid_and_cookie(
+                        load_cookie=use_cookie, load_uuid=use_uuid
                     )
-                    if use_cookie:
-                        self.save_cookie(cookie_fname)
-                        bot_support.console_print(bot_support, "Saved cookie!")
-                    return True
-                else:
-                    bot_support.console_print(
-                        bot_support, "Username or password is incorrect."
-                    )
-                    delete_credentials()
-                    return False
+                    is False
+                ):
+                    if set_device is True:
+                        self.set_device()
+                    if generate_all_uuids is True:
+                        self.generate_all_uuids()
 
-    def load_cookie(self, fname):
-        # Python2 compatibility
-        if PY2:
-            FileNotFoundError = IOError
-
-        try:
-            with open(fname, "r") as f:
-                self.session = requests.Session()
-                self.session.cookies = requests.utils.cookiejar_from_dict(json.load(f))
-            cookie_username = self.cookie_dict["ds_user"]
-            assert cookie_username == self.username
-        except FileNotFoundError:
-            raise Exception("Cookie file `{}` not found".format(fname))
-        except (TypeError, EOFError):
-            os.remove(fname)
-            msg = (
-                "An error occured opening the cookie `{}`, "
-                "it will be removed an recreated."
+            self.pre_login_flow()
+            data = json.dumps(
+                {
+                    "phone_id": self.phone_id,
+                    "_csrftoken": self.token,
+                    "username": self.username,
+                    "guid": self.uuid,
+                    "device_id": self.device_id,
+                    "password": self.password,
+                    "login_attempt_count": "0",
+                }
             )
-            raise Exception(msg.format(fname))
-        except AssertionError:
-            msg = "The loaded cookie was for {} instead of {}."
-            raise Exception(msg.format(cookie_username, self.username))
 
-    def save_cookie(self, fname):
-        with open(fname, "w") as f:
-            json.dump(requests.utils.dict_from_cookiejar(self.session.cookies), f)
+            if self.send_request("accounts/login/", data, True):
+                self.save_successful_login()
+                self.login_flow(True)
+                # self.device_id = self.uuid
+                return True
+            elif (
+                self.last_json.get("error_type", "") == "checkpoint_challenge_required"
+            ):
+                bot_support.console_print(
+                    bot_support, "Checkpoint challenge required..."
+                )
+                if ask_for_code is True:
+                    solved = self.solve_challenge()
+                    if solved:
+                        self.save_successful_login()
+                        self.login_flow(True)
+                        return True
+                    else:
+                        self.save_failed_login()
+                        return False
+                else:
+                    return False
+            else:
+                self.save_failed_login()
+                return False
+
+    def save_successful_login(self):
+        from instabot.bot import bot_support
+
+        self.is_logged_in = True
+        self.last_login = time.time()
+        bot_support.console_print(
+            bot_support, "Logged-in successfully as '{}'!".format(self.username)
+        )
+
+    def save_failed_login(self):
+        from instabot.bot import bot_support
+
+        bot_support.console_print(bot_support, "Username or password is incorrect.")
+        delete_credentials()
+
+    def solve_challenge(self):
+        from instabot.bot import bot_support
+
+        challenge_url = self.last_json["challenge"]["api_path"][1:]
+        try:
+            self.send_request(challenge_url, None, login=True, with_signature=False)
+        except Exception as e:
+            bot_support.console_print(
+                bot_support, "solve_challenge; {}".format(e), "red"
+            )
+            return False
+
+        choices = self.get_challenge_choices()
+        for choice in choices:
+            print(choice)
+        code = input("Insert choice: ")
+
+        data = json.dumps({"choice": code})
+        try:
+            self.send_request(challenge_url, data, login=True)
+        except Exception as e:
+            bot_support.console_print(bot_support, e, "red")
+            return False
+
+        print("A code has been sent to the method selected, please check.")
+        code = input("Insert code: ")
+
+        data = json.dumps({"security_code": code})
+        try:
+            self.send_request(challenge_url, data, login=True)
+        except Exception as e:
+            bot_support.console_print(bot_support, e, "red")
+            return False
+
+        worked = (
+            ("logged_in_user" in self.last_json)
+            and (self.last_json.get("action", "") == "close")
+            and (self.last_json.get("status", "") == "ok")
+        )
+
+        if worked:
+            return True
+
+        bot_support.console_print(
+            bot_support, "Not possible to log in. Reset and try again", "red"
+        )
+        return False
+
+    def get_challenge_choices(self):
+        last_json = self.last_json
+        choices = []
+
+        if last_json.get("step_name", "") == "select_verify_method":
+            choices.append("Checkpoint challenge received")
+            if "phone_number" in last_json["step_data"]:
+                choices.append("0 - Phone")
+            if "email" in last_json["step_data"]:
+                choices.append("1 - Email")
+
+        if last_json.get("step_name", "") == "delta_login_review":
+            choices.append("Login attempt challenge received")
+            choices.append("0 - It was me")
+            choices.append("0 - It wasn't me")
+
+        if not choices:
+            choices.append(
+                '"{}" challenge received'.format(last_json.get("step_name", "Unknown"))
+            )
+            choices.append("0 - Default")
+
+        return choices
 
     def logout(self, *args, **kwargs):
         if not self.is_logged_in:
             return True
-        
-        # self.is_logged_in = not self.send_request("accounts/logout/")
-        self.is_logged_in = False
+        data = json.dumps({})
+        self.is_logged_in = not self.send_request(
+            "accounts/logout/", data, with_signature=False
+        )
         return not self.is_logged_in
 
     def set_proxy(self):
@@ -183,12 +378,16 @@ class API(object):
             self.session.proxies["http"] = scheme + self.proxy
             self.session.proxies["https"] = scheme + self.proxy
 
+        # noqa: C901
+
     def send_request(
         self,
         endpoint,
         post=None,
         login=False,
         with_signature=True,
+        headers=None,
+        extra_sig=None,
         delay=None,
         repeat=False,
     ):
@@ -201,18 +400,31 @@ class API(object):
 
         if not self.is_logged_in and not login:
             msg = "Not logged in!"
-            self.logger.critical(msg)
             bot_support.console_print(bot_support, msg, "red")
             raise Exception(msg)
 
         self.session.headers.update(config.REQUEST_HEADERS)
-        self.session.headers.update({"User-Agent": self.user_agent})
+        self.session.headers.update(
+            {
+                "User-Agent": self.user_agent,
+                "X-IG-Connection-Speed": "-1kbps",
+                "X-IG-Bandwidth-Speed-KBPS": str(random.randint(7000, 10000)),
+                "X-IG-Bandwidth-TotalBytes-B": str(random.randint(500000, 900000)),
+                "X-IG-Bandwidth-TotalTime-MS": str(random.randint(50, 150)),
+            }
+        )
+
+        if headers:
+            self.session.headers.update(headers)
         try:
             self.total_requests += 1
             if post is not None:  # POST
                 if with_signature:
-                    # Only `send_direct_item` doesn't need a signature
-                    post = self.generate_signature(post)
+                    post = self.generate_signature(
+                        post
+                    )  # Only `send_direct_item` doesn't need a signature
+                    if extra_sig is not None and extra_sig != []:
+                        post += "&".join(extra_sig)
                 response = self.session.post(config.API_URL + endpoint, data=post)
             else:  # GET
                 response = self.session.get(config.API_URL + endpoint)
@@ -221,27 +433,52 @@ class API(object):
             bot_support.console_print(bot_support, str(e), "yellow")
             return False
 
+        self.last_response = response
         if response.status_code == 200:
-            self.last_response = response
             try:
                 self.last_json = json.loads(response.text)
                 return True
             except JSONDecodeError:
                 return False
         else:
-            if response.status_code != 429:
+            if response.status_code != 404 and response.status_code != "404":
                 self.logger.error(
                     "Request returns {} error!".format(response.status_code)
                 )
-            bot_support.console_print(
-                bot_support,
-                "Request returns {} error!".format(response.status_code),
-                "red",
-            )
+                bot_support.console_print(
+                    bot_support,
+                    "Request returns {} error!".format(response.status_code),
+                    "red",
+                )
+
             try:
                 response_data = json.loads(response.text)
-            except JSONDecodeError:
-                response_data = {"message": response.text}
+                if "feedback_required" in str(response_data.get("message")):
+                    self.logger.error(
+                        "ATTENTION!: `feedback_required`"
+                        + str(response_data.get("feedback_message"))
+                    )
+                    bot_support.console_print(
+                        bot_support,
+                        "ATTENTION!: `feedback_required`"
+                        + str(response_data.get("feedback_message")),
+                        "red",
+                    )
+
+                self.fatal_error = True
+                if delay != None:
+                    self.parent_class.update_max(delay)
+                    self.parent_class.update_turn(delay)
+                    return "feedback_required"
+            except ValueError:
+                self.logger.error(
+                    "Error checking for `feedback_required`, response text is not JSON"
+                )
+                bot_support.console_print(
+                    bot_support,
+                    "Error checking for `feedback_required`, response text is not JSON",
+                    "red",
+                )
 
             response_error = json.dumps(
                 {
@@ -254,35 +491,16 @@ class API(object):
                 indent=4,
                 separators=(",", ": "),
             )
-
             error_text = "Error detail:\n <pre>{}</pre>.\nEndpoint:{}.\npost:".format(
                 response_error, endpoint, repr(post_tmp)
             )
-
             bot_support.console_print(bot_support, error_text, "red")
 
-            if "feedback_required" in str(response_data.get("message")):
-                self.logger.error(
-                    "ATTENTION!: `feedback_required`, your action could have been blocked"
-                )
-                bot_support.console_print(
-                    bot_support,
-                    "ATTENTION!: `feedback_required`, your action could have been blocked",
-                    "red",
-                )
-                # bot_support.console_print(bot_support, repr(response_data), "red")
-                self.fatal_error = True
-                if delay != None:
-                    self.parent_class.update_max(delay)
-                    self.parent_class.update_turn(delay)
-
-                return "feedback_required"
             if response.status_code == 429:
                 if delay != None:
                     sleep_seconds = self.parent_class.sleep[delay]
                 else:
                     sleep_seconds = 5 * 60
-                # self.logger.warning( "That means 'too many requests'. I'll go to sleep " "for {} seconds.".format(sleep_seconds) )
                 bot_support.console_print(
                     bot_support,
                     "That means 'too many requests'. I'll go to sleep for {} seconds.".format(
@@ -299,13 +517,82 @@ class API(object):
                 )
             elif response.status_code == 400:
                 response_data = json.loads(response.text)
+
+                # PERFORM Interactive Two-Factor Authentication
+                if response_data.get("two_factor_required"):
+                    bot_support.console_print(
+                        bot_support, "Two-factor authentication required", "green"
+                    )
+                    self.logger.info("Two-factor authentication required")
+                    two_factor_code = input("Enter 2FA verification code: ")
+                    two_factor_id = response_data["two_factor_info"][
+                        "two_factor_identifier"
+                    ]
+
+                    login = self.session.post(
+                        config.API_URL + "accounts/two_factor_login/",
+                        data={
+                            "username": self.username,
+                            "verification_code": two_factor_code,
+                            "two_factor_identifier": two_factor_id,
+                            "password": self.password,
+                            "device_id": self.device_id,
+                            "ig_sig_key_version": 4,
+                        },
+                        allow_redirects=True,
+                    )
+
+                    if login.status_code == 200:
+                        resp_json = json.loads(login.text)
+                        if resp_json["status"] != "ok":
+                            if "message" in resp_json:
+                                self.logger.error(
+                                    "Login error: {}".format(resp_json["message"])
+                                )
+                                bot_support.console_print(
+                                    bot_support,
+                                    "Login error: {}".format(resp_json["message"]),
+                                    "red",
+                                )
+                            else:
+                                self.logger.error(
+                                    'Login error: "{}" status and message {}.'.format(
+                                        resp_json["status"], login.text
+                                    )
+                                )
+                                bot_support.console_print(
+                                    bot_support,
+                                    'Login error: "{}" status and message {}.'.format(
+                                        resp_json["status"], login.text
+                                    ),
+                                    "red",
+                                )
+                            return False
+                        return True
+                    else:
+                        self.logger.error(
+                            "Two-factor authentication request returns {} error with message {} !".format(
+                                login.status_code, login.text
+                            )
+                        )
+                        bot_support.console_print(
+                            bot_support,
+                            "Two-factor authentication request returns {} error with message {} !".format(
+                                login.status_code, login.text
+                            ),
+                            "red",
+                        )
+                        return False
+
+            # End of Interactive Two-Factor Authentication
+            else:
                 msg = "Instagram's error message: {}"
                 bot_support.console_print(
                     bot_support, msg.format(response_data.get("message"))
                 )
                 if "error_type" in response_data:
                     msg = "Error type: {}".format(response_data["error_type"])
-                    bot_support.console_print(bot_support, msg)
+                bot_support.console_print(bot_support, msg)
 
             # For debugging
             try:
@@ -342,28 +629,98 @@ class API(object):
         data.update(self.default_data)
         return json.dumps(data)
 
-    def sync_features(self):
-        data = self.json_data({"id": self.user_id, "experiments": config.EXPERIMENTS})
-        return self.send_request("qe/sync/", data)
+    def action_data(self, data):
+        _data = {"radio_type": "wifi-none", "device_id": self.device_id}
+        data.update(_data)
+        return data
 
     def auto_complete_user_list(self):
         return self.send_request("friendships/autocomplete_user_list/")
 
-    def get_timeline_feed(self):
-        """ Returns 8 medias from timeline feed of logged user."""
-        return self.send_request("feed/timeline/")
+    def batch_fetch(self):
+        data = {
+            "scale": 3,
+            "version": 1,
+            "vc_policy": "default",
+            "surfaces_to_triggers": '{"5734":["instagram_feed_prompt"],"4715":["instagram_feed_header"],"5858":["instagram_feed_tool_tip"]}',
+            "surfaces_to_queries": '{"5734":"viewer() {eligible_promotions.trigger_context_v2(<trigger_context_v2>).ig_parameters(<ig_parameters>).trigger_name(<trigger_name>).surface_nux_id(<surface>).external_gating_permitted_qps(<external_gating_permitted_qps>).supports_client_filters(true).include_holdouts(true) {edges {client_ttl_seconds,log_eligibility_waterfall,is_holdout,priority,time_range {start,end},node {id,promotion_id,logging_data,max_impressions,triggers,contextual_filters {clause_type,filters {filter_type,unknown_action,value {name,required,bool_value,int_value,string_value},extra_datas {name,required,bool_value,int_value,string_value}},clauses {clause_type,filters {filter_type,unknown_action,value {name,required,bool_value,int_value,string_value},extra_datas {name,required,bool_value,int_value,string_value}},clauses {clause_type,filters {filter_type,unknown_action,value {name,required,bool_value,int_value,string_value},extra_datas {name,required,bool_value,int_value,string_value}},clauses {clause_type,filters {filter_type,unknown_action,value {name,required,bool_value,int_value,string_value},extra_datas {name,required,bool_value,int_value,string_value}}}}}},is_uncancelable,template {name,parameters {name,required,bool_value,string_value,color_value,}},creatives {title {text},content {text},footer {text},social_context {text},social_context_images,primary_action{title {text},url,limit,dismiss_promotion},secondary_action{title {text},url,limit,dismiss_promotion},dismiss_action{title {text},url,limit,dismiss_promotion},image.scale(<scale>) {uri,width,height}}}}}}","4715":"viewer() {eligible_promotions.trigger_context_v2(<trigger_context_v2>).ig_parameters(<ig_parameters>).trigger_name(<trigger_name>).surface_nux_id(<surface>).external_gating_permitted_qps(<external_gating_permitted_qps>).supports_client_filters(true).include_holdouts(true) {edges {client_ttl_seconds,log_eligibility_waterfall,is_holdout,priority,time_range {start,end},node {id,promotion_id,logging_data,max_impressions,triggers,contextual_filters {clause_type,filters {filter_type,unknown_action,value {name,required,bool_value,int_value,string_value},extra_datas {name,required,bool_value,int_value,string_value}},clauses {clause_type,filters {filter_type,unknown_action,value {name,required,bool_value,int_value,string_value},extra_datas {name,required,bool_value,int_value,string_value}},clauses {clause_type,filters {filter_type,unknown_action,value {name,required,bool_value,int_value,string_value},extra_datas {name,required,bool_value,int_value,string_value}},clauses {clause_type,filters {filter_type,unknown_action,value {name,required,bool_value,int_value,string_value},extra_datas {name,required,bool_value,int_value,string_value}}}}}},is_uncancelable,template {name,parameters {name,required,bool_value,string_value,color_value,}},creatives {title {text},content {text},footer {text},social_context {text},social_context_images,primary_action{title {text},url,limit,dismiss_promotion},secondary_action{title {text},url,limit,dismiss_promotion},dismiss_action{title {text},url,limit,dismiss_promotion},image.scale(<scale>) {uri,width,height}}}}}}","5858":"viewer() {eligible_promotions.trigger_context_v2(<trigger_context_v2>).ig_parameters(<ig_parameters>).trigger_name(<trigger_name>).surface_nux_id(<surface>).external_gating_permitted_qps(<external_gating_permitted_qps>).supports_client_filters(true).include_holdouts(true) {edges {client_ttl_seconds,log_eligibility_waterfall,is_holdout,priority,time_range {start,end},node {id,promotion_id,logging_data,max_impressions,triggers,contextual_filters {clause_type,filters {filter_type,unknown_action,value {name,required,bool_value,int_value,string_value},extra_datas {name,required,bool_value,int_value,string_value}},clauses {clause_type,filters {filter_type,unknown_action,value {name,required,bool_value,int_value,string_value},extra_datas {name,required,bool_value,int_value,string_value}},clauses {clause_type,filters {filter_type,unknown_action,value {name,required,bool_value,int_value,string_value},extra_datas {name,required,bool_value,int_value,string_value}},clauses {clause_type,filters {filter_type,unknown_action,value {name,required,bool_value,int_value,string_value},extra_datas {name,required,bool_value,int_value,string_value}}}}}},is_uncancelable,template {name,parameters {name,required,bool_value,string_value,color_value,}},creatives {title {text},content {text},footer {text},social_context {text},social_context_images,primary_action{title {text},url,limit,dismiss_promotion},secondary_action{title {text},url,limit,dismiss_promotion},dismiss_action{title {text},url,limit,dismiss_promotion},image.scale(<scale>) {uri,width,height}}}}}}"}',  # Just copied from request.
+        }
+        data = self.json_data(data)
+        return self.send_request("qp/batch_fetch/", data)
+
+    def get_timeline_feed(self, options=[]):
+        headers = {"X-Ads-Opt-Out": "0", "X-DEVICE-ID": self.uuid}
+        data = {
+            "_csrftoken": self.token,
+            "_uuid": self.uuid,
+            "is_prefetch": 0,
+            "phone_id": self.phone_id,
+            "device_id": self.uuid,
+            "client_session_id": self.client_session_id,
+            "battery_level": random.randint(25, 100),
+            "is_charging": random.randint(0, 1),
+            "will_sound_on": random.randint(0, 1),
+            "is_on_screen": True,
+            "timezone_offset": datetime.datetime.now(pytz.timezone("CET")).strftime(
+                "%z"
+            ),
+        }
+
+        if "is_pull_to_refresh" in options:
+            data["reason"] = "pull_to_refresh"
+            data["is_pull_to_refresh"] = "1"
+        elif "is_pull_to_refresh" not in options:
+            data["reason"] = "cold_start_fetch"
+            data["is_pull_to_refresh"] = "0"
+
+        # unseen_posts
+        # feed_view_info
+        # seen_posts
+
+        if "push_disabled" in options:
+            data["push_disabled"] = "true"
+
+        if "recovered_from_crash" in options:
+            data["recovered_from_crash"] = "1"
+
+        data = json.dumps(data)
+        return self.send_request(
+            "feed/timeline/", data, with_signature=False, headers=headers
+        )
 
     def get_megaphone_log(self):
         return self.send_request("megaphone/log/")
 
     def expose(self):
         data = self.json_data(
-            {"id": self.user_id, "experiment": "ig_android_profile_contextual_feed"}
+            {"id": self.uuid, "experiment": "ig_android_profile_contextual_feed"}
         )
         return self.send_request("qe/expose/", data)
 
-    def upload_photo(self, photo, caption=None, upload_id=None, from_video=False):
-        return upload_photo(self, photo, caption, upload_id, from_video)
+    # ====== PHOTO METHODS ====== #
+    def upload_photo(
+        self,
+        photo,
+        caption=None,
+        upload_id=None,
+        from_video=False,
+        force_resize=False,
+        options={},
+    ):
+        """Upload photo to Instagram
+        @param photo         Path to photo file (String)
+        @param caption       Media description (String)
+        @param upload_id     Unique upload_id (String). When None, then generate automatically
+        @param from_video    A flag that signals whether the photo is loaded from the video or by itself (Boolean, DEPRECATED: not used)
+        @param force_resize  Force photo resize (Boolean)
+        @param options       Object with difference options, e.g. configure_timeout, rename (Dict)
+                             Designed to reduce the number of function arguments!
+                             This is the simplest request object.
+        @return Boolean
+        """
+        return upload_photo(
+            self, photo, caption, upload_id, from_video, force_resize, options
+        )
 
     def download_photo(self, media_id, filename, media=False, folder="photos"):
         return download_photo(self, media_id, filename, media, folder)
@@ -371,19 +728,63 @@ class API(object):
     def configure_photo(self, upload_id, photo, caption=""):
         return configure_photo(self, upload_id, photo, caption)
 
-    def upload_video(self, photo, caption=None, upload_id=None):
-        return upload_video(self, photo, caption, upload_id)
+    # ====== STORY METHODS ====== #
+    def download_story(self, filename, story_url, username):
+        return download_story(self, filename, story_url, username)
+
+    def upload_story_photo(self, photo, upload_id=None):
+        return upload_story_photo(self, photo, upload_id)
+
+    def configure_story(self, upload_id, photo):
+        return configure_story(self, upload_id, photo)
+
+    # ====== VIDEO METHODS ====== #
+    def upload_video(
+        self, video, caption=None, upload_id=None, thumbnail=None, options={}
+    ):
+        """Upload video to Instagram
+        @param video      Path to video file (String)
+        @param caption    Media description (String)
+        @param upload_id  Unique upload_id (String). When None, then generate automatically
+        @param thumbnail  Path to thumbnail for video (String). When None, then thumbnail is generate automatically
+        @param options    Object with difference options, e.g. configure_timeout, rename_thumbnail, rename (Dict)
+                          Designed to reduce the number of function arguments!
+                          This is the simplest request object.
+        @return           Object with state of uploading to Instagram (or False)
+        """
+        return upload_video(self, video, caption, upload_id, thumbnail, options)
 
     def download_video(self, media_id, filename, media=False, folder="video"):
         return download_video(self, media_id, filename, media, folder)
 
     def configure_video(
-        self, upload_id, video, thumbnail, width, height, duration, caption=""
+        self,
+        upload_id,
+        video,
+        thumbnail,
+        width,
+        height,
+        duration,
+        caption="",
+        options={},
     ):
+        """Post Configure Video (send caption, thumbnail and more else to Instagram)
+        @param upload_id  Unique upload_id (String). Received from "upload_video"
+        @param video      Path to video file (String)
+        @param thumbnail  Path to thumbnail for video (String). When None, then thumbnail is generate automatically
+        @param width      Width in px (Integer)
+        @param height     Height in px (Integer)
+        @param duration   Duration in seconds (Integer)
+        @param caption    Media description (String)
+        @param options    Object with difference options, e.g. configure_timeout, rename_thumbnail, rename (Dict)
+                          Designed to reduce the number of function arguments!
+                          This is the simplest request object.
+        """
         return configure_video(
-            self, upload_id, video, thumbnail, width, height, duration, caption
+            self, upload_id, video, thumbnail, width, height, duration, caption, options
         )
 
+    # ====== MEDIA METHODS ====== #
     def edit_media(self, media_id, captionText=""):
         data = self.json_data({"caption_text": captionText})
         url = "media/{media_id}/edit_media/".format(media_id=media_id)
@@ -412,23 +813,45 @@ class API(object):
         url = "media/{media_id}/delete/".format(media_id=media.get("id"))
         return self.send_request(url, data)
 
-    def change_password(self, new_password):
-        data = self.json_data(
-            {
-                "old_password": self.password,
-                "new_password1": new_password,
-                "new_password2": new_password,
+    def gen_user_breadcrumb(self, size):
+        key = "iN4$aGr0m"
+        dt = int(time.time() * 1000)
+
+        time_elapsed = random.randint(500, 1500) + size * random.randint(500, 1500)
+        text_change_event_count = max(1, size / random.randint(3, 5))
+
+        data = "{size!s} {elapsed!s} {count!s} {dt!s}".format(
+            **{
+                "size": size,
+                "elapsed": time_elapsed,
+                "count": text_change_event_count,
+                "dt": dt,
             }
         )
-        return self.send_request("accounts/change_password/", data)
-
-    def explore(self):
-        return self.send_request("discover/explore/")
+        return "{!s}\n{!s}\n".format(
+            base64.b64encode(
+                hmac.new(
+                    key.encode("ascii"), data.encode("ascii"), digestmod=hashlib.sha256
+                ).digest()
+            ),
+            base64.b64encode(data.encode("ascii")),
+        )
 
     def comment(self, media_id, comment_text):
-        data = self.json_data({"comment_text": comment_text})
-        url = "media/{media_id}/comment/".format(media_id=media_id)
-        return self.send_request(url, data, delay="comment")
+        return self.send_request(
+            endpoint="media/{media_id}/comment/".format(media_id=media_id),
+            post=self.json_data(
+                self.action_data(
+                    {
+                        "container_module": "comments_v2",
+                        "user_breadcrumb": self.gen_user_breadcrumb(len(comment_text)),
+                        "idempotence_token": self.generate_UUID(True),
+                        "comment_text": comment_text,
+                    }
+                )
+            ),
+            delay="comment",
+        )
 
     def reply_to_comment(self, media_id, comment_text, parent_comment_id):
         data = self.json_data(
@@ -441,7 +864,118 @@ class API(object):
         data = self.json_data()
         url = "media/{media_id}/comment/{comment_id}/delete/"
         url = url.format(media_id=media_id, comment_id=comment_id)
+        return self.send_request(url, data, delay="comment")
+
+    def get_comment_likers(self, comment_id):
+        url = "media/{comment_id}/comment_likers/?".format(comment_id=comment_id)
+        return self.send_request(url)
+
+    def get_media_likers(self, media_id):
+        url = "media/{media_id}/likers/?".format(media_id=media_id)
+        return self.send_request(url)
+
+    def like_comment(self, comment_id):
+        data = self.json_data(
+            {
+                "is_carousel_bumped_post": "false",
+                "container_module": "comments_v2",
+                "feed_position": "0",
+            }
+        )
+        url = "media/{comment_id}/comment_like/".format(comment_id=comment_id)
         return self.send_request(url, data)
+
+    def unlike_comment(self, comment_id):
+        data = self.json_data(
+            {
+                "is_carousel_bumped_post": "false",
+                "container_module": "comments_v2",
+                "feed_position": "0",
+            }
+        )
+        url = "media/{comment_id}/comment_unlike/".format(comment_id=comment_id)
+        return self.send_request(url, data)
+
+    # From profile => "is_carousel_bumped_post":"false", "container_module":"feed_contextual_profile", "feed_position":"0"
+    # From home/feed => "inventory_source":"media_or_ad", "is_carousel_bumped_post":"false", "container_module":"feed_timeline", "feed_position":"0"
+    def like(
+        self,
+        media_id,
+        double_tap=None,
+        container_module="feed_short_url",
+        feed_position=0,
+        username=None,
+        user_id=None,
+        hashtag_name=None,
+        hashtag_id=None,
+        entity_page_name=None,
+        entity_page_id=None,
+    ):
+
+        data = self.action_data(
+            {
+                "media_id": media_id,
+                "container_module": container_module,
+                "feed_position": str(feed_position),
+                "is_carousel_bumped_post": "false",
+            }
+        )
+        if container_module == "feed_timeline":
+            data.update({"inventory_source": "media_or_ad"})
+        if username:
+            data.update({"username": username, "user_id": user_id})
+        if hashtag_name:
+            data.update({"hashtag_name": hashtag_name, "hashtag_id": hashtag_id})
+        if entity_page_name:
+            data.update(
+                {"entity_page_name": entity_page_name, "entity_page_id": entity_page_id}
+            )
+        if double_tap is None:
+            double_tap = random.randint(0, 1)
+        json_data = self.json_data(data)
+        # TODO: comment out debug log out when done
+        self.logger.debug("post data: {}".format(json_data))
+        return self.send_request(
+            endpoint="media/{media_id}/like/".format(media_id=media_id),
+            post=json_data,
+            extra_sig=["d={}".format(double_tap)],
+            delay="like",
+        )
+
+    def unlike(self, media_id):
+        data = self.json_data(
+            {
+                "media_id": media_id,
+                "radio_type": "wifi-none",
+                "is_carousel_bumped_post": "false",
+                "container_module": "photo_view_other",
+                "feed_position": "0",
+            }
+        )
+        url = "media/{media_id}/unlike/".format(media_id=media_id)
+        return self.send_request(url, data, delay="unlike")
+
+    def get_media_comments(self, media_id, max_id=""):
+        url = "media/{media_id}/comments/".format(media_id=media_id)
+        if max_id:
+            url += "?max_id={max_id}".format(max_id=max_id)
+        return self.send_request(url)
+
+    def explore(self, is_prefetch=False):
+        data = {
+            "is_prefetch": is_prefetch,
+            "is_from_promote": False,
+            "timezone_offset": datetime.datetime.now(pytz.timezone("CET")).strftime(
+                "%z"
+            ),
+            "session_id": self.client_session_id,
+            "supported_capabilities_new": config.SUPPORTED_CAPABILITIES,
+        }
+        if is_prefetch:
+            data["max_id"] = 0
+            data["module"] = "explore_popular"
+        data = json.dumps(data)
+        return self.send_request("discover/explore/", data)
 
     def get_username_info(self, user_id):
         url = "users/{user_id}/info/".format(user_id=user_id)
@@ -451,13 +985,10 @@ class API(object):
         return self.get_username_info(self.user_id)
 
     def get_recent_activity(self):
-        return self.send_request("news/inbox/?")
+        return self.send_request("news/inbox")
 
     def get_following_recent_activity(self):
-        return self.send_request("news/?")
-
-    def getv2Inbox(self):
-        return self.send_request("direct_v2/inbox/?")
+        return self.send_request("news")
 
     def get_user_tags(self, user_id):
         url = "usertags/{user_id}/feed/?rank_token={rank_token}&ranked_content=true&"
@@ -466,18 +997,6 @@ class API(object):
 
     def get_self_user_tags(self):
         return self.get_user_tags(self.user_id)
-
-    def tag_feed(self, tag):
-        url = "feed/tag/{tag}/?rank_token={rank_token}&ranked_content=true&"
-        return self.send_request(url.format(tag=tag, rank_token=self.rank_token))
-
-    def get_comment_likers(self, comment_id):
-        url = "media/{comment_id}/comment_likers/?".format(comment_id=comment_id)
-        return self.send_request(url)
-
-    def get_media_likers(self, media_id):
-        url = "media/{media_id}/likers/?".format(media_id=media_id)
-        return self.send_request(url)
 
     def get_geo_media(self, user_id):
         url = "maps/user/{user_id}/".format(user_id=user_id)
@@ -489,6 +1008,11 @@ class API(object):
     def sync_from_adress_book(self, contacts):
         url = "address_book/link/?include=extra_display_name,thumbnails"
         return self.send_request(url, "contacts=" + json.dumps(contacts))
+
+    # ====== FEED METHODS ====== #
+    def tag_feed(self, tag):
+        url = "feed/tag/{tag}/?rank_token={rank_token}&ranked_content=true&"
+        return self.send_request(url.format(tag=tag, rank_token=self.rank_token))
 
     def get_timeline(self):
         url = "feed/timeline/?rank_token={rank_token}&ranked_content=true&"
@@ -527,6 +1051,11 @@ class API(object):
         url = "feed/popular/?people_teaser_supported=1&rank_token={rank_token}&ranked_content=true&"
         return self.send_request(url.format(rank_token=self.rank_token))
 
+    def get_liked_media(self, max_id=""):
+        url = "feed/liked/?max_id={max_id}".format(max_id=max_id)
+        return self.send_request(url)
+
+    # ====== FRIENDSHIPS METHODS ====== #
     def get_user_followings(self, user_id, max_id=""):
         url = "friendships/{user_id}/following/?max_id={max_id}&ig_sig_key_version={sig_key}&rank_token={rank_token}"
         url = url.format(
@@ -550,104 +1079,94 @@ class API(object):
     def get_self_user_followers(self):
         return self.followers
 
-    def like_comment(self, comment_id):
-        data = self.json_data()
-        url = "media/{comment_id}/comment_like/".format(comment_id=comment_id)
-        return self.send_request(url, data)
-
-    def unlike_comment(self, comment_id):
-        data = self.json_data()
-        url = "media/{comment_id}/comment_unlike/".format(comment_id=comment_id)
-        return self.send_request(url, data)
-
-    def like(self, media_id):
-        data = self.json_data({"media_id": media_id})
-        url = "media/{media_id}/like/".format(media_id=media_id)
-        return self.send_request(url, data, delay="like")
-
-    def unlike(self, media_id):
-        data = self.json_data({"media_id": media_id})
-        url = "media/{media_id}/unlike/".format(media_id=media_id)
-        return self.send_request(url, data, delay="unlike")
-
-    def get_media_comments(self, media_id, max_id=""):
-        url = "media/{media_id}/comments/".format(media_id=media_id)
-        if max_id:
-            url += "?max_id={max_id}".format(max_id=max_id)
-        return self.send_request(url)
-
-    def get_direct_share(self):
-        return self.send_request("direct_share/inbox/?")
-
     def follow(self, user_id):
-        data = self.json_data({"user_id": user_id})
+        data = self.json_data(self.action_data({"user_id": user_id}))
+        self.logger.debug("post data: {}".format(data))
         url = "friendships/create/{user_id}/".format(user_id=user_id)
-        return self.send_request(url, data, delay="follow")
+        return self.send_request(url, data)
 
     def unfollow(self, user_id):
-        data = self.json_data({"user_id": user_id})
+        data = self.json_data({"user_id": user_id, "radio_type": "wifi-none"})
         url = "friendships/destroy/{user_id}/".format(user_id=user_id)
-        return self.send_request(url, data, delay="unfollow")
+        return self.send_request(url, data)
 
     def block(self, user_id):
         data = self.json_data({"user_id": user_id})
         url = "friendships/block/{user_id}/".format(user_id=user_id)
-        return self.send_request(url, data, delay="block")
+        return self.send_request(url, data)
 
     def unblock(self, user_id):
         data = self.json_data({"user_id": user_id})
         url = "friendships/unblock/{user_id}/".format(user_id=user_id)
-        return self.send_request(url, data, delay="unblock")
+        return self.send_request(url, data)
 
     def user_friendship(self, user_id):
         data = self.json_data({"user_id": user_id})
         url = "friendships/show/{user_id}/".format(user_id=user_id)
         return self.send_request(url, data)
 
+    def mute_user(self, user, mute_story=False, mute_posts=False):
+        data_dict = {}
+        if mute_posts:
+            data_dict["target_posts_author_id"] = user
+        if mute_story:
+            data_dict["target_reel_author_id"] = user
+        data = self.json_data(data_dict)
+        url = "friendships/mute_posts_or_story_from_follow/"
+        return self.send_request(url, data)
+
+    def unmute_user(self, user, unmute_posts=False, unmute_stories=False):
+        data_dict = {}
+        if unmute_posts:
+            data_dict["target_posts_author_id"] = user
+        if unmute_stories:
+            data_dict["target_reel_author_id"] = user
+        data = self.json_data(data_dict)
+        url = "friendships/unmute_posts_or_story_from_follow/"
+        return self.send_request(url, data)
+
+    def get_pending_friendships(self):
+        """Get pending follow requests"""
+        url = "friendships/pending/"
+        return self.send_request(url)
+
+    def approve_pending_friendship(self, user_id):
+        data = self.json_data(
+            {
+                "_uuid": self.uuid,
+                "_uid": self.user_id,
+                "user_id": user_id,
+                "_csrftoken": self.token,
+            }
+        )
+        url = "friendships/approve/{}/".format(user_id)
+        return self.send_request(url, post=data)
+
+    def reject_pending_friendship(self, user_id):
+        data = self.json_data(
+            {
+                "_uuid": self.uuid,
+                "_uid": self.user_id,
+                "user_id": user_id,
+                "_csrftoken": self.token,
+            }
+        )
+        url = "friendships/ignore/{}/".format(user_id)
+        return self.send_request(url, post=data)
+
+    def get_direct_share(self):
+        return self.send_request("direct_share/inbox/?")
+
     @staticmethod
     def _prepare_recipients(users, thread_id=None, use_quotes=False):
-        from instabot.bot import bot_support
-
         if not isinstance(users, list):
-            bot_support.console_print(bot_support, "Users must be an list")
+            print("Users must be an list")
             return False
         result = {"users": "[[{}]]".format(",".join(users))}
         if thread_id:
             template = '["{}"]' if use_quotes else "[{}]"
             result["thread"] = template.format(thread_id)
         return result
-
-    def send_direct_item(self, item_type, users, **options):
-        data = {"client_context": self.generate_UUID(True), "action": "send_item"}
-
-        url = "direct_v2/threads/broadcast/{}/".format(item_type)
-        text = options.get("text", "")
-        if item_type == "link":
-            data["link_text"] = text
-            data["link_urls"] = json.dumps(options.get("urls"))
-        elif item_type == "text":
-            data["text"] = text
-        elif item_type == "media_share":
-            data["text"] = text
-            data["media_type"] = options.get("media_type", "photo")
-            data["media_id"] = options.get("media_id", "")
-        elif item_type == "hashtag":
-            data["text"] = text
-            data["hashtag"] = options.get("hashtag", "")
-        elif item_type == "profile":
-            data["text"] = text
-            data["profile_user_id"] = options.get("profile_user_id")
-
-        recipients = self._prepare_recipients(
-            users, options.get("thread"), use_quotes=False
-        )
-        if not recipients:
-            return False
-        data["recipient_users"] = recipients.get("users")
-        if recipients.get("thread"):
-            data["thread_ids"] = recipients.get("thread")
-        data.update(self.default_data)
-        return self.send_request(url, data, with_signature=False)
 
     @staticmethod
     def generate_signature(data):
@@ -682,11 +1201,7 @@ class API(object):
         else:
             return generated_uuid.replace("-", "")
 
-    def get_liked_media(self, max_id=""):
-        url = "feed/liked/?max_id={max_id}".format(max_id=max_id)
-        return self.send_request(url)
-
-    def get_total_followers_or_followings(
+    def get_total_followers_or_followings(  # noqa: C901
         self,
         user_id,
         amount=None,
@@ -729,7 +1244,6 @@ class API(object):
                 bot_support,
                 "--> You are going to filter business accounts. This will take time! <--",
             )
-            from random import random
         if to_file is not None:
             if os.path.isfile(to_file):
                 if not overwrite:
@@ -745,49 +1259,49 @@ class API(object):
             with open(to_file, "w"):
                 pass
         desc = "Getting {} of {}".format(which, user_id)
-        # with tqdm(total=total, desc=desc, leave=True) as pbar:
-        while True:
-            get(user_id, next_max_id)
-            last_json = self.last_json
-            try:
-                with open(to_file, "a") if to_file is not None else StringIO() as f:
-                    for item in last_json["users"]:
-                        if filter_private and item["is_private"]:
-                            continue
-                        if filter_business:
-                            time.sleep(2 * random())
-                            self.get_username_info(item["pk"])
-                            item_info = self.last_json
-                            if item_info["user"]["is_business"]:
+        with tqdm(total=total, desc=desc, leave=True) as pbar:
+            while True:
+                get(user_id, next_max_id)
+                last_json = self.last_json
+                try:
+                    with open(to_file, "a") if to_file is not None else StringIO() as f:
+                        for item in last_json["users"]:
+                            if filter_private and item["is_private"]:
                                 continue
-                        if filter_verified and item["is_verified"]:
-                            continue
-                        if to_file is not None:
-                            if usernames:
-                                f.write("{}\n".format(item["username"]))
-                            else:
-                                f.write("{}\n".format(item["pk"]))
-                        result.append(item)
-                        # pbar.update(1)
-                        sleep_track += 1
-                        if sleep_track >= 20000:
-                            sleep_time = uniform(120, 180)
-                            msg = "\nWaiting {:.2f} min. due to too many requests."
-                            bot_support.console_print(
-                                bot_support, msg.format(sleep_time / 60)
-                            )
-                            time.sleep(sleep_time)
-                            sleep_track = 0
-                if not last_json["users"] or len(result) >= total:
+                            if filter_business:
+                                time.sleep(2 * random.random())
+                                self.get_username_info(item["pk"])
+                                item_info = self.last_json
+                                if item_info["user"]["is_business"]:
+                                    continue
+                            if filter_verified and item["is_verified"]:
+                                continue
+                            if to_file is not None:
+                                if usernames:
+                                    f.write("{}\n".format(item["username"]))
+                                else:
+                                    f.write("{}\n".format(item["pk"]))
+                            result.append(item)
+                            pbar.update(1)
+                            sleep_track += 1
+                            if sleep_track >= 20000:
+                                sleep_time = random.uniform(120, 180)
+                                msg = "\nWaiting {:.2f} min. due to too many requests."
+                                bot_support.console_print(
+                                    bot_support, msg.format(sleep_time / 60)
+                                )
+                                time.sleep(sleep_time)
+                                sleep_track = 0
+                    if not last_json["users"] or len(result) >= total:
+                        return result[:total]
+                except Exception as e:
+                    bot_support.console_print(bot_support, "ERROR: {}".format(e))
                     return result[:total]
-            except Exception as e:
-                bot_support.console_print(bot_support, "ERROR: {}".format(e))
-                return result[:total]
 
-            if last_json["big_list"] is False:
-                return result[:total]
+                if last_json["big_list"] is False:
+                    return result[:total]
 
-            next_max_id = last_json.get("next_max_id", "")
+                next_max_id = last_json.get("next_max_id", "")
 
     def get_total_followers(self, user_id, amount=None):
         return self.get_total_followers_or_followings(user_id, amount, "followers")
@@ -855,6 +1369,17 @@ class API(object):
             liked_items += last_json["items"]
         return liked_items
 
+    # ====== ACCOUNT / PERSONAL INFO METHODS ====== #
+    def change_password(self, new_password):
+        data = self.json_data(
+            {
+                "old_password": self.password,
+                "new_password1": new_password,
+                "new_password2": new_password,
+            }
+        )
+        return self.send_request("accounts/change_password/", data)
+
     def remove_profile_picture(self):
         data = self.json_data()
         return self.send_request("accounts/remove_profile_picture/", data)
@@ -868,8 +1393,10 @@ class API(object):
         return self.send_request("accounts/set_public/", data)
 
     def set_name_and_phone(self, name="", phone=""):
-        data = self.json_data({"first_name": name, "phone_number": phone})
-        return self.send_request("accounts/set_phone_and_name/", data)
+        return self.send_request(
+            "accounts/set_phone_and_name/",
+            self.json_data({"first_name": name, "phone_number": phone}),
+        )
 
     def get_profile_data(self):
         data = self.json_data()
@@ -893,15 +1420,15 @@ class API(object):
         url = (
             "fbsearch/topsearch/?context=blended&query={query}&rank_token={rank_token}"
         )
-        url = url.format(query=query, rank_token=self.rank_token)
-        return self.send_request(url)
+        return self.send_request(url.format(query=query, rank_token=self.rank_token))
 
     def search_users(self, query):
         url = "users/search/?ig_sig_key_version={sig_key}&is_typeahead=true&query={query}&rank_token={rank_token}"
-        url = url.format(
-            sig_key=config.SIG_KEY_VERSION, query=query, rank_token=self.rank_token
+        return self.send_request(
+            url.format(
+                sig_key=config.SIG_KEY_VERSION, query=query, rank_token=self.rank_token
+            )
         )
-        return self.send_request(url)
 
     def search_username(self, username):
         url = "users/{username}/usernameinfo/".format(username=username)
@@ -909,8 +1436,7 @@ class API(object):
 
     def search_tags(self, query):
         url = "tags/search/?is_typeahead=true&q={query}&rank_token={rank_token}"
-        url = url.format(query=query, rank_token=self.rank_token)
-        return self.send_request(url)
+        return self.send_request(url.format(query=query, rank_token=self.rank_token))
 
     def search_location(self, query="", lat=None, lng=None):
         url = (
@@ -923,12 +1449,71 @@ class API(object):
         url = "feed/user/{}/reel_media/".format(user_id)
         return self.send_request(url)
 
+    def get_reels_tray_feed(
+        self, reason="pull_to_refresh"
+    ):  # reason can be = cold_start, pull_to_refresh
+        data = {
+            "supported_capabilities_new": config.SUPPORTED_CAPABILITIES,
+            "reason": reason,
+            "_csrftoken": self.token,
+            "_uuid": self.uuid,
+        }
+        data = json.dumps(data)
+        return self.send_request("feed/reels_tray/", data)
+
+    def get_users_reel(self, user_ids):
+        """
+            Input: user_ids - a list of user_id
+            Output: dictionary: user_id - stories data.
+            Basically, for each user output the same as after self.get_user_reel
+        """
+        url = "feed/reels_media/"
+        res = self.send_request(
+            url, post=self.json_data({"user_ids": [str(x) for x in user_ids]})
+        )
+        if res:
+            return self.last_json["reels"] if "reels" in self.last_json else []
+        return []
+
+    def see_reels(self, reels):
+        """
+            Input - the list of reels jsons
+            They can be aquired by using get_users_reel() or get_user_reel() methods
+        """
+        if not isinstance(reels, list):
+            # In case of only one reel as input
+            reels = [reels]
+
+        story_seen = {}
+        now = int(time.time())
+        for i, story in enumerate(
+            sorted(reels, key=lambda m: m["taken_at"], reverse=True)
+        ):
+            story_seen_at = now - min(
+                i + 1 + random.randint(0, 2), max(0, now - story["taken_at"])
+            )
+            story_seen["{!s}_{!s}".format(story["id"], story["user"]["pk"])] = [
+                "{!s}_{!s}".format(story["taken_at"], story_seen_at)
+            ]
+
+        data = self.json_data(
+            {
+                "reels": story_seen,
+                "_csrftoken": self.token,
+                "_uuid": self.uuid,
+                "_uid": self.user_id,
+            }
+        )
+        data = self.generate_signature(data)
+        return self.session.post(
+            "https://i.instagram.com/api/v2/" + "media/seen/", data=data
+        ).ok
+
     def get_user_stories(self, user_id):
         url = "feed/user/{}/story/".format(user_id)
         return self.send_request(url)
 
     def get_self_story_viewers(self, story_id):
-
         url = "media/{}/list_reel_media_viewer/?supported_capabilities_new={}".format(
             story_id, config.SUPPORTED_CAPABILITIES
         )
@@ -973,13 +1558,17 @@ class API(object):
         return self.send_request(url)
 
     def get_self_insight(self):
-        url = "insights/account_organic_insights/?show_promotions_in_landing_page=true&first={}".format()  # todo
+        # TODO:
+        url = "insights/account_organic_insights/?show_promotions_in_landing_page=true&first={}".format()
         return self.send_request(url)
 
-    def save_media(self, media_id):
-        data = self.json_data()
-        url = "media/{}/save/".format(media_id)
-        return self.send_request(url, data)
+    # From profile => "module_name":"feed_contextual_profile"
+    # From home/feed => "module_name":"feed_timeline"
+    def save_media(self, media_id, module_name="feed_timeline"):
+        return self.send_request(
+            endpoint="media/{media_id}/save/".format(media_id=media_id),
+            post=self.json_data(self.action_data({"module_name": module_name})),
+        )
 
     def unsave_media(self, media_id):
         data = self.json_data()
@@ -990,3 +1579,103 @@ class API(object):
         url = "feed/saved/"
         return self.send_request(url)
 
+    def get_loom_fetch_config(self):
+        return self.send_request("loom/fetch_config/")
+
+    def get_profile_notice(self):
+        return self.send_request("users/profile_notice/")
+
+    # ====== DIRECT METHODS ====== #
+    def get_inbox_v2(self):
+        data = json.dumps({"persistentBadging": True, "use_unified_inbox": True})
+        return self.send_request("direct_v2/inbox/", data)
+
+    def get_presence(self):
+        return self.send_request("direct_v2/get_presence/")
+
+    def get_ranked_recipients(self, mode, show_threads, query=None):
+        data = {
+            "mode": mode,
+            "show_threads": "false" if show_threads is False else "true",
+            "use_unified_inbox": "true",
+        }
+        if query is not None:
+            data["query"] = query
+        return self.send_request("direct_v2/ranked_recipients/", json.dumps(data))
+
+    def send_direct_item(self, item_type, users, **options):
+        data = {"client_context": self.generate_UUID(True), "action": "send_item"}
+        headers = {}
+        recipients = self._prepare_recipients(
+            users, options.get("thread"), use_quotes=False
+        )
+        if not recipients:
+            return False
+        data["recipient_users"] = recipients.get("users")
+        if recipients.get("thread"):
+            data["thread_ids"] = recipients.get("thread")
+        data.update(self.default_data)
+
+        url = "direct_v2/threads/broadcast/{}/".format(item_type)
+        text = options.get("text", "")
+        if item_type == "link":
+            data["link_text"] = text
+            data["link_urls"] = json.dumps(options.get("urls"))
+        elif item_type == "text":
+            data["text"] = text
+        elif item_type == "media_share":
+            data["text"] = text
+            data["media_type"] = options.get("media_type", "photo")
+            data["media_id"] = options.get("media_id", "")
+        elif item_type == "hashtag":
+            data["text"] = text
+            data["hashtag"] = options.get("hashtag", "")
+        elif item_type == "profile":
+            data["text"] = text
+            data["profile_user_id"] = options.get("profile_user_id")
+        elif item_type == "photo":
+            url = "direct_v2/threads/broadcast/upload_photo/"
+            filepath = options["filepath"]
+            upload_id = str(int(time.time() * 1000))
+            with open(filepath, "rb") as f:
+                photo = f.read()
+
+            data["photo"] = (
+                "direct_temp_photo_%s.jpg" % upload_id,
+                photo,
+                "application/octet-stream",
+                {"Content-Transfer-Encoding": "binary"},
+            )
+
+            m = MultipartEncoder(data, boundary=self.uuid)
+            data = m.to_string()
+            headers.update({"Content-type": m.content_type})
+
+        return self.send_request(url, data, with_signature=False, headers=headers)
+
+    def get_pending_inbox(self):
+        url = "direct_v2/pending_inbox/?persistentBadging=true&use_unified_inbox=true"
+        return self.send_request(url)
+
+    # ACCEPT button in pending request
+    def approve_pending_thread(self, thread_id):
+        data = self.json_data({"_uuid": self.uuid, "_csrftoken": self.token})
+        url = "direct_v2/threads/{}/approve/".format(thread_id)
+        return self.send_request(url, post=data)
+
+    # DELETE button in pending request
+    def hide_pending_thread(self, thread_id):
+        data = self.json_data({"_uuid": self.uuid, "_csrftoken": self.token})
+        url = "direct_v2/threads/{}/hide/".format(thread_id)
+        return self.send_request(url, post=data)
+
+    # BLOCK button in pending request
+    def decline_pending_thread(self, thread_id):
+        data = self.json_data({"_uuid": self.uuid, "_csrftoken": self.token})
+        url = "direct_v2/threads/{}/decline/".format(thread_id)
+        return self.send_request(url, post=data)
+
+    def open_instagram_link(self, link):
+        return self.send_request(
+            "oembed/?url={}".format(urllib.parse.quote(link, safe=""))
+        )
