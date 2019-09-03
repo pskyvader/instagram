@@ -398,7 +398,6 @@ class Bot(object):
         )
 
     def logout(self, *args, **kwargs):
-        #save_checkpoint(self)
         self.api.logout()
         self.console_print(
             "Bot stopped. "
@@ -408,35 +407,37 @@ class Bot(object):
     
 
     def login(self, **args):
+        """if login function is run threaded, for example in scheduled job,
+        signal will fail because it 'only works in main thread'.
+        In this case, you may want to call login(is_threaded=True).
+        """
         if self.proxy:
             args["proxy"] = self.proxy
         if self.api.login(**args) is False:
             return False
-
-        # self.prepare()
-        signal.signal(signal.SIGTERM, self.logout)
-        atexit.register(self.logout)
+        #self.prepare()
+        atexit.register(self.print_counters)
+        if "is_threaded" in args:
+            if args["is_threaded"]:
+                return True
+        signal.signal(signal.SIGTERM, self.print_counters)
         return True
 
     def prepare(self):
         storage = load_checkpoint(self)
         if storage is not None:
-            self.total, self.blocked_actions, self.api.total_requests, self.start_time = (
+            total, self.blocked_actions, self.api.total_requests, self.start_time = (
                 storage
             )
 
+            for k, v in total.items():
+                self.total[k] = v
+
     def print_counters(self):
+        save_checkpoint(self)
         for key, val in self.total.items():
             if val > 0:
-                self.console_print(
-                    "Total {}: {}{}".format(
-                        key,
-                        val,
-                        "/" + str(self.max_per_day[key])
-                        if self.max_per_day.get(key)
-                        else "",
-                    )
-                )
+                self.console_print( "Total {}: {}{}".format( key, val, "/" + str(self.max_per_day[key]) if self.max_per_day.get(key) else "", ) )
         for key, val in self.blocked_actions.items():
             if val:
                 self.console_print("Blocked {}".format(key))
@@ -450,6 +451,7 @@ class Bot(object):
             t_remaining = target_delay - elapsed_time
             time.sleep(t_remaining * random.uniform(0.25, 1.25))
         self.last[key] = time.time()
+
 
     def update_delay(self, key, repeat=False):
         sleep = 1
@@ -582,7 +584,21 @@ class Bot(object):
         """
         return get_tags(self, query)
 
-    # getters
+
+     def get_user_stories(self, user_id):
+        """
+        Returns array of stories links
+        """
+        return get_user_stories(self, user_id)
+
+    def get_user_reel(self, user_id):
+        return get_user_reel(self, user_id)
+
+    def get_self_story_viewers(self, story_id):
+        return get_self_story_viewers(self, story_id)
+
+    def get_pending_follow_requests(self):
+        return get_pending_follow_requests(self)
 
     def get_your_medias(self, as_dict=False):
         """
@@ -700,16 +716,67 @@ class Bot(object):
     def convert_to_user_id(self, usernames):
         return convert_to_user_id(self, usernames)
 
-    # like
+    def get_pending_thread_requests(self):
+        return get_pending_thread_requests(self)
 
-    def like(self, media_id, check_media=True):
-        return like(self, media_id, check_media)
+     # like
+
+    def like(
+        self,
+        media_id,
+        check_media=True,
+        container_module="feed_short_url",
+        feed_position=0,
+        username=None,
+        user_id=None,
+        hashtag_name=None,
+        hashtag_id=None,
+        entity_page_name=None,
+        entity_page_id=None,
+    ):
+
+        return like(
+            self,
+            media_id,
+            check_media,
+            container_module=container_module,
+            feed_position=feed_position,
+            username=username,
+            user_id=user_id,
+            hashtag_name=hashtag_name,
+            hashtag_id=hashtag_id,
+            entity_page_name=entity_page_name,
+            entity_page_id=entity_page_id,
+        )
 
     def like_comment(self, comment_id):
         return like_comment(self, comment_id)
 
-    def like_medias(self, media_ids, check_media=True):
-        return like_medias(self, media_ids, check_media)
+    def like_medias(
+        self,
+        media_ids,
+        check_media=True,
+        container_module="feed_timeline",
+        username=None,
+        user_id=None,
+        hashtag_name=None,
+        hashtag_id=None,
+        entity_page_name=None,
+        entity_page_id=None,
+    ):
+
+        return like_medias(
+            self,
+            media_ids,
+            check_media,
+            container_module=container_module,
+            username=username,
+            user_id=user_id,
+            hashtag_name=hashtag_name,
+            hashtag_id=hashtag_id,
+            entity_page_name=entity_page_name,
+            entity_page_id=entity_page_id,
+        )
 
     def like_timeline(self, amount=None):
         return like_timeline(self, amount)
@@ -728,6 +795,9 @@ class Bot(object):
 
     def like_users(self, user_ids, nlikes=None, filtration=True):
         return like_users(self, user_ids, nlikes, filtration)
+
+    def like_location_feed(self, place, amount):
+        return like_location_feed(self, place, amount)
 
     def like_followers(self, user_id, nlikes=None, nfollows=None):
         return like_followers(self, user_id, nlikes, nfollows)
@@ -752,8 +822,17 @@ class Bot(object):
     def unlike_user(self, user):
         return unlike_user(self, user)
 
-    # photo
+    # story
+    def download_stories(self, username):
+        return download_stories(self, username)
 
+    def upload_story_photo(self, photo, upload_id=None):
+        return upload_story_photo(self, photo, upload_id)
+
+    def watch_users_reels(self, user_ids, max_users=100):
+        return watch_users_reels(self, user_ids, max_users=max_users)
+
+    # photo
     def download_photo(
         self, media_id, folder="photos", filename=None, save_description=False
     ):
@@ -762,13 +841,37 @@ class Bot(object):
     def download_photos(self, medias, folder="photos", save_description=False):
         return download_photos(self, medias, folder, save_description)
 
-    def upload_photo(self, photo, caption=None, upload_id=None, from_video=False):
-        return upload_photo(self, photo, caption, upload_id, from_video)
+    def upload_photo(
+        self, photo, caption=None, upload_id=None, from_video=False, options={}
+    ):
+        """Upload photo to Instagram
+        @param photo         Path to photo file (String)
+        @param caption       Media description (String)
+        @param upload_id     Unique upload_id (String). When None, then generate automatically
+        @param from_video    A flag that signals whether the photo is loaded from the video or by itself (Boolean, DEPRECATED: not used)
+        @param options       Object with difference options, e.g. configure_timeout, rename (Dict)
+                             Designed to reduce the number of function arguments!
+                             This is the simplest request object.
+        @return              Object with state of uploading to Instagram (or False)
+        """
+        return upload_photo(self, photo, caption, upload_id, from_video, options)
 
     # video
+    def upload_video(self, video, caption="", thumbnail=None, options={}):
+        """Upload video to Instagram
+        @param video      Path to video file (String)
+        @param caption    Media description (String)
+        @param thumbnail  Path to thumbnail for video (String). When None, then thumbnail is generate automatically
+        @param options    Object with difference options, e.g. configure_timeout, rename_thumbnail, rename (Dict)
+                          Designed to reduce the number of function arguments!
+        @return           Object with state of uploading to Instagram (or False)
+        """
+        return upload_video(self, video, caption, thumbnail, options)
 
-    def upload_video(self, video, caption=""):
-        return upload_video(self, video, caption)
+    def download_video(
+        self, media_id, folder="videos", filename=None, save_description=False
+    ):
+        return download_video(self, media_id, folder, filename, save_description)
 
     # follow
 
@@ -798,8 +901,13 @@ class Bot(object):
     def unfollow_everyone(self):
         return unfollow_everyone(self)
 
-    # direct
+    def approve_pending_follow_requests(self):
+        return approve_pending_follow_requests(self)
 
+    def reject_pending_follow_requests(self):
+        return reject_pending_follow_requests(self)
+
+    # direct
     def send_message(self, text, user_ids, thread_id=None):
         return send_message(self, text, user_ids, thread_id)
 
@@ -821,8 +929,13 @@ class Bot(object):
     def send_like(self, user_ids, thread_id=None):
         return send_like(self, user_ids, thread_id)
 
-    # delete
+    def send_photo(self, user_ids, filepath, thread_id=None):
+        return send_photo(self, user_ids, filepath, thread_id)
 
+    def approve_pending_thread_requests(self):
+        return approve_pending_thread_requests(self)
+
+    # delete
     def delete_media(self, media_id):
         return delete_media(self, media_id)
 
@@ -833,7 +946,6 @@ class Bot(object):
         return delete_comment(self, media_id, comment_id)
 
     # archive
-
     def archive(self, media_id, undo=False):
         return archive(self, media_id, undo)
 
@@ -847,7 +959,6 @@ class Bot(object):
         return unarchive_medias(self, medias)
 
     # comment
-
     def comment(self, media_id, comment_text):
         return comment(self, media_id, comment_text)
 
@@ -873,7 +984,6 @@ class Bot(object):
         return is_commented(self, media_id)
 
     # block
-
     def block(self, user_id):
         return block(self, user_id)
 
@@ -890,7 +1000,6 @@ class Bot(object):
         return block_bots(self)
 
     # filter
-
     def filter_medias(
         self, media_items, filtration=True, quiet=False, is_comment=False
     ):
@@ -904,6 +1013,7 @@ class Bot(object):
 
     def check_not_bot(self, user):
         return check_not_bot(self, user)
+
 
     # support
 
