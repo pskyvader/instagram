@@ -186,7 +186,8 @@ class Bot(object):
         verbosity=True,
         device=None,
     ):
-        self.api = API(device=device, parent_class=self)
+        self.api = API(device=device, base_path=base_path, parent_class=self)
+        self.base_path = base_path
 
         c_time = functions.current_time("%Y-%m-%d")
         self.total = {
