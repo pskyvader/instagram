@@ -299,6 +299,15 @@ class Bot(object):
         self._user_infos = {}  # User info cache
         self._usernames = {}  # `username` to `user_id` mapping
 
+        # Adjust file paths
+        followed_file = os.path.join(base_path, followed_file)
+        unfollowed_file = os.path.join(base_path, unfollowed_file)
+        skipped_file = os.path.join(base_path, skipped_file)
+        friends_file = os.path.join(base_path, friends_file)
+        comments_file = os.path.join(base_path, comments_file)
+        blacklist_file = os.path.join(base_path, blacklist_file)
+        whitelist_file = os.path.join(base_path, whitelist_file)
+
         # Database files
         self.followed_file = utils.file(followed_file)
         self.unfollowed_file = utils.file(unfollowed_file)
@@ -307,6 +316,7 @@ class Bot(object):
         self.comments_file = utils.file(comments_file)
         self.blacklist_file = utils.file(blacklist_file)
         self.whitelist_file = utils.file(whitelist_file)
+        
 
         self.proxy = proxy
         self.verbosity = verbosity
@@ -314,6 +324,7 @@ class Bot(object):
         self.logger = self.api.logger
         self.console_print("Instabot Started")
 
+    
     @property
     def user_id(self):
         # For compatibility
@@ -387,13 +398,14 @@ class Bot(object):
         )
 
     def logout(self, *args, **kwargs):
-        save_checkpoint(self)
+        #save_checkpoint(self)
         self.api.logout()
         self.console_print(
             "Bot stopped. "
             "Worked: {}".format(str(datetime.datetime.now() - self.start_time))
         )
         self.print_counters()
+    
 
     def login(self, **args):
         if self.proxy:
