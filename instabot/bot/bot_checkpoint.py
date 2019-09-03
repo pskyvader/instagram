@@ -2,9 +2,9 @@
     Instabot Checkpoint methods.
 """
 
-from datetime import datetime
-import pickle
 import os
+import pickle
+from datetime import datetime
 
 CHECKPOINT_PATH = "{fname}.checkpoint"
 
@@ -43,7 +43,8 @@ class Checkpoint(object):
 def save_checkpoint(self):
     checkpoint = Checkpoint(self)
     fname = CHECKPOINT_PATH.format(fname=self.api.username)
-    with open(fname, 'wb') as f:
+    fname = os.path.join(self.base_path, fname)
+    with open(fname, "wb") as f:
         pickle.dump(checkpoint, f, -1)
     return True
 
@@ -51,7 +52,8 @@ def save_checkpoint(self):
 def load_checkpoint(self):
     try:
         fname = CHECKPOINT_PATH.format(fname=self.api.username)
-        with open(fname, 'rb') as f:
+        fname = os.path.join(self.base_path, fname)
+        with open(fname, "rb") as f:
             checkpoint = pickle.load(f)
         if isinstance(checkpoint, Checkpoint):
             return checkpoint.dump()
