@@ -59,6 +59,11 @@ def get_popular_medias(self):
     return [str(media["id"]) for media in self.api.last_json["items"]]
 
 
+def get_tags(self, query):
+    self.api.search_tags(query)
+    return [str(media["name"]) for media in self.api.last_json["results"]]
+
+
 def get_your_medias(self, as_dict=False):
     self.api.get_self_user_feed()
     if as_dict:
