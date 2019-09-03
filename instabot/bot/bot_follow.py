@@ -27,7 +27,7 @@ def follow(self, user_id, force=False, hashtag="", progress=None):
             msg = "===> FOLLOWED <==== `user_id`: {}. Total: {}/{}".format(
                 user_id, self.total["follows"], self.max_per_day["follows"]
             )
-            self.console_print(msg, "green")
+            self.console_print(msg, "green",progress=progress)
 
             if user_id not in self.following:
                 self.following.append(user_id)
