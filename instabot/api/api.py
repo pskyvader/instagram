@@ -883,7 +883,7 @@ class API(object):
             }
         )
         url = "media/{comment_id}/comment_like/".format(comment_id=comment_id)
-        return self.send_request(url, data)
+        return self.send_request(url, data,delay='like')
 
     def unlike_comment(self, comment_id):
         data = self.json_data(
@@ -894,7 +894,7 @@ class API(object):
             }
         )
         url = "media/{comment_id}/comment_unlike/".format(comment_id=comment_id)
-        return self.send_request(url, data)
+        return self.send_request(url, data,delay='unlike')
 
     # From profile => "is_carousel_bumped_post":"false", "container_module":"feed_contextual_profile", "feed_position":"0"
     # From home/feed => "inventory_source":"media_or_ad", "is_carousel_bumped_post":"false", "container_module":"feed_timeline", "feed_position":"0"
@@ -959,7 +959,7 @@ class API(object):
         url = "media/{media_id}/comments/".format(media_id=media_id)
         if max_id:
             url += "?max_id={max_id}".format(max_id=max_id)
-        return self.send_request(url)
+        return self.send_request(url,delay='comment')
 
     def explore(self, is_prefetch=False):
         data = {
@@ -1000,7 +1000,7 @@ class API(object):
 
     def get_geo_media(self, user_id):
         url = "maps/user/{user_id}/".format(user_id=user_id)
-        return self.send_request(url)
+        return self.send_request(url,delay='get')
 
     def get_self_geo_media(self):
         return self.get_geo_media(self.user_id)
@@ -1030,7 +1030,7 @@ class API(object):
             min_timestamp=min_timestamp,
             rank_token=self.rank_token,
         )
-        return self.send_request(url)
+        return self.send_request(url,delay='get')
 
     def get_self_user_feed(self, max_id="", min_timestamp=None):
         return self.get_user_feed(self.user_id, max_id, min_timestamp)
@@ -1064,7 +1064,7 @@ class API(object):
             sig_key=config.SIG_KEY_VERSION,
             rank_token=self.rank_token,
         )
-        return self.send_request(url)
+        return self.send_request(url,delay='get')
 
     def get_self_users_following(self):
         return self.get_user_followings(self.user_id)
@@ -1074,7 +1074,7 @@ class API(object):
         url = url.format(user_id=user_id, rank_token=self.rank_token)
         if max_id:
             url += "&max_id={max_id}".format(max_id=max_id)
-        return self.send_request(url)
+        return self.send_request(url,delay='get')
 
     def get_self_user_followers(self):
         return self.followers
@@ -1083,27 +1083,27 @@ class API(object):
         data = self.json_data(self.action_data({"user_id": user_id}))
         self.logger.debug("post data: {}".format(data))
         url = "friendships/create/{user_id}/".format(user_id=user_id)
-        return self.send_request(url, data)
+        return self.send_request(url, data,delay='follow')
 
     def unfollow(self, user_id):
         data = self.json_data({"user_id": user_id, "radio_type": "wifi-none"})
         url = "friendships/destroy/{user_id}/".format(user_id=user_id)
-        return self.send_request(url, data)
+        return self.send_request(url, data,delay='unfollow')
 
     def block(self, user_id):
         data = self.json_data({"user_id": user_id})
         url = "friendships/block/{user_id}/".format(user_id=user_id)
-        return self.send_request(url, data)
+        return self.send_request(url, data,delay='block')
 
     def unblock(self, user_id):
         data = self.json_data({"user_id": user_id})
         url = "friendships/unblock/{user_id}/".format(user_id=user_id)
-        return self.send_request(url, data)
+        return self.send_request(url, data,delay='unblock')
 
     def user_friendship(self, user_id):
         data = self.json_data({"user_id": user_id})
         url = "friendships/show/{user_id}/".format(user_id=user_id)
-        return self.send_request(url, data)
+        return self.send_request(url, data,delay='get')
 
     def mute_user(self, user, mute_story=False, mute_posts=False):
         data_dict = {}
@@ -1427,16 +1427,16 @@ class API(object):
         return self.send_request(
             url.format(
                 sig_key=config.SIG_KEY_VERSION, query=query, rank_token=self.rank_token
-            )
+            ),delay='get'
         )
 
     def search_username(self, username):
         url = "users/{username}/usernameinfo/".format(username=username)
-        return self.send_request(url)
+        return self.send_request(url,delay='get')
 
     def search_tags(self, query):
         url = "tags/search/?is_typeahead=true&q={query}&rank_token={rank_token}"
-        return self.send_request(url.format(query=query, rank_token=self.rank_token))
+        return self.send_request(url.format(query=query, rank_token=self.rank_token),delay='get')
 
     def search_location(self, query="", lat=None, lng=None):
         url = (
@@ -1530,16 +1530,16 @@ class API(object):
     def follow_hashtag(self, hashtag):
         data = self.json_data({})
         url = "tags/follow/{}/".format(hashtag)
-        return self.send_request(url, data)
+        return self.send_request(url, data,delay='follow')
 
     def unfollow_hashtag(self, hashtag):
         data = self.json_data({})
         url = "tags/unfollow/{}/".format(hashtag)
-        return self.send_request(url, data)
+        return self.send_request(url, data,delay='unfollow')
 
     def get_tags_followed_by_user(self, user_id):
         url = "users/{}/following_tags_info/".format(user_id)
-        return self.send_request(url)
+        return self.send_request(url,delay='get')
 
     def get_hashtag_sections(self, hashtag):
         data = self.json_data(
