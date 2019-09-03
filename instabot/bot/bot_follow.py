@@ -52,42 +52,28 @@ def follow(self, user_id, force=False, hashtag="", progress=None):
     return False
 
 
-def follow_users(self, user_ids, base=0, proporcion=1, hashtag=""):
+def follow_users(self, user_ids):
     broken_items = []
     if self.reached_limit("follows"):
-        self.console_print("Out of follows for today.")
+        self.logger.info("Out of follows for today.")
         return
+    msg = "Going to follow {} users.".format(len(user_ids))
+    self.logger.info(msg)
     skipped = self.skipped_file
     followed = self.followed_file
     unfollowed = self.unfollowed_file
+    self.console_print(msg, "green")
 
     # Remove skipped and already followed and unfollowed list from user_ids
-    # following=igaccounts_model.getAll(select='pk')
-    # following=(f['pk'] for f in following)
-    # user_ids = list(set(user_ids) - skipped.set - followed.set - unfollowed.set - set(following))
     user_ids = list(set(user_ids) - skipped.set - followed.set - unfollowed.set)
-
     msg = "After filtering followed, unfollowed and `{}`, {} user_ids left to follow."
     msg = msg.format(skipped.fname, len(user_ids))
     self.console_print(msg, "green")
-    count = 0
-    # for user_id in tqdm(user_ids, desc='Processed users'):
-    for user_id in user_ids:
-        count += 1
+    for user_id in tqdm(user_ids, desc="Processed users"):
         if self.reached_limit("follows"):
-            self.console_print("Out of follows for today.")
+            self.logger.info("Out of follows for today.")
             break
-        # self.console_print(user_id,progress=base+(count/len(user_ids))*proporcion)
-        if not self.follow(
-            user_id,
-            hashtag=hashtag,
-            progress=base + (count / len(user_ids)) * proporcion,
-        ):
-            if self.api.fatal_error:
-                i = user_ids.index(user_id)
-                broken_items += user_ids[i - 1 :]
-                break
-
+        if not self.follow(user_id):
             if self.api.last_response.status_code == 404:
                 self.console_print("404 error user {user_id} doesn't exist.", "red")
                 broken_items.append(user_id)
@@ -111,38 +97,64 @@ def follow_users(self, user_ids, base=0, proporcion=1, hashtag=""):
                     broken_items += user_ids[i:]
                     break
 
-    self.console_print(
+    self.logger.info(
         "DONE: Now following {} users in total.".format(self.total["follows"])
     )
     return broken_items
 
 
 def follow_followers(self, user_id, nfollows=None):
-    self.console_print("Follow followers of: {}".format(user_id))
+    self.logger.info("Follow followers of: {}".format(user_id))
     if self.reached_limit("follows"):
-        self.console_print("Out of follows for today.")
+        self.logger.info("Out of follows for today.")
         return
     if not user_id:
-        self.console_print("User not found.")
+        self.logger.info("User not found.")
         return
     followers = self.get_user_followers(user_id, nfollows)
     followers = list(set(followers) - set(self.blacklist))
     if not followers:
-        self.console_print("{} not found / closed / has no followers.".format(user_id))
+        self.logger.info("{} not found / closed / has no followers.".format(user_id))
     else:
         self.follow_users(followers[:nfollows])
 
 
 def follow_following(self, user_id, nfollows=None):
-    self.console_print("Follow following of: {}".format(user_id))
+    self.logger.info("Follow following of: {}".format(user_id))
     if self.reached_limit("follows"):
-        self.console_print("Out of follows for today.")
+        self.logger.info("Out of follows for today.")
         return
     if not user_id:
-        self.console_print("User not found.")
+        self.logger.info("User not found.")
         return
     followings = self.get_user_following(user_id)
     if not followings:
-        self.console_print("{} not found / closed / has no following.".format(user_id))
+        self.logger.info("{} not found / closed / has no following.".format(user_id))
     else:
         self.follow_users(followings[:nfollows])
+
+
+def approve_pending_follow_requests(self):
+    pending = self.get_pending_follow_requests()
+    if pending:
+        for u in tqdm(pending, desc="Approving users"):
+            user_id = u["pk"]
+            username = u["username"]
+            self.api.approve_pending_friendship(user_id)
+            if self.api.last_response.status_code != 200:
+                self.logger.error("Could not approve {}".format(username))
+        self.logger.info("DONE: {} people approved.".format(len(pending)))
+        return True
+
+
+def reject_pending_follow_requests(self):
+    pending = self.get_pending_follow_requests()
+    if pending:
+        for u in tqdm(pending, desc="Rejecting users"):
+            user_id = u["pk"]
+            username = u["username"]
+            self.api.reject_pending_friendship(user_id)
+            if self.api.last_response.status_code != 200:
+                self.logger.error("Could not approve {}".format(username))
+        self.logger.info("DONE: {} people rejected.".format(len(pending)))
+        return True

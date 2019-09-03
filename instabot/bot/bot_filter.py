@@ -6,7 +6,7 @@
 def filter_medias(self, media_items, filtration=True, quiet=False, is_comment=False):
     if filtration:
         if not quiet:
-            self.console_print("Received {} medias.".format(len(media_items)))
+            self.logger.info("Received {} medias.".format(len(media_items)))
         if not is_comment:
             media_items = _filter_medias_not_liked(media_items)
             if self.max_likes_to_like:
@@ -17,7 +17,7 @@ def filter_medias(self, media_items, filtration=True, quiet=False, is_comment=Fa
             media_items = _filter_medias_not_commented(self, media_items)
         if not quiet:
             msg = "After filtration {} medias left."
-            self.console_print(msg.format(len(media_items)))
+            self.logger.info(msg.format(len(media_items)))
     return _get_media_ids(media_items)
 
 
@@ -59,7 +59,9 @@ def _filter_medias_nlikes(media_items, max_likes_to_like, min_likes_to_like):
 def _get_media_ids(media_items):
     result = []
     for media in media_items:
-        if "pk" in media:
+        if "id" in media:
+            result.append(media["id"])
+        elif "pk" in media:
             result.append(media["pk"])
     return result
 
@@ -116,7 +118,7 @@ def search_blacklist_hashtags_in_media(self, media_id):
     return any((h in text) for h in self.blacklist_hashtags)
 
 
-def check_user(self, user_id, unfollowing=False):
+def check_user(self, user_id, unfollowing=False):  # noqa: C901
     if not self.filter_users and not unfollowing:
         return True
 
@@ -137,6 +139,12 @@ def check_user(self, user_id, unfollowing=False):
         self.console_print("`user_id` equals bot's `user_id`, skipping!", "green")
         return False
 
+    if user_id in self.following:
+        if not unfollowing:
+            # Log to Console
+            self.console_print("Already following, skipping!", "red")
+        return False
+
     user_info = self.get_user_info(user_id)
     if not user_info:
         self.console_print("not `user_info`, skipping!", "red")
@@ -145,12 +153,6 @@ def check_user(self, user_id, unfollowing=False):
     if unfollowing and user_info["favorito"]:
         self.console_print("`user_id` in `favoritos`.", "red")
         return True
-
-    if user_id in self.following:
-        if not unfollowing:
-            # Log to Console
-            self.console_print("Already following, skipping!", "red")
-        return False
 
     msg = "USER_NAME: {username}, FOLLOWER: {followers}, FOLLOWING: {following}"
     follower_count = user_info["follower_count"]
@@ -178,54 +180,60 @@ def check_user(self, user_id, unfollowing=False):
             self.console_print(
                 "info: account DOES NOT HAVE A PROFILE PHOTO, skipping! ", "red"
             )
-            skipped.append(user_id, show_message=False)
+            skipped.append(user_id)
             return False
     if "is_private" in user_info and self.filter_private_users:
         if user_info["is_private"]:
             self.console_print("info: account is PRIVATE, skipping! ", "red")
-            skipped.append(user_id, show_message=False)
+            skipped.append(user_id)
             return False
     if "is_business" in user_info and self.filter_business_accounts:
         if user_info["is_business"]:
             self.console_print("info: is BUSINESS, skipping!", "red")
-            skipped.append(user_id, show_message=False)
+            skipped.append(user_id)
             return False
     if "is_verified" in user_info and self.filter_verified_accounts:
         if user_info["is_verified"]:
             self.console_print("info: is VERIFIED, skipping !", "red")
-            skipped.append(user_id, show_message=False)
+            skipped.append(user_id)
             return False
 
     if follower_count < self.min_followers_to_follow:
         msg = "follower_count < bot.min_followers_to_follow, skipping!"
         self.console_print(msg, "red")
-        skipped.append(user_id, show_message=False)
+        skipped.append(user_id)
         return False
     if follower_count > self.max_followers_to_follow:
         msg = "follower_count > bot.max_followers_to_follow, skipping!"
         self.console_print(msg, "red")
-        skipped.append(user_id, show_message=False)
+        skipped.append(user_id)
         return False
     if user_info["following_count"] < self.min_following_to_follow:
         msg = "following_count < bot.min_following_to_follow, skipping!"
         self.console_print(msg, "red")
-        skipped.append(user_id, show_message=False)
+        skipped.append(user_id)
         return False
     if user_info["following_count"] > self.max_following_to_follow:
         msg = "following_count > bot.max_following_to_follow, skipping!"
         self.console_print(msg, "red")
-        skipped.append(user_id, show_message=False)
+        skipped.append(user_id)
         return False
     try:
-        if follower_count / following_count > self.max_followers_to_following_ratio:
+        if (
+            (following_count > 0)
+            and follower_count / following_count > self.max_followers_to_following_ratio
+        ):
             msg = "follower_count / following_count > bot.max_followers_to_following_ratio, skipping!"
             self.console_print(msg, "red")
-            skipped.append(user_id, show_message=False)
+            skipped.append(user_id)
             return False
-        if following_count / follower_count > self.max_following_to_followers_ratio:
+        if (
+            (follower_count > 0)
+            and following_count / follower_count > self.max_following_to_followers_ratio
+        ):
             msg = "following_count / follower_count > bot.max_following_to_followers_ratio, skipping!"
             self.console_print(msg, "red")
-            skipped.append(user_id, show_message=False)
+            skipped.append(user_id)
             return False
     except ZeroDivisionError:
         self.console_print("ZeroDivisionError: division by zero", "red")
@@ -237,13 +245,13 @@ def check_user(self, user_id, unfollowing=False):
     ):
         msg = "media_count < bot.min_media_count_to_follow, BOT or INACTIVE, skipping!"
         self.console_print(msg, "red")
-        skipped.append(user_id, show_message=False)
+        skipped.append(user_id)
         return False
 
     if search_stop_words_in_user(self, user_info):
         msg = "`bot.search_stop_words_in_user` found in user, skipping!"
         self.console_print(msg, "red")
-        skipped.append(user_id, show_message=False)
+        skipped.append(user_id)
         return False
 
     return True
@@ -271,12 +279,12 @@ def check_not_bot(self, user_id):
     ):
         msg = "following_count > bot.max_following_to_block, skipping!"
         self.console_print(msg, "red")
-        skipped.append(user_id, show_message=False)
+        skipped.append(user_id)
         return False  # massfollower
 
     if search_stop_words_in_user(self, user_info):
         msg = "`bot.search_stop_words_in_user` found in user, skipping!"
-        skipped.append(user_id, show_message=False)
+        skipped.append(user_id)
         return False
 
     return True
