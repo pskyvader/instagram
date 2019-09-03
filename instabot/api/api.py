@@ -1282,7 +1282,7 @@ class API(object):
                                 else:
                                     f.write("{}\n".format(item["pk"]))
                             result.append(item)
-                            pbar.update(1)
+                            #pbar.update(1)
                             sleep_track += 1
                             if sleep_track >= 20000:
                                 sleep_time = random.uniform(120, 180)
