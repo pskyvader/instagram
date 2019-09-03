@@ -12,7 +12,7 @@ def add_credentials():
     with open(SECRET_FILE, "a") as f:
         console_print("Enter your login: ")
         f.write(str(sys.stdin.readline().strip()) + ":")
-        console_print("Enter your password: ")
+        console_print("Enter your password: (it will not be shown due to security reasons - just start typing and press Enter)")
         f.write(getpass.getpass() + "\n")
 
 
@@ -89,3 +89,9 @@ def delete_credentials():
 
 if __name__ == "__main__":
     check_secret()
+
+
+
+
+
+
