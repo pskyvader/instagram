@@ -125,7 +125,7 @@ update/*
 **/custom_resources/*
 tmp
 *.txt
-cookie_usuario
+*.json
 !icon.txt
 *.checkpoint
 */__pycache__/
