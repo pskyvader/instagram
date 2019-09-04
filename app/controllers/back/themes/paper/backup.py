@@ -256,18 +256,23 @@ class backup(base):
 
         file = []
         for root, dirs, files in os.walk(self.dir_backup):
-            for fichero in files:
-                if id in fichero:
-                    file.append(fichero)
+            if '/cache' not in root:
+                for fichero in files:
+                    if id in fichero:
+                        file.append(fichero)
 
         file = file.pop()
 
         if os.access(self.dir_backup + "/" + file, os.W_OK) is not True:
-            respuesta[
-                "mensaje"
-            ] = "Debes dar permisos de escritura o eliminar el archivo manualmente"
+            respuesta[ "mensaje" ] = "Debes dar permisos de escritura o eliminar el archivo manualmente"
         else:
-            os.remove(self.dir_backup + "/" + file)
+            if os.path.exists(self.dir_backup + "/cache/" + file):
+                if os.access(self.dir_backup + "/cache/" + file, os.W_OK) is True:
+                    respuesta[ "mensaje" ] = "Debes dar permisos de escritura o eliminar el archivo manualmente para el cache de archivo"
+                else:
+                    os.remove(self.dir_backup + "/cache/" + file)
+                    os.remove(self.dir_backup + "/" + file)
+
             respuesta["exito"] = True
             respuesta["mensaje"] = "Eliminado correctamente."
 
