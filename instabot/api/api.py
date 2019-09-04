@@ -455,6 +455,22 @@ class API(object):
                     "red",
                 )
 
+            response_error = json.dumps(
+                {
+                    "text": response.text,
+                    "status_code": response.status_code,
+                    "headers": dict(response.headers),
+                    "url": response.url,
+                },
+                sort_keys=True,
+                indent=4,
+                separators=(",", ": "),
+            )
+            error_text = "Error detail:\n <pre>{}</pre>.\nEndpoint:{}.\npost:".format(
+                response_error, endpoint, repr(post_tmp)
+            )
+            bot_support.console_print(bot_support, error_text, "red")
+
             try:
                 response_data = json.loads(response.text)
                 if "feedback_required" in str(response_data.get("message")):
@@ -483,22 +499,6 @@ class API(object):
                     "Error checking for `feedback_required`, response text is not JSON",
                     "red",
                 )
-
-            response_error = json.dumps(
-                {
-                    "text": response.text,
-                    "status_code": response.status_code,
-                    "headers": dict(response.headers),
-                    "url": response.url,
-                },
-                sort_keys=True,
-                indent=4,
-                separators=(",", ": "),
-            )
-            error_text = "Error detail:\n <pre>{}</pre>.\nEndpoint:{}.\npost:".format(
-                response_error, endpoint, repr(post_tmp)
-            )
-            bot_support.console_print(bot_support, error_text, "red")
 
             if response.status_code == 429:
                 if delay != None:
