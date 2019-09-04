@@ -108,6 +108,7 @@ class database():
                 sql += " , " + str(condiciones['limit2'])
 
         row = self.consulta(sql, True)
+        print(row)
         return row
 
     def insert(self, table, idname, insert, delete_cache=True):
