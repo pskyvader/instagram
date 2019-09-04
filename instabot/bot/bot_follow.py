@@ -76,6 +76,10 @@ def follow_users(self, user_ids, base, proporcion, hashtag):
             break
             
         if not self.follow(user_id,hashtag=hashtag,progress=base+(count/len(user_ids))*proporcion):
+            if self.api.fatal_error:
+                i = user_ids.index(user_id)
+                broken_items += user_ids[i - 1 :]
+                break
             if self.api.last_response.status_code == 404:
                 self.console_print("404 error user {user_id} doesn't exist.", "red")
                 broken_items.append(user_id)
