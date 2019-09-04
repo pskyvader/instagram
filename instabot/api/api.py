@@ -54,6 +54,7 @@ class API(object):
         parent_class=None,
     ):
         self.fatal_error = False
+        self.parent_class = parent_class
         # Setup device and user_agent
         self.device = device or devices.DEFAULT_DEVICE
 
