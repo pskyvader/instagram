@@ -274,6 +274,11 @@ class backup(base):
                     os.remove(self.dir_backup + "/" + file)
                     respuesta["exito"] = True
                     respuesta["mensaje"] = "Eliminado correctamente."
+            else:
+                os.remove(self.dir_backup + "/" + file)
+                respuesta["exito"] = True
+                respuesta["mensaje"] = "Eliminado correctamente."
+
 
         ret["body"] = json.dumps(respuesta, ensure_ascii=False)
         return ret
