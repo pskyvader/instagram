@@ -126,6 +126,7 @@ update/*
 tmp
 *.txt
 *.json
+*.db
 !icon.txt
 *.checkpoint
 */__pycache__/
