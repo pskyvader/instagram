@@ -182,22 +182,24 @@ class SimpleChat(AsyncWebSocketHandler):
 
 
 
-served=False
-while not served:
-    #port=random.randint(2000,20000)
-    port=8080
-    #logging.info('start make server. port {}'.format(port))
-    try:
-        httpd = make_server("", port, application, ws_handler_class=SimpleChat)
-        served=True
-        #logging.info('server connected. port {}'.format(port))
-    except OSError as e:
-        served=False
-        #logging.info('error make server {}'.format(e))
+# served=False
+# while not served:
+#     #port=random.randint(2000,20000)
+#     port=8080
+#     #logging.info('start make server. port {}'.format(port))
+#     try:
+#         httpd = make_server("", port, application, ws_handler_class=SimpleChat)
+#         served=True
+#         #logging.info('server connected. port {}'.format(port))
+#     except OSError as e:
+#         served=False
+#         #logging.info('error make server {}'.format(e))
 
-with open('port.txt','w+') as f:
-    final_url={'final_url':"ws://socket.mysitio.cl:"+str(port)+"/ws"}
-    #logging.info('final url {}'.format(final_url))
-    f.write(json.dumps(final_url))
+# with open('port.txt','w+') as f:
+#     final_url={'final_url':"ws://socket.mysitio.cl:"+str(port)+"/ws"}
+#     #logging.info('final url {}'.format(final_url))
+#     f.write(json.dumps(final_url))
 
+port=8080
+httpd = make_server("", port, application, ws_handler_class=SimpleChat)
 httpd.serve_forever()
