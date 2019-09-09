@@ -590,6 +590,7 @@ class API(object):
 
             # End of Interactive Two-Factor Authentication
             else:
+                response_data = json.loads(response.text)
                 msg = "Instagram's error message: {}"
                 bot_support.console_print(
                     bot_support, msg.format(response_data.get("message"))
