@@ -74,11 +74,12 @@ class instagram(base):
         total = 0
         message = socket.receive()
         while message != "" and message != "END":
-            print('message',message)
             if "{" in message:
                 try:
                     message=json.loads(message)
+                    print('message',message)
                     if message['type']=='log':
+                        print('message',message.data)
                         time= message['time'] if 'time' in message else ''
                         message = message.data
                         message["mensaje"] = message["mensaje"]
