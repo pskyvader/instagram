@@ -78,9 +78,6 @@ class API(object):
                 log_filename = os.path.join(
                     base_path, "instabot_{}.log".format(id(self))
                 )
-            else:
-                if ".json" not in log_filename:
-                    log_filename += ".json"
 
             fh = logging.FileHandler(filename=log_filename)
             fh.setLevel(logging.INFO)
@@ -202,6 +199,9 @@ class API(object):
         if self.cookie_fname is None:
             cookie_fname = "{username}_uuid_and_cookie.json".format(username=username)
             self.cookie_fname = os.path.join(self.base_path, cookie_fname)
+        else:
+            if ".json" not in self.cookie_fname:
+                self.cookie_fname += ".json"
 
         cookie_is_loaded = False
 

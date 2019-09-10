@@ -43,7 +43,6 @@ class instagram(base):
     @classmethod
     def index(cls):
         """Controlador de lista_class de elementos base, puede ser sobreescrito en el controlador de cada modulo"""
-        from core.socket import socket
 
         ret = {"body": []}
         # Clase para enviar a controlador de lista_class
@@ -72,25 +71,26 @@ class instagram(base):
         ret["body"] += asi.normal()["body"]
 
         log = []
-        message = socket.receive()
         total = 0
+        message = socket.receive()
         while message != "" and message != "END":
             if "{" in message:
                 try:
-                    rest = message[: message.index("{")]
-                    rest = rest[rest.index(":") + 1 : rest.index(".")]
-                    # rest={'mensaje': rest.strip()}
+                    message=json.loads(message)
+                    if message['type']=='log':
+                        time= message['time'] if 'time' in message else ''
+                        message = json.loads(message)
+                        message["mensaje"] = message["mensaje"]
+                        message["time"] = time
+                        if "porcentaje" in message:
+                            total = float(message["porcentaje"])
 
-                    message = message[message.index("{") :]
-                    message = json.loads(message)
-                    message["mensaje"] = rest.strip() + " - " + message["mensaje"]
-                    if "porcentaje" in message:
-                        total = float(message["porcentaje"])
-
-                    log.insert(0, message)
-                    # log.insert(0, rest)
+                        log.insert(0, message)
+                        # log.insert(0, rest)
                 except:
                     pass
+
+
             message = socket.receive()
 
         mensaje_error = ""

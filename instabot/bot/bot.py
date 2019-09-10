@@ -183,7 +183,7 @@ class Bot(object):
         stop_words=("shop", "store", "free"),
         blacklist_hashtags=["#shop", "#store", "#free"],
         blocked_actions_protection=True,
-        verbosity=True,
+        verbosity=False,
         device=None,
     ):
         self.api = API(device=device, base_path=base_path, parent_class=self)

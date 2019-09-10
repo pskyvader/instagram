@@ -5,13 +5,6 @@ import pprint
 from beaker.middleware import SessionMiddleware
 
 
-
-import sqlite3
-import datetime
-from asyncore_wsgi import AsyncWebSocketHandler, make_server
-import json
-
-
 sys.path.insert(0, os.path.dirname(__file__))
 
 
@@ -27,6 +20,7 @@ def application2(environ, start_response):
         if ret != "":
             ret = bytes(ret, "utf-8")
             from gzip import compress
+
             ret = compress(ret)
             main_data["headers"].append(("Accept-encoding", "gzip,deflate"))
             main_data["headers"].append(("Content-Encoding", "gzip"))
@@ -85,121 +79,3 @@ session_opts = {
 app2 = LoggingMiddleware(application2)
 application = SessionMiddleware(app2, session_opts)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-clients = []
-file=os.path.join(os.path.dirname(__file__),'log.db')
-
-if not os.path.exists(file):
-    with open(file,'a+') as f:
-        pass
-    conn = sqlite3.connect(file)
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS log ( id integer PRIMARY KEY AUTOINCREMENT, message text NOT NULL );''')
-    conn.commit()
-    conn.close()
-
-
-class SimpleChat(AsyncWebSocketHandler):
-    lines=[]
-    conn = sqlite3.connect(file)
-    cur = conn.cursor()
-    def handleMessage(self):
-        if self.data!='':
-            message='log: {} - {} - {} '.format(datetime.datetime.now().time(),self.client_address[0],self.data)
-            self.insert_bdd(message)
-            for client in clients:
-                if client != self:
-                    self.send(client,message)
-
-    def handleConnected(self):
-        #logging.info('new connection {}'.format(self))
-        self.read(self)
-        clients.append(self)
-        msg=str(self.client_address)+" connected"
-        self.insert_bdd(msg)
-
-        for client in clients:
-            message='log: {} - {} - {} '.format(datetime.datetime.now().time(),self.client_address[0]," - connected")
-            self.send(client,message)
-            self.send(client,"connected:" + str(len(clients)))
-        
-        
-
-    def handleClose(self):
-        clients.remove(self)
-        msg=str(self.client_address)+" closed"
-        self.insert_bdd(msg)
-
-        for client in clients:
-            message='log: {} - {} - {} '.format(datetime.datetime.now().time(),self.client_address[0]," - disconnected")
-            self.send(client,message)
-            self.send(client,"connected:" + str(len(clients)))
-
-    def read(self,client):
-        self.get_lines()
-        for l in self.lines:
-            client.sendMessage(l)
-        client.sendMessage('END')
-
-    def send(self,client,msg):
-        self.get_lines()
-        if msg!='':
-            client.sendMessage(msg)
-        
-
-    def get_lines(self):
-        if len(self.lines)==0:
-            self.cur.execute("SELECT message FROM log ORDER BY id DESC LIMIT 500")
-            row=self.cur.fetchall()
-            self.lines = list(reversed(list(l[0] for l in row)))
-    
-    def insert_bdd(self,msg):
-        if msg!='':
-            self.lines.append(msg)
-            self.cur.execute( "INSERT INTO log (message) VALUES (?)", (msg,) )
-            self.conn.commit()
-    
-
-
-
-# served=False
-# while not served:
-#     #port=random.randint(2000,20000)
-#     port=8080
-#     #logging.info('start make server. port {}'.format(port))
-#     try:
-#         httpd = make_server("", port, application, ws_handler_class=SimpleChat)
-#         served=True
-#         #logging.info('server connected. port {}'.format(port))
-#     except OSError as e:
-#         served=False
-#         #logging.info('error make server {}'.format(e))
-
-# with open('port.txt','w+') as f:
-#     final_url={'final_url':"ws://socket.mysitio.cl:"+str(port)+"/ws"}
-#     #logging.info('final url {}'.format(final_url))
-#     f.write(json.dumps(final_url))
-
-port=8080
-httpd = make_server("", port, application, ws_handler_class=SimpleChat)
-httpd.serve_forever()

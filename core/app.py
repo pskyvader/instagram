@@ -214,7 +214,7 @@ class app:
             elif url[0] == "sw.js":
                 url[0] = "sw"
             elif (
-                url[0] == "log.json" or url[0] == "icon.txt" or url[0] == "sitemap.xml"
+                url[0] == "log.json" or url[0] == "icon.txt" or url[0] == "sitemap.xml" or url[0] == "log.html"
             ):
                 url = ["static_file"] + url
             elif url[0] == "favicon.ico":

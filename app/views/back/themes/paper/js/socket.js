@@ -1,40 +1,26 @@
-//var wsUri = "ws://127.0.0.1/ws"; 
-var wsUri = "ws://socket.mysitio.cl:8000/ws";
-var wsUri_start = "http://socket.mysitio.cl/";
+// var wsUri = "ws://socket.mysitio.cl:8000/ws";
+// var wsUri_start = "http://socket.mysitio.cl/";
+var wsUri = ("ws://" + window.location.host + "/ws").replace('8080', '8001');
+console.log(wsUri);
 var intento = 0;
 websocket = null;
 
 function websocket_start(callback) {
     if (window.WebSocket !== undefined) {
         if (websocket == null) {
-            $.ajax({
-                url: wsUri_start + 'port.txt',
-                crossDomain: true,
-                dataType: "json",
-                cache: false,
-                success: function(data) {
-                    wsUri = data.final_url;
-                    websocket = new WebSocket(wsUri);
-                    console.log(websocket);
-                    websocket.onopen = function(evt) {
-                        onOpen(evt)
-                    };
-                    websocket.onclose = function(evt) {
-                        onClose(evt)
-                    };
-                    websocket.onmessage = function(evt) {
-                        onMessage(evt)
-                    };
-                    websocket.onerror = function(evt) {
-                        onError(evt,callback)
-                    };
-                },
-                error: function() {
-                    if (typeof(callback) != 'undefined') {
-                        callback();
-                    }
-                }
-            });
+            websocket = new WebSocket(wsUri);
+            websocket.onopen = function(evt) {
+                onOpen(evt)
+            };
+            websocket.onclose = function(evt) {
+                onClose(evt)
+            };
+            websocket.onmessage = function(evt) {
+                onMessage(evt)
+            };
+            websocket.onerror = function(evt) {
+                onError(evt)
+            };
         }
     } else {
         console.log("sockets not supported");
@@ -61,16 +47,13 @@ function onClose(evt) {
 }
 
 function onMessage(evt) {
-    // There are two types of messages: 
-    // 1. a chat participant message itself 
-    // 2. a message with a number of connected chat participants 
     var message = evt.data;
-    if (message.startsWith("log:")) {
-        message = message.slice("log:".length);
-        if (message.indexOf("{") != -1) {
-            message = message.slice(message.indexOf("{"));
-            try {
-                data = JSON.parse(message)
+    try {
+        message = JSON.parse(message)
+        if (message.type == 'log') {
+            if (typeof(message.data) == 'object') {
+                var time = (message.time != undefined) ? message.time + ' - ' : '';
+                data = message.data;
                 if (data.porcentaje) {
                     barra(data.porcentaje);
                     if ($('#progreso_instagram').length > 0) {
@@ -82,54 +65,44 @@ function onMessage(evt) {
                 } else {
                     message = ''
                 }
-            } catch (error) {}
-            if (message != '') {
-                notificacion_footer(message);
-                if ($('#log_instagram').length > 0) {
-                    p = $('<p></p>');
-                    if (data && data.color) {
-                        p.css('color', data.color);
-                    }
-                    if (data && data.bold) {
-                        p.css('font-weight', 'bold');
-                    } else {
-                        p.css('font-weight', 'regular');
-                    }
-                    $('#log_instagram').prepend(p.append(message));
-                    if ($('#log_instagram p').length > 500) {
-                        $('#log_instagram p').each(function(k, v) {
-                            if (k > 100) {
-                                $(v).remove();
-                            }
-                        });
+                if (message != '') {
+                    notificacion_footer(message);
+                    if ($('#log_instagram').length > 0) {
+                        p = $('<p></p>');
+                        if (data && data.color) {
+                            p.css('color', data.color);
+                        }
+                        if (data && data.bold) {
+                            p.css('font-weight', 'bold');
+                        } else {
+                            p.css('font-weight', 'regular');
+                        }
+                        $('#log_instagram').prepend(p.append(time + message));
+                        if ($('#log_instagram p').length > 500) {
+                            $('#log_instagram p').each(function(k, v) {
+                                if (k > 100) {
+                                    $(v).remove();
+                                }
+                            });
+                        }
                     }
                 }
+
+            } else {
+
             }
-        } else {
-            //notificacion_footer(message);
         }
-
-
-    } else if (message.startsWith("connected:")) {
-        //message = message.slice("connected:".length);
-        //console.log(message);
-    }
+    } catch (error) {}
 }
 
-function onError(evt,callback) {
+function onError(evt, callback) {
     websocket = null;
     console.log("Error al conectar log");
     notificacion_footer("Error al conectar log");
     if (intento < 1) {
         intento++;
-        $.ajax({
-            url: wsUri_start,
-            timeout: 500,
-            complete: function(data) {
-                websocket_start();
-            }
-        });
-    }else{
+        websocket_start();
+    } else {
         if (typeof(callback) != 'undefined') {
             callback();
         }
