@@ -186,7 +186,13 @@ class Bot(object):
         verbosity=False,
         device=None,
     ):
-        self.api = API(device=device, base_path=base_path, parent_class=self)
+        self.api = API(
+            device=device,
+            base_path=base_path,
+            save_logfile=True,
+            log_filename="instabot.log",
+            parent_class=self,
+        )
         self.base_path = base_path
 
         c_time = functions.current_time("%Y-%m-%d")
