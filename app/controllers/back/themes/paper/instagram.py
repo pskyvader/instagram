@@ -88,7 +88,8 @@ class instagram(base):
                             total = float(message["porcentaje"])
 
                         log.insert(0, message)
-                        # log.insert(0, rest)
+                    else:
+                        print('message not log',message)
                 except:
                     pass
 
