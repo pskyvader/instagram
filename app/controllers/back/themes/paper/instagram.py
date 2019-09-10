@@ -74,6 +74,7 @@ class instagram(base):
         total = 0
         message = socket.receive()
         while message != "" and message != "END":
+            print(message)
             if "{" in message:
                 try:
                     message=json.loads(message)
