@@ -86,10 +86,8 @@ class instagram(base):
                             total = float(message["porcentaje"])
 
                         log.insert(0, message)
-                    else:
-                        print('message not log',message)
-                except Exception as e:
-                    print('error',e)
+                except:
+                    pass
 
 
             message = socket.receive()
