@@ -90,8 +90,8 @@ class instagram(base):
                         log.insert(0, message)
                     else:
                         print('message not log',message)
-                except:
-                    pass
+                except Exception as e:
+                    print('error',e)
 
 
             message = socket.receive()
