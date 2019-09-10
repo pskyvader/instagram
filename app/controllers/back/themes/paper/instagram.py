@@ -80,7 +80,7 @@ class instagram(base):
                     message=json.loads(message)
                     if message['type']=='log':
                         time= message['time'] if 'time' in message else ''
-                        message = json.loads(message)
+                        message = message.data
                         message["mensaje"] = message["mensaje"]
                         message["time"] = time
                         if "porcentaje" in message:
