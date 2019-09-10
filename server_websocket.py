@@ -43,7 +43,7 @@ class SimpleChat(AsyncWebSocketHandler):
                 pass
             message = {
                 "type": "log",
-                "time": datetime.datetime.now().time().strftime('HH:mm:ss'),
+                "time": datetime.datetime.now().time().strftime("%H:%M:%S"),
                 "address": self.client_address[0],
                 "data": self.data,
             }
@@ -62,7 +62,7 @@ class SimpleChat(AsyncWebSocketHandler):
         for client in clients:
             message = {
                 "type": "log",
-                "time": datetime.datetime.now().time().strftime('HH:mm:ss'),
+                "time": datetime.datetime.now().time().strftime("%H:%M:%S"),
                 "address": self.client_address[0],
                 "data": "Connected",
             }
@@ -81,7 +81,7 @@ class SimpleChat(AsyncWebSocketHandler):
         for client in clients:
             message = {
                 "type": "log",
-                "time": datetime.datetime.now().time().strftime('HH:mm:ss'),
+                "time": datetime.datetime.now().time().strftime("%H:%M:%S"),
                 "address": self.client_address[0],
                 "data": "Disconnected",
             }
