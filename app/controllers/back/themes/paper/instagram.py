@@ -220,13 +220,13 @@ class instagram(base):
             configuracion_model.setByVariable(
                 "daily_process_hours", json.dumps(daily_process_hours)
             )
-            cookie_name = configuracion_model.getByVariable(
-                "cookie_name", "cookie_usuario"
-            )
-            if ".json" not in cookie_name:
-                cookie_name += ".json"
-            if os.path.exists(cookie_name):
-                os.remove(cookie_name)
+            # cookie_name = configuracion_model.getByVariable(
+            #     "cookie_name", "cookie_usuario"
+            # )
+            # if ".json" not in cookie_name:
+            #     cookie_name += ".json"
+            # if os.path.exists(cookie_name):
+            #     os.remove(cookie_name)
         if hora not in daily_process_hours:
             respuesta["mensaje"] = "Fuera de horario activo: " + hora
             if len(var) == 0:
