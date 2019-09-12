@@ -255,7 +255,7 @@ class backup(base):
         id = campos["id"]
 
         file = []
-        file_cache = []
+        cache_file = []
         for root, dirs, files in os.walk(self.dir_backup):
             if '/cache' not in root:
                 for fichero in files:
@@ -264,10 +264,16 @@ class backup(base):
             else:
                 for fichero in files:
                     if id in fichero:
-                        file_cache.append(fichero)
-
-        file = file.pop()
-        cache_file = file_cache.pop()
+                        cache_file.append(fichero)
+        if len(file)>0:
+            file = file.pop()
+        else: 
+            file=''
+        
+        if len(cache_file)>0:
+            cache_file = cache_file.pop()
+        else: 
+            cache_file=''
 
         if os.access(self.dir_backup + "/" + file, os.W_OK) is not True:
             respuesta[ "mensaje" ] = "Debes dar permisos de escritura o eliminar el archivo manualmente"
