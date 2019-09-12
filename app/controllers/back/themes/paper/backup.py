@@ -278,7 +278,7 @@ class backup(base):
         if os.access(self.dir_backup + "/" + file, os.W_OK) is not True:
             respuesta[ "mensaje" ] = "Debes dar permisos de escritura o eliminar el archivo manualmente"
         else:
-            if os.path.exists(self.dir_backup + "/cache/" + cache_file):
+            if cache_file!='' and os.path.exists(self.dir_backup + "/cache/" + cache_file):
                 if os.access(self.dir_backup + "/cache/" + cache_file, os.W_OK) is not True:
                     respuesta[ "mensaje" ] = "Debes dar permisos de escritura o eliminar el archivo manualmente para el cache de archivo"
                 else:
