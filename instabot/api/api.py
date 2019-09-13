@@ -490,8 +490,10 @@ class API(object):
                         self.parent_class.update_turn(delay)
                         
                     if 'feedback_url' in response_data:
+                        #data = json.dumps({})
+                        data=None
                         bot_support.console_print( bot_support, "Trying feedback" )
-                        feedback_response=self.send_request(response_data['feedback_url'])
+                        feedback_response=self.send_request(response_data['feedback_url'],data)
                         bot_support.console_print( bot_support, "Feedback response: {}".format(feedback_response) )
                     else:
                         bot_support.console_print( bot_support, "No feedback_url" )
