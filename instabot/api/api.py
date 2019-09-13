@@ -455,17 +455,21 @@ class API(object):
                     "red",
                 )
 
-            response_error = json.dumps(
-                {
-                    "text": response.text,
-                    "status_code": response.status_code,
-                    "headers": dict(response.headers),
-                    "url": response.url,
-                },
-                sort_keys=True,
-                indent=4,
-                separators=(",", ": "),
-            )
+            # response_error = json.dumps(
+            #     {
+            #         "text": response.text,
+            #         "status_code": response.status_code,
+            #         "headers": dict(response.headers),
+            #         "url": response.url,
+            #     },
+            #     sort_keys=True,
+            #     indent=4,
+            #     separators=(",", ": "),
+            # )
+            response_error = json.dumps(response, sort_keys=True, indent=4, separators=(",", ": "), )
+
+
+
             error_text = "Error detail:\n <pre>{}</pre>.\n Endpoint: {}.\n post: {}.".format(
                 response_error, endpoint, repr(post_tmp)
             )
