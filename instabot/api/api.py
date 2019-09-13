@@ -466,9 +466,9 @@ class API(object):
             #     indent=4,
             #     separators=(",", ": "),
             # )
-            response_error = json.dumps(response, sort_keys=True, indent=4, separators=(",", ": "), )
-
-
+            response_error = json.dumps(
+                response, sort_keys=True, indent=4, separators=(",", ": ")
+            )
 
             error_text = "Error detail:\n <pre>{}</pre>.\n Endpoint: {}.\n post: {}.".format(
                 response_error, endpoint, repr(post_tmp)
@@ -492,16 +492,21 @@ class API(object):
                     if delay != None:
                         self.parent_class.update_max(delay)
                         self.parent_class.update_turn(delay)
-                        
-                    if 'feedback_url' in response_data:
-                        #data = json.dumps({})
-                        data=None
-                        bot_support.console_print( bot_support, "Trying feedback" )
+
+                    if "feedback_url" in response_data:
+                        # data = json.dumps({})
+                        data = None
+                        bot_support.console_print(bot_support, "Trying feedback")
                         self.parent_class.small_delay()
-                        feedback_response=self.send_request(response_data['feedback_url'],data)
-                        bot_support.console_print( bot_support, "Feedback response: {}".format(feedback_response) )
+                        feedback_response = self.send_request(
+                            response_data["feedback_url"], data
+                        )
+                        bot_support.console_print(
+                            bot_support,
+                            "Feedback response: {}".format(feedback_response),
+                        )
                     else:
-                        bot_support.console_print( bot_support, "No feedback_url" )
+                        bot_support.console_print(bot_support, "No feedback_url")
 
                     return "feedback_required"
             except ValueError:
