@@ -488,13 +488,13 @@ class API(object):
                     if delay != None:
                         self.parent_class.update_max(delay)
                         self.parent_class.update_turn(delay)
+                        
                     if 'feedback_url' in response_data:
                         bot_support.console_print( bot_support, "Trying feedback" )
                         feedback_response=self.send_request(response_data['feedback_url'])
                         bot_support.console_print( bot_support, "Feedback response: {}".format(feedback_response) )
                     else:
                         bot_support.console_print( bot_support, "No feedback_url" )
-
 
                     return "feedback_required"
             except ValueError:
