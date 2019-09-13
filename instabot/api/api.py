@@ -466,7 +466,7 @@ class API(object):
                 indent=4,
                 separators=(",", ": "),
             )
-            error_text = "Error detail:\n <pre>{}</pre>.\nEndpoint:{}.\npost:".format(
+            error_text = "Error detail:\n <pre>{}</pre>.\n Endpoint: {}.\n post: {}.".format(
                 response_error, endpoint, repr(post_tmp)
             )
             bot_support.console_print(bot_support, error_text, "red")
