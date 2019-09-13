@@ -493,6 +493,7 @@ class API(object):
                         #data = json.dumps({})
                         data=None
                         bot_support.console_print( bot_support, "Trying feedback" )
+                        self.parent_class.small_delay()
                         feedback_response=self.send_request(response_data['feedback_url'],data)
                         bot_support.console_print( bot_support, "Feedback response: {}".format(feedback_response) )
                     else:
