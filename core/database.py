@@ -34,9 +34,10 @@ class database():
             self._dbHost, self._dbUser, self._dbPassword, self._dbName, charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
     @staticmethod
     def close():
-        if database._instance is not None and database._connection is not None:
-            database._connection.close()
-            database._connection=None
+        if database._instance is not None:
+            if database._connection is not None:
+                database._connection.close()
+                database._connection=None
             database._instance=None
 
     def prepare(self):
