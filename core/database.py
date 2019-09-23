@@ -33,6 +33,9 @@ class database():
         self._connection = pymysql.connect(
             self._dbHost, self._dbUser, self._dbPassword, self._dbName, charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
 
+    def close(self):
+        self._connection.close()
+
     def prepare(self):
         cursor = self._connection.cursor()
         return cursor
@@ -57,6 +60,8 @@ class database():
                 self.last_insert_id = cursor.lastrowid
                 if delete_cache:
                     cache.delete_cache()
+            
+            cursor.close()
         except pymysql.InternalError as error:
             code, message = error.args
             self._connection.rollback()
@@ -68,6 +73,8 @@ class database():
             else:
                 rows = True
         return rows
+    
+
 
     def get_last_insert_id(self):
         return self.last_insert_id
