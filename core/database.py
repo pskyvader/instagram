@@ -34,7 +34,8 @@ class database():
             self._dbHost, self._dbUser, self._dbPassword, self._dbName, charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
 
     def close(self):
-        self._connection.close()
+        if self._connection is not None:
+            self._connection.close()
 
     def prepare(self):
         cursor = self._connection.cursor()
