@@ -41,6 +41,9 @@ class database():
             database._instance=None
 
     def prepare(self):
+        if self._connection is None:
+            self._instance = database()
+
         cursor = self._connection.cursor()
         return cursor
 
