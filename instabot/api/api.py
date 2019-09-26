@@ -522,6 +522,7 @@ class API(object):
                     sleep_seconds = self.parent_class.sleep[delay]
                 else:
                     sleep_seconds = 5 * 60
+
                 bot_support.console_print(
                     bot_support,
                     "That means 'too many requests'. I'll go to sleep for {} seconds.".format(
