@@ -492,12 +492,10 @@ class API(object):
                         self.parent_class.update_turn(delay)
 
                     if "feedback_url" in response_data:
-                        # data = json.dumps({})
-                        data = None
                         bot_support.console_print(bot_support, "Trying feedback")
                         self.parent_class.small_delay()
                         feedback_response = self.send_request(
-                            response_data["feedback_url"], data
+                            response_data["feedback_url"], post_tmp
                         )
                         bot_support.console_print(
                             bot_support,
