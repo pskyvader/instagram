@@ -74,6 +74,10 @@ class database():
             code, message = error.args
             self._connection.rollback()
             raise RuntimeError('error DB query: ', code, message, sql)
+        except Exception as e:
+            print(e)
+            raise RuntimeError('EXCEPTION: ', e)
+
 
         if rows is None:
             if return_query:
