@@ -258,9 +258,7 @@ class API(object):
                 self.login_flow(True)
                 # self.device_id = self.uuid
                 return True
-            elif (
-                self.last_json.get("error_type", "") == "checkpoint_challenge_required"
-            ):
+            elif ( self.last_json.get("error_type", "") == "checkpoint_challenge_required" ):
                 bot_support.console_print(
                     bot_support, "Checkpoint challenge required..."
                 )
