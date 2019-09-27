@@ -601,7 +601,10 @@ class API(object):
                             "red",
                         )
                         return False
-
+                elif response_data.get("message")=='challenge_required':
+                    bot_support.console_print( bot_support, "Checkpoint challenge required..." )
+                    solved = self.solve_challenge()
+                    return solved
             # End of Interactive Two-Factor Authentication
             else:
                 response_data = json.loads(response.text)
