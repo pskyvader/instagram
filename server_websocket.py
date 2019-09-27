@@ -104,7 +104,8 @@ class SimpleChat(AsyncWebSocketHandler):
 
     def get_lines(self):
         if len(self.lines) == 0:
-            self.cur.execute("SELECT message FROM log ORDER BY id DESC LIMIT 500")
+            limit=5000
+            self.cur.execute("SELECT message FROM log ORDER BY id DESC LIMIT "+str(limit))
             row = self.cur.fetchall()
             self.lines = list(reversed(list(l[0] for l in row)))
 
