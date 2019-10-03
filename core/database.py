@@ -56,6 +56,7 @@ class database():
         rows = None
         try:
             cursor = self.prepare()
+            self._connection.ping(reconnect=True)
             cursor.execute(sql)
             self._connection.commit()
             if return_query:
