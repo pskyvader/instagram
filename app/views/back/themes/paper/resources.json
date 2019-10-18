@@ -23,6 +23,9 @@
             {"url": "assets/fonts/font-awesome/css/font-awesome.min.css","local":true,"media":"all","combine":true,"defer":true}
         ],
     "js" : [
+        {"url": "https://unpkg.com/react@16/umd/react.production.min.js","local":false,"defer":false,"combine":false},
+        {"url": "https://unpkg.com/react-dom@16/umd/react-dom.production.min.js","local":false,"defer":false,"combine":false},
+        {"url": "https://unpkg.com/babel-standalone@6/babel.min.js","local":false,"defer":false,"combine":false},
         {"url": "assets/js/jquery-3.3.1.min.js","local":true,"defer":false,"combine":true},
         {"url": "assets/js/jquery-ui-1.12.1.min.js","local":true,"defer":false,"combine":true},
         {"url": "assets/js/jquery.ui.touch-punch.min.js","local":true,"defer":false,"combine":true},
@@ -94,6 +97,7 @@
         {"url": "js/detail.js","local":true,"defer":false,"combine":true},
         {"url": "js/pedido.js","local":true,"defer":false,"combine":true},
         {"url": "js/online.js","local":true,"defer":false,"combine":true},
+        {"url": "js/reactjs/like_button.jsx","local":true,"defer":false,"combine":false,"react":true},
         {"url": "js/custom.js","local":true,"defer":false,"combine":true}
     ]
 }

@@ -31,8 +31,7 @@ class view:
         if theme == "":
             theme = view.get_theme()
 
-
-        makedirs(app.get_dir(True) + "tmp/",exist_ok=True)
+        makedirs(app.get_dir(True) + "tmp/", exist_ok=True)
 
         env = Environment(
             loader=FileSystemLoader(theme),
@@ -95,7 +94,7 @@ class view:
                     d = view.render_unit(env, "", d)
                 data2.append(d)
             data = data2
-            #si todos los elementos de la lista son string, la lista se convierte en string
+            # si todos los elementos de la lista son string, la lista se convierte en string
             if all(isinstance(x, str) for x in data):
                 data = "".join(data)
         elif isinstance(data, tuple):
@@ -138,7 +137,7 @@ class view:
         if combine and len(locales) > 0:
             locales = view.combine_resources("css", locales, theme, base_url, nuevo)
 
-        css = no_combinados + locales + css
+        css = css + no_combinados + locales
 
         if array_only:
             return [css, nuevo]
@@ -171,7 +170,7 @@ class view:
         if combine and len(locales) > 0:
             locales = view.combine_resources("js", locales, theme, base_url, nuevo)
 
-        js = no_combinados + locales + js
+        js = js + no_combinados + locales
 
         if array_only:
             return [js, nuevo]
@@ -267,7 +266,7 @@ class view:
         from os import path, makedirs
 
         dir_resources = theme + "custom_resources/"
-        makedirs(dir_resources,exist_ok=True)
+        makedirs(dir_resources, exist_ok=True)
         file = "resources-" + str(nuevo) + "-" + str(len(locales)) + "." + type_resource
         my_file = Path(dir_resources + file)
         if my_file.is_file():
@@ -283,6 +282,7 @@ class view:
                     "media": "all",
                     "defer": defer,
                     "is_content": False,
+                    "local": True,
                 }
             ]
         else:

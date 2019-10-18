@@ -19,6 +19,6 @@
     {% endfor %} 
 {% else %} 
     {% for j in js %} 
-        <script src="{{j.url}}" {% if j.defer %} async defer {% endif %}></script> 
+        <script src="{{j.url}}" {% if j.defer %} async defer {% endif %} {% if not j.local %} crossorigin="" {% endif %} {% if j.react%} type="text/babel" {% endif %}></script> 
     {% endfor %} 
 {% endif %}

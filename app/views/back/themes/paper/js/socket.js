@@ -1,7 +1,7 @@
 // var wsUri = "ws://socket.mysitio.cl:8000/ws";
 // var wsUri_start = "http://socket.mysitio.cl/";
-var wsUri = ("ws://" + window.location.host + "/ws").replace('8080', '8001');
-console.log(wsUri);
+var wsUri = ("ws://" + window.location.host + "/ws").replace('8080', '8001').replace('80', '8001');
+// console.log(wsUri);
 var intento = 0;
 websocket = null;
 
