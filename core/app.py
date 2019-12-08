@@ -253,7 +253,7 @@ class app:
 
     @staticmethod
     def parse_get(query_string):
-        from cgi import parse_qs
+        from urllib.parse import parse_qs
 
         get = dict(parse_qs(query_string))
         if "url" in get:
