@@ -29,8 +29,10 @@ class database():
             print(self._errors)
 
     def conect(self):
-        self._connection = pymysql.connect(
-            self._dbHost, self._dbUser, self._dbPassword, self._dbName, charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+        try:
+            self._connection = pymysql.connect( self._dbHost, self._dbUser, self._dbPassword, self._dbName, charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+        except Exception as e:
+            print(e)
             
     @staticmethod
     def close():
