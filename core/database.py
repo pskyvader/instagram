@@ -25,14 +25,12 @@ class database():
             self._prefix = config["prefix"] + "_"
             self.conect()
         except:
-            print('error DB connection')
-            self._errors = 'Error DB connection ' + self._dbHost + ',' + \
-                self._dbUser + ','+self._dbPassword + ','+self._dbName
+            self._errors = 'Error DB connection ' + self._dbHost + ',' + self._dbUser + ','+self._dbPassword + ','+self._dbName
+            print(self._errors)
 
     def conect(self):
         self._connection = pymysql.connect(
             self._dbHost, self._dbUser, self._dbPassword, self._dbName, charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
-        print(self._connection)
             
     @staticmethod
     def close():
